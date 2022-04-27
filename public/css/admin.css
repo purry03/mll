@@ -1,0 +1,169 @@
+html,
+body {
+    padding: 0 !important;
+}
+
+nav {
+    margin: 0 !important;
+}
+
+button {
+    padding: 5px 10px;
+    outline: none;
+    background-color: #fff;
+    color: #000;
+    border: solid 1px;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.section {
+    background-color: #fff;
+    width: 75%;
+    margin: 25px auto;
+    padding: 50px;
+}
+
+.systems h1 {
+    margin-bottom: 25px;
+}
+
+input {
+    font-family: monospace;
+    display: block;
+    margin-top: 5px;
+    padding: 5px;
+    width: 250px;
+}
+
+input[type=checkbox] {
+    display: inline-block !important;
+    width: auto !important;
+    font-family: monospace;
+    margin-left: 5px;
+    padding: 5px;
+    transform: translateY(2px);
+}
+
+label {
+    margin-right: 15px;
+    font-size: 0.9rem;
+}
+
+.add-system-wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: left;
+}
+
+.add-system {
+    margin-top: 15px;
+    margin-right: 5px;
+}
+
+.matches-heading {
+    margin-top: 25px;
+}
+
+#system-matches {
+    min-height: 25px;
+    list-style-type: none;
+}
+
+#system-matches li {
+    margin: 10px 0;
+    color: #0645AD;
+    cursor: pointer;
+}
+
+.system-list-heading {
+    margin-top: 50px;
+    margin-bottom: 10px;
+}
+
+
+.system-list {
+    border: 1px solid #111;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.system-list td,
+.system-list th {
+    padding: 10px 25px;
+    border: 1px solid #111;
+}
+
+.services h1 {
+    margin-bottom: 75px;
+}
+
+.service {
+    margin: 50px 0;
+}
+
+.service h3 {
+    margin-bottom: 25px;
+}
+
+.service h4 {
+    display: block;
+}
+
+.srrvice-location {
+    display: flex;
+    align-items: center;
+}
+
+.services .update {
+    padding: 10px 20px;
+}
+
+.add-routes-wrapper {
+    display: block;
+    margin: 25px 0;
+}
+
+.add-routes-wrapper h2 {
+    margin-bottom: 15px;
+}
+
+.add-routes-wrapper input {
+    margin: 5px 0;
+}
+
+.add-routes-wrapper button {
+    margin: 10px 0;
+}
+
+.route-list-wrapper {
+    padding: 10px 0;
+    width: 100%;
+    overflow-x: scroll;
+}
+
+.route-list {
+    border: 1px solid #111;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.route-list td,
+.route-list th {
+    padding: 10px 25px;
+    border: 1px solid #111;
+    min-width: 250px;
+}
+
+.mailCheckbox {
+    display: inline-block;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.mailCheckbox input {
+    vertical-align: middle;
+    position: relative;
+    bottom: .4em;
+    /* this is a better value for different fonts! */
+}

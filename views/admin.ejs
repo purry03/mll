@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Admin</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="img/logo.png" />
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <h3>Multi-Lemm Logistics Admin Panel</h3>
+    </nav>
+
+    <div class="main">
+        <!-- <div class="section systems">
+            <h1>Manage Systems</h1>
+            <div class="add-system-wrapper">
+                <label class='add-system'>System Name : <input type="text" placeholder="System Name" name="system"
+                        id="system_name"></label>
+                <button onclick="searchSystem()">Search System</button>
+            </div>
+            <div class="system-results-div">
+
+            </div>
+
+
+            <h2 class="system-list-heading">Systems List</h2>
+            <table class="system-list">
+                <tr>
+                    <th>
+                        System Name
+                    </th>
+                    <th>
+                        Security Status
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+                <% systems.forEach(system=>{ %>
+                <tr>
+                    <td>
+                        <%=system.name%>
+                    </td>
+                    <td>
+                        <%=Math.round(parseFloat(system.security) * 10) / 10 %>
+                    </td>
+                    <th>
+                        <button>Remove</button>
+                    </th>
+                </tr>
+                <% }); %>
+            </table>
+        </div> -->
+
+        <div class="section services">
+            <h1>Manage Services</h1>
+            <div class="service freighter">
+                <h3>Freighter</h3>
+                <label>Price Per Highsec Jump :
+                    <input type="text" class="highsec-price">
+                </label>
+                <label>Price Per Lowsec Jump :
+                    <input type="text" class="lowsec-price">
+                </label> <label>Price Per Nullsec Jump :
+                    <input type="text" class="nullsec-price">
+                </label>
+                <h4>
+                    Available In :
+                </h4>
+                <label class='service-location'>Highsec : <input type="checkbox" class="runs-highsec"></label>
+                <label class='service-location'>Lowsec : <input type="checkbox" class="runs-lowsec"></label>
+                <label class='service-location'>Nullsec : <input type="checkbox" class="runs-nullsec"> </label>
+                <label style="display:block;margin-top:15px">Max Volume :
+                    <input type="text" class="max-volume">
+                </label>
+                <label style="display:block;margin-top:15px">Max Collateral :
+                    <input type="text" class="max-collateral">
+                </label>
+                <label style="display:block;margin-top:15px">Rush Shipping Multiplier :
+                    <input type="text" class="rush-multiplier">
+                </label>
+                <label style="display:block;margin-top:15px">Minimum Rush Cost (ISK) :
+                    <input type="text" class="min-rush">
+                </label>
+                <label class='service-location'>Rush Shipping : <input type="checkbox" class="is-rush"> </label>
+
+            </div>
+            <hr>
+            <div class="service br">
+                <h3>Blockade Runner</h3>
+                <label>Price Per Highsec Jump :
+                    <input type="text" class="highsec-price">
+                </label>
+                <label>Price Per Lowsec Jump :
+                    <input type="text" class="lowsec-price">
+                </label> <label>Price Per Nullsec Jump :
+                    <input type="text" class="nullsec-price">
+                </label>
+                <h4>
+                    Available In :
+                </h4>
+                <label class='service-location'>Highsec : <input type="checkbox" class="runs-highsec"></label>
+                <label class='service-location'>Lowsec : <input type="checkbox" class="runs-lowsec"></label>
+                <label class='service-location'>Nullsec : <input type="checkbox" class="runs-nullsec"></label>
+                <label style="display:block;margin-top:15px">Max Volume :
+                    <input type="text" class="max-volume">
+                </label>
+                <label style="display:block;margin-top:15px">Max Collateral :
+                    <input type="text" class="max-collateral">
+                </label>
+                <label style="display:block;margin-top:15px">Rush Shipping Multiplier :
+                    <input type="text" class="rush-multiplier">
+                </label>
+                <label style="display:block;margin-top:15px">Minimum Rush Cost (ISK) :
+                    <input type="text" class="min-rush">
+                </label>
+                <label class='service-location'>Rush Shipping : <input type="checkbox" class="is-rush"> </label>
+
+            </div>
+            <hr>
+            <div class="service dst">
+                <h3>Deep Space Transport</h3>
+                <label>Price Per Highsec Jump :
+                    <input type="text" class="highsec-price">
+                </label>
+                <label>Price Per Lowsec Jump :
+                    <input type="text" class="lowsec-price">
+                </label> <label>Price Per Nullsec Jump :
+                    <input type="text" class="nullsec-price">
+                </label>
+                <h4>
+                    Available In :
+                </h4>
+                <label class='service-location'>Highsec : <input type="checkbox" class="runs-highsec"></label>
+                <label class='service-location'>Lowsec : <input type="checkbox" class="runs-lowsec"></label>
+                <label class='service-location'>Nullsec : <input type="checkbox" class="runs-nullsec"></label>
+                <label style="display:block;margin-top:15px">Max Volume :
+                    <input type="text" class="max-volume">
+                </label>
+                <label style="display:block;margin-top:15px">Max Collateral :
+                    <input type="text" class="max-collateral">
+                </label>
+                <label style="display:block;margin-top:15px">Rush Shipping Multiplier :
+                    <input type="text" class="rush-multiplier">
+                </label>
+                <label style="display:block;margin-top:15px">Minimum Rush Cost (ISK) :
+                    <input type="text" class="min-rush">
+                </label>
+                <label class='service-location'>Rush Shipping : <input type="checkbox" class="is-rush"> </label>
+
+            </div>
+            <button class='update' onclick="updateServices()">Update</button>
+        </div>
+    </div>
+
+    <div class="section routes">
+        <h1>JF Routes</h1>
+
+        <div class="add-routes-wrapper">
+            <h2>Add new route</h2>
+            <label class='add-route'>Start : <input type="text" placeholder="Name" name="start-system"
+                    id="start-system"></label>
+            <label class='add-route'>Destination : <input type="text" placeholder="Name" name="destination-system"
+                    id="destination-system"></label>
+            <label class='add-route'>Maximum Volume : <input type="text" placeholder="Maximum Volume" name="max-volume"
+                    id="max-JFvolume"></label>
+            <label class='add-route'>Minimum Reward : <input type="text" placeholder="Minimum Reward" name="min-reward"
+                    id="min-reward"></label>
+            <label class='add-route'>Maximum Collateral : <input type="text" placeholder="Maximum Collateral"
+                    name="max-collateral" id="max-JFcollateral"></label>
+            <label class='add-route'>Flat Rate : <input type="text" placeholder="Flat Charge" name="system"
+                    id="JFFlatprice"></label>
+            <label class='add-route'>ISK/m<sup>3</sup> : <input type="text" placeholder="ISK/m3" name="system"
+                    id="JFprice"></label>
+            <label class='add-route'>Rush Shipping Charge : <input type="text" placeholder="Rush Shipping Charge"
+                    name="system" id="rush-shipping-charge"></label>
+            <label class='add-route'>Collateral Multiplier (%) : <input type="text" placeholder="0 - 100"
+                    name="collateral-multiplier" id="collateral-multiplier" value="0"></label>
+            <label class='add-route' style="display: block;">Charge Flat Rate For This Route: <input type="checkbox"
+                    id="flat-rate"></label>
+            <label class='add-route' style="display: block;">Enable Rush Shipping: <input type="checkbox"
+                    id="rush-shipping"></label>
+
+            <button onclick="addJFRoute()">Add Route</button>
+        </div>
+
+
+        <h2>Existing Routes</h2>
+        <div class="route-list-wrapper">
+            <table class="route-list" style="margin-top: 20px;">
+                <tr>
+                    <th>
+                        Start
+                    </th>
+                    <th>
+                        Finish
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        Min Reward
+                    </th>
+                    <th>
+                        Max Volume
+                    </th>
+                    <th>
+                        Max Collateral
+                    </th>
+                    <th>
+                        Rush Shipping
+                    </th>
+                    <th>
+                        Rush Shipping Charge
+                    </th>
+                    <th>
+                        Collateral Multiplier
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+                <% routes.forEach(route=>{ %>
+                <tr>
+                    <td>
+                        <%=route.start%>
+                    </td>
+                    <td>
+                        <%=route.destination %>
+                    </td>
+                    <td>
+                        <% if(route.isFlat) {%>
+                        <%=route.flatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK <strong>FLAT</strong>
+                        <%}%>
+                    <% if(!route.isFlat) {%>
+                        <%=route.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK <strong>per
+                            m<sup>3</sup></strong>
+                        <%}%>
+                </td>
+                <td>
+                    <%= route.minReward.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> ISK
+                    </td>
+                    <td>
+                        <%= route.maxVolume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> m<sup>3</sup>
+                    </td>
+                    <td>
+                        <%= route.maxCollateral.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> ISK
+                    </td>
+                    <td>
+                        <%= route.isRush ? "Yes" : "No" %>
+                    </td>
+                    <td>
+                        <%= route.rushShippingCharge.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> ISK
+                    </td>
+                    <td>
+                        <%= route.collateralMultiplier.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> %
+                    </td>
+                    <td>
+                        <button onclick="removeRoute('<%=route.id%>')">Remove</button>
+                        <button onclick="toggleRush('<%=route.id%>')">Toggle Rush Shipping</button>
+
+                    </td>
+                </tr>
+                <% }); %>
+            </table>
+        </div>
+
+        <div class="edit-route-wrapper">
+            <h2 style="margin:20px 0;">Edit Route</h2>
+            <select name="route" id="route-edit-select" style="padding: 5px;">
+                <% routes.forEach(route=>{ %>
+                <option value=<%=route.id%>><%=route.start%> >> <%=route.destination%></option>
+                <% }); %>
+                <option hidden disabled selected value> -- Select Route -- </option>
+            </select>
+            <button style="display: block;margin: 10px 0;" onclick="loadRoute()">Load Route</button>
+            <label class='add-route'>Start : <input type="text" placeholder="Name" name="start-system"
+                    id="start-system"></label>
+            <label class='add-route'>Destination : <input type="text" placeholder="Name" name="destination-system"
+                    id="destination-system"></label>
+            <label class='add-route'>Maximum Volume : <input type="text" placeholder="Maximum Volume" name="max-volume"
+                    id="max-JFvolume"></label>
+            <label class='add-route'>Minimum Reward : <input type="text" placeholder="Minimum Reward" name="min-reward"
+                    id="min-reward"></label>
+            <label class='add-route'>Maximum Collateral : <input type="text" placeholder="Maximum Collateral"
+                    name="max-collateral" id="max-JFcollateral"></label>
+            <label class='add-route'>Flat Rate : <input type="text" placeholder="Flat Charge" name="system"
+                    id="JFFlatprice"></label>
+            <label class='add-route'>ISK/m<sup>3</sup> : <input type="text" placeholder="ISK/m3" name="system"
+                    id="JFprice"></label>
+            <label class='add-route'>Rush Shipping Charge : <input type="text" placeholder="Rush Shipping Charge"
+                    name="system" id="rush-shipping-charge"></label>
+            <label class='add-route'>Collateral Multiplier (%) : <input type="text" placeholder="0 - 100"
+                    name="collateral-multiplier" id="collateral-multiplier" value="0"></label>
+            <label class='add-route' style="display: block;">Charge Flat Rate For This Route: <input type="checkbox"
+                    id="flat-rate"></label>
+            <label class='add-route' style="display: block;">Enable Rush Shipping: <input type="checkbox"
+                    id="rush-shipping"></label>
+
+            <button onclick="editJFRoute()" style="margin: 10px 0;">Save Changes</button>
+        </div>
+    </div>
+
+    <div class="section routes">
+        <h1>Hauler Logins</h1>
+        <br><br><br>
+        <h2>Add New User</h2>
+        <br>
+        <label class='add-hauler'>Ingame Name : <input type="text" placeholder="Ingame Name" name="ingame-name"
+                id="ingame-name"></label>
+        <label class='add-hauler'>Username : <input type="text" placeholder="Username" name="username"
+                id="username"></label>
+        <label class='add-hauler'>Password : <input type="text" placeholder="Password" name="Password"
+                id="password"></label>
+        <button onclick="addHauler()" style="margin: 10px 0;">Add User</button>
+
+
+
+        <table class="route-list" style="margin-top: 20px;">
+            <tr>
+                <th>Ingame Name</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Action</th>
+            </tr>
+            <% haulers.forEach(hauler=>{ %>
+            <tr>
+                <td><%=hauler.ingame_name%></td>
+                <td><%=hauler.username%></td>
+                <td><%=hauler.password%></td>
+                <td><button onclick="removeHauler('<%=hauler.id%>')">Remove</button>
+                </td>
+            </tr>
+            <% }); %>
+        </table>
+
+    </div>
+
+
+    <div class="section settings">
+        <h1>Settings</h1>
+        <br>
+        <br>
+        <br>
+        <h2>Mail Service</h2>
+        <br>
+        <% if(settings.mailsEnabled){%>
+        <label class="mailCheckbox">Enabled: <input type="checkbox" checked="true"></label>
+        <%}%>
+        <% if(!settings.mailsEnabled){%>
+        <label class="mailCheckbox">Enabled: <input type="checkbox"></label>
+        <%}%>
+    </div>
+
+    <script src="js/systems.js" async defer></script>
+    <script src="js/services.js" async defer></script>
+    <script src="js/haulers.js" async defer></script>
+    <script src="js/settings.js" async defer></script>
+    <script src="js/jf.js" async defer></script>
+
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<html>
+
+<head>
+    <title>Multi-Lemm Logistics</title>
+    <link rel="icon" type="image/png" href="img/logo.png" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalizer.css">
+    <link rel="stylesheet" href="css/homepage.css">
+    <link rel="stylesheet" href="css/scroll.css">
+
+</head>
+
+<body>
+    <header style="position: relative;">
+        <div id='navContainer' class='navContainer'>
+            <h3 class='title'><a href='#'>Multi-Lemm Logistics</a></h3>
+            <div style='float:right'>
+                <ul class='navList'>
+                    <li class='navLink'><a href="/jfcalculator">JF Calculator</a></li>
+                    <li class='navLink'><a href="/perjumpcalcuator">BR/DST/Freighter Calculator</a></li>
+                    <li class='navLink' onclick="joinus()">Guide</li>
+                    <li class='navLink'><a href='https://discord.gg/kgBGPKuwQ9' target="_blank">DISCORD</a></li>
+                    <li class='navLink'><a
+                            href='https://www.pandemic-horde.org/forum/index.php?threads/multi-lemm-logistics-jf-freighter-br-service-covering-tke-def-custom-routes.2872/'
+                            target="_blank">FORUMS</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class='topContainer'>
+
+        <video style="width: 100%; height: 100%; z-index: -1;object-fit: cover;" autoplay muted loop id="myVideo">
+            <source src="img/jita.mp4" type="video/mp4">
+            Any alternate text.
+        </video>
+
+
+
+        <div class='headingContainer'>
+            <img class='mainLogo' src='img/logo.png'>
+            <h1 class='mainHeading'>Multi-Lemm Logistics</h1>
+            <h3 class='subHeading'>Your Friendly Logistics Service</h3>
+            <a href="/jfcalculator"><button class='mainButton'>JF Calculator</button></a>
+            <a href="/perjumpcalcuator"><button class='mainButton'>BR/DST/Freighter Calculator</button></a>
+            <a href="https://discord.gg/kgBGPKuwQ9"><button class='mainButton'>Discord</button></a>
+
+        </div>
+    </div>
+    <div id='aboutus' class='bottomContainer'>
+
+
+        <div class='corpHeadingContainer'>
+            <h1 id='services' class='thumbContainerHeading'>What We Do</h1>
+            <div class='thumbContainer'>
+                <div class='thumb'>
+                    <img class='thumbImage' src="https://imperium.news/wp-content/uploads/2021/03/Highsec_Hauling.jpg">
+                    <h3 class='thumbHeading'>Hauling</h3>
+                    <h3 class='thumbText'>Multi-Lemm Logistics cover all of your hauling needs. We cover nullsec, lowsec
+                        & highsec routes.</h3>
+                </div>
+                <div class='thumb'>
+                    <img class='thumbImage'
+                        src="https://webimg.ccpgamescdn.com/kvd74o0q2fjg/4puPE1s8eQaOuACuyc4gUO/9925021662d183c0d807b3ef225ab06b/industry_2.jpg?w=360&fm=jpg">
+                    <h3 class='thumbHeading'>Jump Freighters</h3>
+                    <h3 class='thumbText'>We primarily use Jump Freighters to service regular routes to Pandemic Horde
+                        space, see our calculator for more information on available routes</h3>
+
+                </div>
+                <div class='thumb'>
+                    <img class='thumbImage'
+                        src="https://static-cdn.jtvnw.net/cf_vods/d2nvs31859zcd8/84787c9e7ca2f986f2cf_sakeineve_20275185559_1610845944/thumb/custom-f784b70e-c700-47ef-bba0-0a0b5a8fdb34-1280x720.jpeg">
+                    <h3 class='thumbHeading'>BRs, DSTs & Freighters</h3>
+                    <h3 class='thumbText'>Multi-Lemm Logistics also offer services using Blockade Runners, Deep Space
+                        Transports & Freighters. These services are ideal for non-standard routes.</h3>
+
+                </div>
+                <div class='thumb'>
+                    <img class='thumbImage'
+                        src="https://static1.makeuseofimages.com/wordpress/wp-content/uploads/2014/05/eve-online-newbie-hauling.png?q=50&fit=crop&w=640&dpr=1.5">
+                    <h3 class='thumbHeading'>Custom Contracts</h3>
+                    <h3 class='thumbText'>We also offer custom Jump Freighter services, for a quote please join our
+                        Discord.</h3>
+
+                </div>
+            </div>
+        </div>
+        <hr>
+
+
+        <div class='corpHeadingContainer'>
+            <h1 class='thumbContainerHeading'>How to setup a contract:</h1>
+            <ol id='joinus' class='joinUsList'>
+                <li class='joinUsListElement'>Copy the items you want to have shipped from your Inventory or Personal
+                    Assets page, you can do this by highlighting the items and then pressing Ctrl + C.</li>
+                <li class='joinUsListElement'>Paste these items into the Item List on our calculator.</li>
+                <li class='joinUsListElement'>Select the desired route from the drop downs.</li>
+                <li class='joinUsListElement'>Press the Submit button, this should generate the contract reward and
+                    collateral.</li>
+                <li class='joinUsListElement'>Create a new contract in game, ensuring that you set this to a private
+                    courier contract, as per the below screenshot: <br> <img src="/img/ss.png"></li>
+                <li class='joinUsListElement'>Press next and fill in the remaining details based on the calculator
+                    output.</li>
+            </ol>
+            </ol>
+        </div>
+    </div>
+    <div class='footer'>
+        <h3 class='footerText'>Multi-Lemm Logistics</h3>
+    </div>
+    <script src='/js/navbar.js'></script>
+    <script src='/js/scroll.js'></script>
+</body>
+
+</html>
