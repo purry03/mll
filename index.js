@@ -201,7 +201,7 @@ const settingsSchema = mongoose.Schema({
     mailsEnabled: {
         type: Boolean,
         required: true,
-        default: true
+        default: false
     }
 });
 
