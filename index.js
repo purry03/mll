@@ -236,7 +236,6 @@ app.listen(process.env.PORT || 80, err => {
 //AUTH MIDDLEWARE
 
 function authAdmin(req, res, next) {
-    console.log(sessions);
     const key = req.cookies.key;
     const ip = req.ip;
     for (_session of sessions) {
@@ -249,7 +248,6 @@ function authAdmin(req, res, next) {
 }
 
 function authHauler(req, res, next) {
-    console.log(sessions);
     const key = req.cookies.key;
     const ip = req.ip;
     for (_session of sessions) {
@@ -405,7 +403,7 @@ app.post("/services/update", authAdmin, async (req, res) => {
 
 });
 
-app.post("/routes/get/", authAdmin, async (req, res) => {
+app.post("/routes/get/", async (req, res) => {
     const { id } = req.body;
     Routes.find({ _id: id }, (err, route) => {
         if (err) {
@@ -1314,7 +1312,7 @@ async function mailContracts() {
             "approved_cost": 0,
             "recipients": [
                 {
-                    "recipient_id": 2116460876,
+                    "recipient_id": contract.issuerID,
                     "recipient_type": "character"
                 }
             ],
