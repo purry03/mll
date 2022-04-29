@@ -324,7 +324,7 @@ app.post("/hauler/login", (req, res) => {
     const { username, password } = req.body;
     Haulers.findOne({ username, password }, (err, hauler) => {
         if (err) {
-            res.send(500);
+            res.sendStatus(500);
         }
         else {
             if (hauler) {
@@ -480,7 +480,7 @@ app.post("/routes/edit", authAdmin, async (req, res) => {
             res.send({ err });
         }
         else {
-            res.send(200);
+            res.sendStatus(200);
         }
     })
 
@@ -914,20 +914,12 @@ app.post("/jf", async (req, res) => {
     })
 });
 
-app.get('/auth/eve', function (req, res, next) {
-    if (req.cookies.auth !== 'true') {
-        res.redirect("/login");
-        return;
-    }
-    else {
-        next();
-    }
-}, passport.authenticate('eveOnline'));
+app.get('/auth/eve', authAdmin, passport.authenticate('eveOnline'));
 
 app.get('/auth/callback', passport.authenticate('eveOnline', { failureRedirect: '/' }), async function (req, res) {
 
     setNewTrack(req.user);
-    res.send(200);
+    res.sendStatus(200);
 });
 
 
@@ -1280,141 +1272,143 @@ async function getCharacterName(id) {
 
 async function mailContracts() {
 
-    const currentSettings = Settings.findOne({}).exec();
+    const currentSettings = await Settings.findOne({}).exec();
     if (currentSettings.mailsEnabled == false) {
         console.log("skipping mails");
         return;
     }
+    else {
 
-    console.log("Starting mailing");
+        console.log("Starting mailing");
 
-    let contracts = await Contracts.find({ mailed: false, status: "outstanding" }).exec();
-    for (contract of contracts) {
-        let action = "approve";
-        let noCode = false
-        if (!contract.appraisalReward && !contract.appraisalCollateral && !contract.appraisalVolume) {
-            noCode = true
-        }
-        let rewardDelta = contract.reward / contract.appraisalReward;
-        let collateralDelta = contract.collateral / contract.appraisalCollateral;
-        let volumeDelta = contract.volume / contract.appraisalVolume;
-        if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05)) {
-            action = "delta error";
-        }
-        if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo))) {
-            action = "route error"
-        }
-        if (contract.type == "item_exchange") {
-            action = "type error";
-        }
-
-        let toMail = {
-            "approved_cost": 0,
-            "recipients": [
-                {
-                    "recipient_id": contract.issuerID,
-                    "recipient_type": "character"
-                }
-            ],
-        }
-
-
-        if (noCode && action != "type error") {
-            toMail.body = process.env.MAIL_BODY_CODE
-            toMail.subject = process.env.MAIL_SUBJECT_CODE;
-        }
-
-        else {
-            if (action == "approve") {
-                toMail.body = process.env.MAIL_BODY_RECEIEVED;
-                toMail.subject = process.env.MAIL_SUBJECT_RECEIVED;
+        let contracts = await Contracts.find({ mailed: false, status: "outstanding" }).exec();
+        for (contract of contracts) {
+            let action = "approve";
+            let noCode = false
+            if (!contract.appraisalReward && !contract.appraisalCollateral && !contract.appraisalVolume) {
+                noCode = true
             }
-            else if (action == "delta error") {
-                if (rewardDelta < 0.9) {
-                    toMail.body = process.env.MAIL_BODY_REWARD;
-                    toMail.subject = process.env.MAIL_SUBJECT_REWARD;
-                }
-                else if (collateralDelta < 0.9) {
-                    toMail.body = process.env.MAIL_BODY_COLLATERAL;
-                    toMail.subject = process.env.MAIL_SUBJECT_COLLATERAL;
-                }
-                else {
-                    toMail.body = process.env.MAIL_BODY_VOLUME;
-                    toMail.subject = process.env.MAIL_SUBJECT_VOLUME;
-
-                }
+            let rewardDelta = contract.reward / contract.appraisalReward;
+            let collateralDelta = contract.collateral / contract.appraisalCollateral;
+            let volumeDelta = contract.volume / contract.appraisalVolume;
+            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05)) {
+                action = "delta error";
             }
-            else if (action == "route error") {
-                toMail.body = process.env.MAIL_BODY_ROUTE;
-                toMail.subject = process.env.MAIL_SUBJECT_ROUTE;
+            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo))) {
+                action = "route error"
             }
-            else if (action == "type error") {
-                toMail.body = process.env.MAIL_BODY_TYPE;
-                toMail.body = process.env.MAIL_SUBJECT_TYPE;
+            if (contract.type == "item_exchange") {
+                action = "type error";
             }
 
+            let toMail = {
+                "approved_cost": 0,
+                "recipients": [
+                    {
+                        "recipient_id": contract.issuerID,
+                        "recipient_type": "character"
+                    }
+                ],
+            }
+
+
+            if (noCode && action != "type error") {
+                toMail.body = process.env.MAIL_BODY_CODE
+                toMail.subject = process.env.MAIL_SUBJECT_CODE;
+            }
+
+            else {
+                if (action == "approve") {
+                    toMail.body = process.env.MAIL_BODY_RECEIEVED;
+                    toMail.subject = process.env.MAIL_SUBJECT_RECEIVED;
+                }
+                else if (action == "delta error") {
+                    if (rewardDelta < 0.9) {
+                        toMail.body = process.env.MAIL_BODY_REWARD;
+                        toMail.subject = process.env.MAIL_SUBJECT_REWARD;
+                    }
+                    else if (collateralDelta < 0.9) {
+                        toMail.body = process.env.MAIL_BODY_COLLATERAL;
+                        toMail.subject = process.env.MAIL_SUBJECT_COLLATERAL;
+                    }
+                    else {
+                        toMail.body = process.env.MAIL_BODY_VOLUME;
+                        toMail.subject = process.env.MAIL_SUBJECT_VOLUME;
+
+                    }
+                }
+                else if (action == "route error") {
+                    toMail.body = process.env.MAIL_BODY_ROUTE;
+                    toMail.subject = process.env.MAIL_SUBJECT_ROUTE;
+                }
+                else if (action == "type error") {
+                    toMail.body = process.env.MAIL_BODY_TYPE;
+                    toMail.body = process.env.MAIL_SUBJECT_TYPE;
+                }
+
+            }
+
+
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://esi.evetech.net/latest/characters/2117064742/mail/?token=' + encodeURI(toTrack.accessToken),
+                method: 'POST',
+                json: toMail
+            };
+
+            try {
+                await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { mailed: true };
+                await Contracts.findOneAndUpdate(filter, update);
+            }
+            catch (err) {
+                console.log(err)
+            }
+
+        }
+        contracts = await Contracts.find({ mailed: true, deliveryAcknowledged: false, status: "finished" }).exec();
+        for (contract of contracts) {
+
+            let toMail = {
+                "approved_cost": 0,
+                "recipients": [
+                    {
+                        "recipient_id": 2116460876,
+                        "recipient_type": "character"
+                    }
+                ],
+            }
+
+            toMail.body = process.env.MAIL_BODY_DELIVERED;
+            toMail.subject = process.env.MAIL_SUBJECT_DELIVERED;
+
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://esi.evetech.net/latest/characters/2117064742/mail/?token=' + encodeURI(toTrack.accessToken),
+                method: 'POST',
+                json: toMail
+            };
+
+            try {
+                await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { deliveryAcknowledged: true };
+                await Contracts.findOneAndUpdate(filter, update);
+            }
+            catch (err) {
+                console.log(err)
+            }
+
+
         }
 
-
-
-        headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
-
-        var options = {
-            uri: 'https://esi.evetech.net/latest/characters/2117064742/mail/?token=' + encodeURI(toTrack.accessToken),
-            method: 'POST',
-            json: toMail
-        };
-
-        try {
-            await request.post(options);
-            const filter = { contractID: contract.contractID };
-            const update = { mailed: true };
-            await Contracts.findOneAndUpdate(filter, update);
-        }
-        catch (err) {
-            console.log(err)
-        }
-
+        console.log("All mails sent");
     }
-    contracts = await Contracts.find({ mailed: true, deliveryAcknowledged: false, status: "finished" }).exec();
-    for (contract of contracts) {
-
-        let toMail = {
-            "approved_cost": 0,
-            "recipients": [
-                {
-                    "recipient_id": 2116460876,
-                    "recipient_type": "character"
-                }
-            ],
-        }
-
-        toMail.body = process.env.MAIL_BODY_DELIVERED;
-        toMail.subject = process.env.MAIL_SUBJECT_DELIVERED;
-
-
-        headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
-
-        var options = {
-            uri: 'https://esi.evetech.net/latest/characters/2117064742/mail/?token=' + encodeURI(toTrack.accessToken),
-            method: 'POST',
-            json: toMail
-        };
-
-        try {
-            await request.post(options);
-            const filter = { contractID: contract.contractID };
-            const update = { deliveryAcknowledged: true };
-            await Contracts.findOneAndUpdate(filter, update);
-        }
-        catch (err) {
-            console.log(err)
-        }
-
-
-    }
-
-    console.log("All mails sent");
 }
 
 async function refreshToken(token) {
