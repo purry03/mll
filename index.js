@@ -1376,7 +1376,7 @@ async function mailContracts() {
                 "approved_cost": 0,
                 "recipients": [
                     {
-                        "recipient_id": 2116460876,
+                        "recipient_id": contract.issuerID,
                         "recipient_type": "character"
                     }
                 ],
