@@ -1061,7 +1061,7 @@ async function saveContracts() {
             type: contract.type,
             contractID: contract.contract_id,
             status: contract.status,
-            issuerID: contract.assignee_id,
+            issuerID: contract.issuer_id,
             issuerName: contract.issuer_name,
             start: contract.start_location_id,
             end: contract.end_location_id,
