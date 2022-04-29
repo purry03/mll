@@ -596,7 +596,7 @@ app.get("/mail/:id/:action", async (req, res) => {
     headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
 
     var options = {
-        uri: 'https://esi.evetech.net/latest/characters/2117064742/mail/?token=' + encodeURI(toTrack.accessToken),
+        uri: 'https://esi.evetech.net/latest/characters/' + process.env.CHARACTER_ID + '/mail/?token=' + encodeURI(toTrack.accessToken),
         method: 'POST',
         json: toMail
     };
@@ -1353,7 +1353,7 @@ async function mailContracts() {
             headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
 
             var options = {
-                uri: 'https://esi.evetech.net/latest/characters/2117064742/mail/?token=' + encodeURI(toTrack.accessToken),
+                uri: 'https://esi.evetech.net/latest/characters/' + process.env.CHARACTER_ID + '/mail/?token=' + encodeURI(toTrack.accessToken),
                 method: 'POST',
                 json: toMail
             };
@@ -1389,7 +1389,7 @@ async function mailContracts() {
             headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
 
             var options = {
-                uri: 'https://esi.evetech.net/latest/characters/2117064742/mail/?token=' + encodeURI(toTrack.accessToken),
+                uri: 'https://esi.evetech.net/latest/characters/' + process.env.CHARACTER_ID + '/mail/?token=' + encodeURI(toTrack.accessToken),
                 method: 'POST',
                 json: toMail
             };
