@@ -268,7 +268,7 @@ function authHauler(req, res, next) {
 
 
 
-app.get("/perjumpcalcuator", (req, res) => {
+app.get("/perjumpcalculator", (req, res) => {
     System.find({}, (err, systems) => {
         if (err) {
             res.sendStatus(500);
