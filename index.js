@@ -772,8 +772,8 @@ app.post("/", async (req, res) => {
 
     const toSave = new Appraisal({
         key: randomstring.generate(8),
-        from: source,
-        to: destination,
+        from: sourceName,
+        to: destinationName,
         volume,
         reward: lowestPrice,
         collateral,
