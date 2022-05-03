@@ -1442,16 +1442,39 @@ async function discordNotification() {
         let contracts = await Contracts.find({ discordNotified: false, status: "outstanding" }).exec();
         for (contract of contracts) {
           let serviceType = contract.description.split("-")[1];
+
           if (serviceType == 'R') {
+            // this is now a rush contract and therefore a discord notification is required
+            let discordNotification = process.env.DISCORD_NOTIFICATON_TEMPLATE;
+            var mapObj = {$ISSUER_NAME:contract.issuerName,$DESTINATION_NAME:contract.end,$VOLUME:contract.volume,$STATUS:contract.status,$ISSUED_DATE:contract.date,$ISSUER_ID:contract.issuerID};
+
+            var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
+            discordNotification = discordNotification.replace(re, function(matched){
+              return mapObj[matched];
+            });
+            console.log(discordNotification);
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.DISCORD_SERVER_ID + '/' + process.env.DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: discordNotification
+            };
+
+
+
+
               try {
-            const filter = { contractID: contract.contractID };
-            const update = { discordNotified: true };
-            await Contracts.findOneAndUpdate(filter, update);
+                //await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { discordNotified: true };
+                await Contracts.findOneAndUpdate(filter, update);
               }
               catch (err) {
                 console.log(err)
               }
-            console.log ('Discord Notification for ' + contract.issuerName + 'being sent.')
+            console.log ('Discord Notification for ' + contract.issuerName + ' being sent.')
           }
           else {
             try {
