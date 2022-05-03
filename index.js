@@ -1,4 +1,4 @@
-require("./jsonBuilder");
+const jsonBuilder = require("./jsonBuilder");
 require('dotenv').config({ path: __dirname + '/.env' })
 // process.env.NODE_ENV = 'production';
 
@@ -206,6 +206,11 @@ const haulerSchema = mongoose.Schema({
 
 const settingsSchema = mongoose.Schema({
     mailsEnabled: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    discordEnabled: {
         type: Boolean,
         required: true,
         default: false
@@ -1432,9 +1437,9 @@ async function mailContracts() {
 async function discordNotification() {
 
     const currentSettings = await Settings.findOne({}).exec();
+    console.log(currentSettings.discordEnabled);
     if (!currentSettings.discordEnabled) {
-        console.log("skipping discord notification");
-        return;
+        console.log("Skipping discord notification");
     }
     else {
 
@@ -1446,7 +1451,7 @@ async function discordNotification() {
 
           if (serviceType == 'R') {
             // this is now a rush contract and therefore a discord notification is required
-              let notificationJson = buildJson(
+              let notificationJson = jsonBuilder.buildJson(
                   contract.issuer_name,
                   contract.start,
                   contract.end,
