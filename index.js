@@ -1445,8 +1445,8 @@ async function discordNotification() {
 
           if (serviceType == 'R') {
             // this is now a rush contract and therefore a discord notification is required
-            let discordNotification = process.env.DISCORD_NOTIFICATON_TEMPLATE;
-            var mapObj = {$ISSUER_NAME:contract.issuerName,$DESTINATION_NAME:contract.end,$VOLUME:contract.volume,$STATUS:contract.status,$ISSUED_DATE:contract.date,$ISSUER_ID:contract.issuerID};
+            let discordNotification = process.env.DISCORD_NOTIFICATION_TEMPLATE;
+            var mapObj = {$ISSUER_NAME:contract.issuerName,$DESTINATION_NAME:contract.end,$ORIGIN_NAME:contract.start,$VOLUME:contract.volume,$STATUS:contract.status,$ISSUED_DATE:contract.date,$ISSUER_ID:contract.issuerID};
 
             var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
             discordNotification = discordNotification.replace(re, function(matched){
