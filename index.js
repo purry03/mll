@@ -1,4 +1,4 @@
-require("./jsonBuilder");
+const jsonBuilder = require("./jsonBuilder");
 require('dotenv').config({ path: __dirname + '/.env' })
 // process.env.NODE_ENV = 'production';
 
@@ -1451,7 +1451,7 @@ async function discordNotification() {
 
           if (serviceType == 'R') {
             // this is now a rush contract and therefore a discord notification is required
-              let notificationJson = buildJson(
+              let notificationJson = jsonBuilder.buildJson(
                   contract.issuer_name,
                   contract.start,
                   contract.end,
