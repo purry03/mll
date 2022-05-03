@@ -1432,9 +1432,9 @@ async function mailContracts() {
 async function discordNotification() {
 
     const currentSettings = await Settings.findOne({}).exec();
+    console.log(currentSettings.discordEnabled);
     if (!currentSettings.discordEnabled) {
-        console.log("skipping discord notification");
-        return;
+        console.log("Skipping discord notification");
     }
     else {
 
