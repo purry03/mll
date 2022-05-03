@@ -1292,18 +1292,18 @@ async function mailContracts() {
         let contracts = await Contracts.find({ mailed: false, status: "outstanding" }).exec();
         for (contract of contracts) {
             let action = "approve";
-            let noCode = false
+            let noCode = false;
             if (!contract.appraisalReward && !contract.appraisalCollateral && !contract.appraisalVolume) {
                 noCode = true
             }
             let rewardDelta = contract.reward / contract.appraisalReward;
             let collateralDelta = contract.collateral / contract.appraisalCollateral;
             let volumeDelta = contract.volume / contract.appraisalVolume;
-            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05)) {
+            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05) && nocode = false) {
                 action = "delta error";
             }
-            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo))) {
-                action = "route error"
+            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) && nocode = false) {
+                action = "route error";
             }
             if (contract.type == "item_exchange") {
                 action = "type error";
@@ -1356,7 +1356,9 @@ async function mailContracts() {
 
             }
 
-
+            if (nocode = true){
+              action = 'Missing validation code & ' + action
+            }
 
             headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
 
