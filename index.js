@@ -1,5 +1,4 @@
-import {buildJson} from "./jsonBuilder";
-
+require("./jsonBuilder");
 require('dotenv').config({ path: __dirname + '/.env' })
 // process.env.NODE_ENV = 'production';
 
