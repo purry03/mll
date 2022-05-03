@@ -209,6 +209,11 @@ const settingsSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    discordEnabled: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
 
