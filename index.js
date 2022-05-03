@@ -1299,10 +1299,10 @@ async function mailContracts() {
             let rewardDelta = contract.reward / contract.appraisalReward;
             let collateralDelta = contract.collateral / contract.appraisalCollateral;
             let volumeDelta = contract.volume / contract.appraisalVolume;
-            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05) && nocode = false) {
+            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05) && nocode === false) {
                 action = "delta error";
             }
-            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) && nocode = false) {
+            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) && nocode === false) {
                 action = "route error";
             }
             if (contract.type == "item_exchange") {
@@ -1356,7 +1356,7 @@ async function mailContracts() {
 
             }
 
-            if (nocode = true){
+            if (nocode === true){
               action = 'Missing validation code & ' + action
             }
 
