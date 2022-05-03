@@ -12,7 +12,7 @@ exports.buildJson = function (issuerName, origin, destination, volume, status, v
                 },
                 "title": "MLL Rush Shipment Notification",
                 "url": "http://multi-lemm-logistics.com/contracts",
-                "description": `${issuerName} has put up a new rush shipping contract, see below for details.`,
+                "description": `**${issuerName}** has put up a new rush shipping contract, see below for details.`,
                 "color": 16757309,
                 "fields": [
                     {
