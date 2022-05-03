@@ -151,8 +151,8 @@ const characterSchema = mongoose.Schema({
 });
 
 const contractSchema = mongoose.Schema({
-    date: Date,
-    dateCompleted: Date,
+    date: String,
+    dateCompleted: String,
     type: String,
     key: String,
     contractID: {
@@ -1457,7 +1457,8 @@ async function discordNotification() {
                   contract.end,
                   contract.volume.toLocaleString("en-GB"),
                   contract.status,
-                  contract.date,
+                  contract.validationStatus,
+                  contract.date.toLocaleDateString("en-GB"),
                   contract.issuerID,
                   process.env.DISCORD_ROLE_ID)
 
@@ -1470,9 +1471,6 @@ async function discordNotification() {
                 method: 'POST',
                 json: notificationJson
             };
-
-
-
 
               try {
                 await request.post(options);

@@ -1,4 +1,4 @@
-exports.buildJson = function (issuerName, origin, destination, volume, status, issuedDate, issuerId, discordRoleId){
+exports.buildJson = function (issuerName, origin, destination, volume, status, validatedStatus, issuedDate, issuerId, discordRoleId){
     let jsonData = {
         "username": "MLL Rush Shipping Notification",
         "avatar_url": "https://multi-lemm-logistics.com/img/logo.png",
@@ -33,6 +33,11 @@ exports.buildJson = function (issuerName, origin, destination, volume, status, i
                     {
                         "name": "Status",
                         "value": `${status}`,
+                        "inline": true
+                    },
+                    {
+                        "name": "Validated Status",
+                        "value": `${validatedStatus}`,
                         "inline": true
                     },
                     {
