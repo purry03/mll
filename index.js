@@ -1,3 +1,5 @@
+import {buildJson} from "./jsonBuilder";
+
 require('dotenv').config({ path: __dirname + '/.env' })
 // process.env.NODE_ENV = 'production';
 
@@ -1431,7 +1433,7 @@ async function mailContracts() {
 async function discordNotification() {
 
     const currentSettings = await Settings.findOne({}).exec();
-    if (currentSettings.discordEnabled == false) {
+    if (!currentSettings.discordEnabled) {
         console.log("skipping discord notification");
         return;
     }
@@ -1445,28 +1447,31 @@ async function discordNotification() {
 
           if (serviceType == 'R') {
             // this is now a rush contract and therefore a discord notification is required
-            let discordNotification = process.env.DISCORD_NOTIFICATION_TEMPLATE;
-            var mapObj = {$ISSUER_NAME:contract.issuerName,$DESTINATION_NAME:contract.end,$ORIGIN_NAME:contract.start,$VOLUME:contract.volume,$STATUS:contract.status,$ISSUED_DATE:contract.date,$ISSUER_ID:contract.issuerID};
+              let notificationJson = buildJson(
+                  contract.issuer_name,
+                  contract.start,
+                  contract.end,
+                  contract.volume,
+                  contract.status,
+                  contract.date,
+                  contract.issuerID,
+                  process.env.DISCORD_ROLE_ID)
 
-            var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
-            discordNotification = discordNotification.replace(re, function(matched){
-              return mapObj[matched];
-            });
-            console.log(discordNotification);
+            console.log(JSON.stringify(notificationJson));
 
             headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
 
             var options = {
                 uri: 'https://discord.com/api/webhooks/' + process.env.DISCORD_SERVER_ID + '/' + process.env.DISCORD_WEBHOOK_TOKEN,
                 method: 'POST',
-                json: discordNotification
+                json: notificationJson
             };
 
 
 
 
               try {
-                //await request.post(options);
+                await request.post(options);
                 const filter = { contractID: contract.contractID };
                 const update = { discordNotified: true };
                 await Contracts.findOneAndUpdate(filter, update);
