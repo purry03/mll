@@ -188,9 +188,7 @@ const contractSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
-    },
-    validationStatus: String,
-    discordNotified: Boolean
+    }
 });
 
 const haulerSchema = mongoose.Schema({
@@ -1304,12 +1302,12 @@ async function mailContracts() {
             if (contract.type == "item_exchange") {
                 action = "type error";
             }
-//contract.issuerID
+
             let toMail = {
                 "approved_cost": 0,
                 "recipients": [
                     {
-                        "recipient_id": 91927851,
+                        "recipient_id": contract.issuerID,
                         "recipient_type": "character"
                     }
                 ],
@@ -1365,7 +1363,7 @@ async function mailContracts() {
             try {
                 await request.post(options);
                 const filter = { contractID: contract.contractID };
-                const update = { mailed: true, validationStatus: action };
+                const update = { mailed: true };
                 await Contracts.findOneAndUpdate(filter, update);
             }
             catch (err) {
@@ -1375,13 +1373,12 @@ async function mailContracts() {
         }
         contracts = await Contracts.find({ mailed: true, deliveryAcknowledged: false, status: "finished" }).exec();
         for (contract of contracts) {
-          //contract.issuerID
 
             let toMail = {
                 "approved_cost": 0,
                 "recipients": [
                     {
-                        "recipient_id": 91927851,
+                        "recipient_id": contract.issuerID,
                         "recipient_type": "character"
                     }
                 ],
