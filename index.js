@@ -1423,6 +1423,7 @@ async function mailContracts() {
 
         console.log("All mails sent");
     }
+    discordNotification();
 }
 
 
