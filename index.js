@@ -1457,7 +1457,7 @@ async function discordNotification() {
                   contract.end,
                   contract.volume.toLocaleString("en-GB"),
                   contract.status,
-                  contract.date.toLocaleDateString("en-GB"),
+                  contract.date,
                   contract.issuerID,
                   process.env.DISCORD_ROLE_ID)
 

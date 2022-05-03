@@ -27,7 +27,7 @@ exports.buildJson = function (issuerName, origin, destination, volume, status, i
                     },
                     {
                         "name": "Volume",
-                        "value": `${volume} m3`,
+                        "value": `${volume.toLocaleString("en-GB")} m3`,
                         "inline": true
                     },
                     {
@@ -37,7 +37,7 @@ exports.buildJson = function (issuerName, origin, destination, volume, status, i
                     },
                     {
                         "name": "Issued Date",
-                        "value": `${issuedDate}`,
+                        "value": `${issuedDate.toLocaleDateString("en-GB")} ${issuedDate.toLocaleTimeString("en-GB")}`,
                         "inline": true
                     }
                 ],
