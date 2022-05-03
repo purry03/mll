@@ -1299,10 +1299,10 @@ async function mailContracts() {
             let rewardDelta = contract.reward / contract.appraisalReward;
             let collateralDelta = contract.collateral / contract.appraisalCollateral;
             let volumeDelta = contract.volume / contract.appraisalVolume;
-            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05) && nocode === false) {
+            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05) && noCode === false) {
                 action = "delta error";
             }
-            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) && nocode === false) {
+            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) && noCode === false) {
                 action = "route error";
             }
             if (contract.type == "item_exchange") {
@@ -1320,7 +1320,7 @@ async function mailContracts() {
             }
 
 
-            if (noCode && action != "type error") {
+            if (noCode == true && action != "type error") {
                 toMail.body = process.env.MAIL_BODY_CODE
                 toMail.subject = process.env.MAIL_SUBJECT_CODE;
             }
@@ -1353,12 +1353,15 @@ async function mailContracts() {
                     toMail.body = process.env.MAIL_BODY_TYPE;
                     toMail.body = process.env.MAIL_SUBJECT_TYPE;
                 }
-
             }
 
-            if (nocode === true){
-              action = 'Missing validation code & ' + action
+            if (noCode === true && action != "approve") {
+              action = 'Missing validation code & ' + action;
             }
+            else if (noCode === true && action = "approve") {
+              action = 'Missing validation code';
+            }
+
 
             headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
 
