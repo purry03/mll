@@ -190,7 +190,11 @@ const contractSchema = mongoose.Schema({
         default: false
     },
     validationStatus: String,
-    discordNotified: Boolean
+    discordNotified: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 });
 
 const haulerSchema = mongoose.Schema({
