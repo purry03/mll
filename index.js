@@ -1425,6 +1425,54 @@ async function mailContracts() {
     }
 }
 
+
+//BG Additions for Discord Bot
+async function discordNotification() {
+
+    const currentSettings = await Settings.findOne({}).exec();
+    if (currentSettings.discordEnabled == false) {
+        console.log("skipping discord notification");
+        return;
+    }
+    else {
+
+        console.log("Starting discord notification");
+
+        let contracts = await Contracts.find({ discordNotified: false, status: "outstanding" }).exec();
+        for (contract of contracts) {
+          let serviceType = contract.description.split("-")[1];
+          if (serviceType == 'R') {
+              try {
+            const filter = { contractID: contract.contractID };
+            const update = { discordNotified: true };
+            await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Discord Notification for ' + contract.issuerName + 'being sent.')
+          }
+          else {
+            try {
+                const filter = { contractID: contract.contractID };
+                const update = { discordNotified: true };
+                await Contracts.findOneAndUpdate(filter, update);
+            }
+            catch (err) {
+                console.log(err)
+            }
+          }
+
+        }
+
+        console.log("Discord Notification Method Complete");
+    }
+}
+
+
+
+
+
 async function refreshToken(token) {
 
     var details = {
