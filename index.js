@@ -151,8 +151,8 @@ const characterSchema = mongoose.Schema({
 });
 
 const contractSchema = mongoose.Schema({
-    date: String,
-    dateCompleted: String,
+    date: Date,
+    dateCompleted: Date,
     type: String,
     key: String,
     contractID: {
