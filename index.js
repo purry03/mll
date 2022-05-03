@@ -575,6 +575,18 @@ app.get("/settings/toggle/mail", authAdmin, async (req, res) => {
 })
 
 
+app.get("/settings/toggle/discord", authAdmin, async (req, res) => {
+    let currentSettings = await Settings.findOne({}).exec();
+    if (currentSettings.discordEnabled) {
+        await Settings.findOneAndUpdate({}, { discordEnabled: false }).exec();
+    }
+    else {
+        await Settings.findOneAndUpdate({}, { discordEnabled: true }).exec();
+    }
+    res.sendStatus(200);
+})
+
+
 app.get("/mail/:id/:action", async (req, res) => {
     const { id, action } = req.params;
     let toMail;
