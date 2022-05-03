@@ -1355,10 +1355,10 @@ async function mailContracts() {
                 }
             }
 
-            if (noCode === true && action != "approve") {
+            if ((noCode === true) && (action != "approve")) {
               action = 'Missing validation code & ' + action;
             }
-            else if (noCode === true && action = "approve") {
+            else if ((noCode === true) && (action = "approve")) {
               action = 'Missing validation code';
             }
 
