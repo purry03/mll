@@ -37,7 +37,7 @@ exports.buildJson = function (issuerName, origin, destination, volume, status, i
                     },
                     {
                         "name": "Issued Date",
-                        "value": `${issuedDate.toLocaleString('en-GB', {timeZone: 'UTC'})}`,
+                        "value": `${issuedDate.toLocaleString('ar-EG', {timeZone: 'UTC'})}`,
                         "inline": true
                     }
                 ],
