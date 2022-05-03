@@ -42,7 +42,7 @@ exports.buildJson = function (issuerName, origin, destination, volume, status, i
                     }
                 ],
                 "footer": {
-                    "text": "$ISSUER_NAME",
+                    "text": `${issuerName}`,
                     "url": `https://evewho.com/character/${issuerId}`,
                     "icon_url": `https://images.evetech.net/characters/${issuerId}/portrait`
                 }
