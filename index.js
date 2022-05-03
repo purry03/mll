@@ -984,7 +984,7 @@ resumeTrack();
 async function resumeTrack() {
 
     fetchStatistics();
-    cronID = setInterval(fetchStatistics, 300000);
+    cronID = setInterval(fetchStatistics, 60000);
     setInterval(mailContracts, 60000);
 
 }
