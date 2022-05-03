@@ -23,7 +23,7 @@ var randomstring = require("randomstring");
 app.use(session({
     resave: false,
     saveUninitialized: true,
-    secret: 'gfwq87t83$S'
+    secret: randomstring.generate(8)
 }));
 
 app.use(cookieParser());
