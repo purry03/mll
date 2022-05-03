@@ -1437,7 +1437,7 @@ async function mailContracts() {
 async function discordNotification() {
 
     const currentSettings = await Settings.findOne({}).exec();
-    console.log(currentSettings.discordEnabled);
+    //console.log(currentSettings.discordEnabled);
     if (!currentSettings.discordEnabled) {
         console.log("Skipping discord notification");
     }
@@ -1462,7 +1462,7 @@ async function discordNotification() {
                   contract.issuerID,
                   process.env.DISCORD_ROLE_ID)
 
-            console.log(JSON.stringify(notificationJson));
+            //console.log(JSON.stringify(notificationJson));
 
             headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
 
