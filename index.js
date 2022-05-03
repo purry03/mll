@@ -1452,12 +1452,12 @@ async function discordNotification() {
           if (serviceType == 'R') {
             // this is now a rush contract and therefore a discord notification is required
               let notificationJson = jsonBuilder.buildJson(
-                  contract.issuer_name,
+                  contract.issuerName,
                   contract.start,
                   contract.end,
-                  contract.volume,
+                  contract.volume.toLocaleString("en-GB"),
                   contract.status,
-                  contract.date,
+                  contract.date.toLocaleDateString("en-GB"),
                   contract.issuerID,
                   process.env.DISCORD_ROLE_ID)
 
