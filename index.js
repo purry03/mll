@@ -1,3 +1,5 @@
+const jsonBuilder = require("./jsonBuilder");
+const moment = require('moment');
 require('dotenv').config({ path: __dirname + '/.env' })
 // process.env.NODE_ENV = 'production';
 
@@ -22,7 +24,7 @@ var randomstring = require("randomstring");
 app.use(session({
     resave: false,
     saveUninitialized: true,
-    secret: 'gfwq87t83$S'
+    secret: randomstring.generate(8)
 }));
 
 app.use(cookieParser());
@@ -150,8 +152,8 @@ const characterSchema = mongoose.Schema({
 });
 
 const contractSchema = mongoose.Schema({
-    date: String,
-    dateCompleted: String,
+    date: Date,
+    dateCompleted: Date,
     type: String,
     key: String,
     contractID: {
@@ -188,7 +190,15 @@ const contractSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
-    }
+    },
+    validationStatus: String,
+    discordNotified: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    discordNotificationTime: Date,
+    discordReminderSent: Boolean
 });
 
 const haulerSchema = mongoose.Schema({
@@ -199,6 +209,11 @@ const haulerSchema = mongoose.Schema({
 
 const settingsSchema = mongoose.Schema({
     mailsEnabled: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    discordEnabled: {
         type: Boolean,
         required: true,
         default: false
@@ -558,6 +573,18 @@ app.get("/settings/toggle/mail", authAdmin, async (req, res) => {
     }
     else {
         await Settings.findOneAndUpdate({}, { mailsEnabled: true }).exec();
+    }
+    res.sendStatus(200);
+})
+
+
+app.get("/settings/toggle/discord", authAdmin, async (req, res) => {
+    let currentSettings = await Settings.findOne({}).exec();
+    if (currentSettings.discordEnabled) {
+        await Settings.findOneAndUpdate({}, { discordEnabled: false }).exec();
+    }
+    else {
+        await Settings.findOneAndUpdate({}, { discordEnabled: true }).exec();
     }
     res.sendStatus(200);
 })
@@ -980,6 +1007,7 @@ async function resumeTrack() {
     fetchStatistics();
     cronID = setInterval(fetchStatistics, 300000);
     setInterval(mailContracts, 60000);
+    setInterval(discordNotification, 30000);
 
 }
 
@@ -1286,23 +1314,23 @@ async function mailContracts() {
         let contracts = await Contracts.find({ mailed: false, status: "outstanding" }).exec();
         for (contract of contracts) {
             let action = "approve";
-            let noCode = false
+            let noCode = false;
             if (!contract.appraisalReward && !contract.appraisalCollateral && !contract.appraisalVolume) {
                 noCode = true
             }
             let rewardDelta = contract.reward / contract.appraisalReward;
             let collateralDelta = contract.collateral / contract.appraisalCollateral;
             let volumeDelta = contract.volume / contract.appraisalVolume;
-            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05)) {
+            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05) && !noCode) {
                 action = "delta error";
             }
-            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo))) {
-                action = "route error"
+            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) && !noCode) {
+                action = "route error";
             }
             if (contract.type == "item_exchange") {
                 action = "type error";
             }
-
+//contract.issuerID
             let toMail = {
                 "approved_cost": 0,
                 "recipients": [
@@ -1347,9 +1375,14 @@ async function mailContracts() {
                     toMail.body = process.env.MAIL_BODY_TYPE;
                     toMail.body = process.env.MAIL_SUBJECT_TYPE;
                 }
-
             }
 
+            if ((noCode) && (action != "approve")) {
+              action = 'Missing validation code & ' + action;
+            }
+            else if ((noCode) && (action = "approve")) {
+              action = 'Missing validation code';
+            }
 
 
             headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
@@ -1363,7 +1396,7 @@ async function mailContracts() {
             try {
                 await request.post(options);
                 const filter = { contractID: contract.contractID };
-                const update = { mailed: true };
+                const update = { mailed: true, validationStatus: action };
                 await Contracts.findOneAndUpdate(filter, update);
             }
             catch (err) {
@@ -1373,6 +1406,7 @@ async function mailContracts() {
         }
         contracts = await Contracts.find({ mailed: true, deliveryAcknowledged: false, status: "finished" }).exec();
         for (contract of contracts) {
+          //contract.issuerID
 
             let toMail = {
                 "approved_cost": 0,
@@ -1411,7 +1445,121 @@ async function mailContracts() {
 
         console.log("All mails sent");
     }
+    //discordNotification();
 }
+
+
+//BG Additions for Discord Bot
+async function discordNotification() {
+
+    const currentSettings = await Settings.findOne({}).exec();
+    //console.log(currentSettings.discordEnabled);
+    if (!currentSettings.discordEnabled) {
+        console.log("Skipping discord notification");
+    }
+    else {
+
+        console.log("Starting discord notification");
+
+        let contracts = await Contracts.find({ discordNotified: false, status: "outstanding" }).exec();
+        for (contract of contracts) {
+          let serviceType = contract.description.split("-")[1];
+
+          if (serviceType == 'R') {
+            // this is now a rush contract and therefore a discord notification is required
+              let notificationJson = jsonBuilder.buildJson(
+                  'firstNotification',
+                  contract.issuerName,
+                  contract.start,
+                  contract.end,
+                  contract.volume,
+                  contract.status,
+                  contract.validationStatus,
+                  contract.date,
+                  contract.issuerID,
+                  process.env.DISCORD_ROLE_ID)
+
+            //console.log(JSON.stringify(notificationJson));
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.DISCORD_SERVER_ID + '/' + process.env.DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { discordNotified: true, discordNotificationTime: Date.now(), discordReminderSent: false};
+                await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Discord Notification for ' + contract.issuerName + ' being sent.')
+          }
+          else {
+            try {
+                const filter = { contractID: contract.contractID };
+                const update = { discordNotified: true, discordReminderSent: true};
+                await Contracts.findOneAndUpdate(filter, update);
+            }
+            catch (err) {
+                console.log(err)
+            }
+          }
+
+        }
+
+        console.log("Checking for discord reminders");
+        let notificationContracts = await Contracts.find({ discordNotified: true, status: "outstanding", discordNotificationTime: {$ne: null}, discordReminderSent: false}).exec();
+        for (contract of notificationContracts) {
+            // this is now a rush contract and therefore a discord notification is required
+              let timePassed = moment().diff(moment(contract.discordNotificationTime), 'hours');
+              if (timePassed >= 12) {
+                let notificationJson = jsonBuilder.buildJson(
+                    'reminderNotification',
+                    contract.issuerName,
+                    contract.start,
+                    contract.end,
+                    contract.volume,
+                    contract.status,
+                    contract.validationStatus,
+                    contract.date,
+                    contract.issuerID,
+                    process.env.DISCORD_ROLE_ID)
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.DISCORD_SERVER_ID + '/' + process.env.DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { discordReminderSent: true};
+                await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Discord Reminder Notification for ' + contract.issuerName + ' being sent.')
+          }
+
+        }
+
+        console.log("Discord Notification Method Complete");
+    }
+}
+
+
+
+
 
 async function refreshToken(token) {
 
