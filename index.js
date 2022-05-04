@@ -196,7 +196,8 @@ const contractSchema = mongoose.Schema({
         required: true,
         default: false
     },
-    discordNotificationTime: Date
+    discordNotificationTime: Date,
+    discordReminderSent: Boolean
 });
 
 const haulerSchema = mongoose.Schema({
@@ -1490,7 +1491,7 @@ async function discordNotification() {
               try {
                 await request.post(options);
                 const filter = { contractID: contract.contractID };
-                const update = { discordNotified: true, discordNotificationTime: Date.now()};
+                const update = { discordNotified: true, discordNotificationTime: Date.now(), discordReminderSent: false};
                 await Contracts.findOneAndUpdate(filter, update);
               }
               catch (err) {
@@ -1501,12 +1502,52 @@ async function discordNotification() {
           else {
             try {
                 const filter = { contractID: contract.contractID };
-                const update = { discordNotified: true };
+                const update = { discordNotified: true, discordReminderSent: true};
                 await Contracts.findOneAndUpdate(filter, update);
             }
             catch (err) {
                 console.log(err)
             }
+          }
+
+        }
+
+        console.log("Checking for discord reminders");
+        let contracts = await Contracts.find({ discordNotified: true, status: "outstanding", discordNotificationTime: {$ne: null}, discordReminderSent: false}).exec();
+        for (contract of contracts) {
+            // this is now a rush contract and therefore a discord notification is required
+              let timePassed = moment().diff(moment(contract.discordNotificationTime), 'hours');
+              if (timePassed >= 0.5) {
+                let notificationJson = jsonBuilder.buildJson(
+                    'reminderNotification',
+                    contract.issuerName,
+                    contract.start,
+                    contract.end,
+                    contract.volume,
+                    contract.status,
+                    contract.validationStatus,
+                    contract.date,
+                    contract.issuerID,
+                    process.env.DISCORD_ROLE_ID)
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.DISCORD_SERVER_ID + '/' + process.env.DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { discordReminderSent: true};
+                await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Discord Reminder Notification for ' + contract.issuerName + ' being sent.')
           }
 
         }
