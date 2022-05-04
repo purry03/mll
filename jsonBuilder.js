@@ -1,6 +1,6 @@
 exports.buildJson = function (notificationType, issuerName, origin, destination, volume, status, validatedStatus, issuedDate, issuerId, discordRoleId){
   let notificationMessage = '**' + issuerName + '** has put up a new rush shipping contract, see below for details.'
-  if notificationType === "reminderNotification" {
+  if (notificationType === "reminderNotification") {
     let notificationMessage = "**HELLO?!** There was a rush contract put up over 12 hours ago and it's still oustanding"
   }
 
