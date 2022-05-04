@@ -195,6 +195,8 @@ const contractSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    discordNotificationTime: Date
     }
 });
 
@@ -1464,6 +1466,7 @@ async function discordNotification() {
           if (serviceType == 'R') {
             // this is now a rush contract and therefore a discord notification is required
               let notificationJson = jsonBuilder.buildJson(
+                  'firstNotification',
                   contract.issuerName,
                   contract.start,
                   contract.end,
@@ -1487,7 +1490,7 @@ async function discordNotification() {
               try {
                 await request.post(options);
                 const filter = { contractID: contract.contractID };
-                const update = { discordNotified: true };
+                const update = { discordNotified: true, discordNotificationTime: Date.now()};
                 await Contracts.findOneAndUpdate(filter, update);
               }
               catch (err) {
