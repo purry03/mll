@@ -1518,7 +1518,7 @@ async function discordNotification() {
         for (contract of notificationContracts) {
             // this is now a rush contract and therefore a discord notification is required
               let timePassed = moment().diff(moment(contract.discordNotificationTime), 'hours');
-              if (timePassed >= 0.5) {
+              if (timePassed >= 12) {
                 let notificationJson = jsonBuilder.buildJson(
                     'reminderNotification',
                     contract.issuerName,
