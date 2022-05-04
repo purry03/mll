@@ -197,7 +197,6 @@ const contractSchema = mongoose.Schema({
         default: false
     },
     discordNotificationTime: Date
-    }
 });
 
 const haulerSchema = mongoose.Schema({
