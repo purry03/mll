@@ -1513,8 +1513,8 @@ async function discordNotification() {
         }
 
         console.log("Checking for discord reminders");
-        let contracts = await Contracts.find({ discordNotified: true, status: "outstanding", discordNotificationTime: {$ne: null}, discordReminderSent: false}).exec();
-        for (contract of contracts) {
+        let notificationContracts = await Contracts.find({ discordNotified: true, status: "outstanding", discordNotificationTime: {$ne: null}, discordReminderSent: false}).exec();
+        for (contract of notificationContracts) {
             // this is now a rush contract and therefore a discord notification is required
               let timePassed = moment().diff(moment(contract.discordNotificationTime), 'hours');
               if (timePassed >= 0.5) {
