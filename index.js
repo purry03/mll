@@ -866,7 +866,7 @@ app.post("/jf", async (req, res) => {
     const data = await response.json();
     let volume, price;
     try {
-        volume = (Math.round((data.totalPackagedVolume || 0) * 100) /100) + (Math.round(parseInt(req.body.additionalVolume || 0) * 100)/100);
+        volume = (Math.round((data.totalPackagedVolume) * 100) /100) || 0 + (Math.round(parseInt(req.body.additionalVolume) * 100)/100) || 0;
         price = Math.round(data.effectivePrices.totalSellPrice);
         errorLines = data.failures;
     }
