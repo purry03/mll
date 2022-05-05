@@ -875,7 +875,7 @@ app.post("/jf", async (req, res) => {
         return;
     }
 
-    let collateral = parseInt(price || 0) + parseInt(additionalCollateral || 0);
+    let collateral = parseInt(price) || 0 + parseInt(additionalCollateral) || 0;
     let reward = 0;
     let servicePricing = "ISK per m<sup>3</sup>"
 
