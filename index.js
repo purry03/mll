@@ -660,7 +660,7 @@ app.post("/", async (req, res) => {
     const data = await response.json();
     let volume, price;
     try {
-        volume = data.totalPackagedVolume + parseInt(req.body.additionalVolume);
+        volume = (Math.round((data.totalPackagedVolume) * 100) /100) || 0 + (parseInt(req.body.additionalVolume) || 0 );
         price = Math.round(data.effectivePrices.totalSellPrice);
         errorLines = data.failures;
     }
@@ -668,7 +668,7 @@ app.post("/", async (req, res) => {
         res.send({ "err": "Invalid Input" });
         return;
     }
-    const collateral = parseInt(price) + parseInt(req.body.additionalCollateral);
+    const collateral = (parseInt(price) || 0) + (parseInt(req.body.additionalCollateral) || 0);;
 
     //get number of jumps
     const { source, destination } = req.body;
@@ -866,7 +866,7 @@ app.post("/jf", async (req, res) => {
     const data = await response.json();
     let volume, price;
     try {
-        volume = (Math.round((data.totalPackagedVolume) * 100) /100) || 0 + (Math.round(parseInt(req.body.additionalVolume) * 100)/100) || 0;
+        volume = (Math.round((data.totalPackagedVolume) * 100) /100) || 0 + (parseInt(req.body.additionalVolume) || 0 );
         price = Math.round(data.effectivePrices.totalSellPrice);
         errorLines = data.failures;
     }
@@ -875,7 +875,7 @@ app.post("/jf", async (req, res) => {
         return;
     }
 
-    let collateral = parseInt(price) || 0 + parseInt(additionalCollateral) || 0;
+    let collateral = (parseInt(price) || 0) + (parseInt(additionalCollateral) || 0);
     let reward = 0;
     let servicePricing = "ISK per m<sup>3</sup>"
 
