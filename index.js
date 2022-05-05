@@ -866,7 +866,7 @@ app.post("/jf", async (req, res) => {
     const data = await response.json();
     let volume, price;
     try {
-        volume = data.totalPackagedVolume + parseInt(req.body.additionalVolume);
+        volume = (Math.round((data.totalPackagedVolume || 0) * 100) /100) + (Math.round(parseInt(req.body.additionalVolume || 0) * 100)/100);
         price = Math.round(data.effectivePrices.totalSellPrice);
         errorLines = data.failures;
     }
@@ -875,7 +875,7 @@ app.post("/jf", async (req, res) => {
         return;
     }
 
-    let collateral = parseInt(price) + parseInt(additionalCollateral);
+    let collateral = parseInt(price || 0) + parseInt(additionalCollateral || 0);
     let reward = 0;
     let servicePricing = "ISK per m<sup>3</sup>"
 
