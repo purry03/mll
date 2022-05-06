@@ -876,7 +876,8 @@ app.post("/jf", async (req, res) => {
     }
 }
 else {
-      volume = (parseInt(req.body.additionalVolume) || 0 )
+      volume = (parseInt(req.body.additionalVolume) || 0 );
+      price = 0;
 }
     let collateral = (parseInt(price) || 0) + (parseInt(additionalCollateral) || 0);
     let reward = 0;
