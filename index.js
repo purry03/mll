@@ -856,6 +856,9 @@ app.post("/jf", async (req, res) => {
 
     let errorLines = "";
 
+    let volume, price;
+    if (itemList != "") {
+
     //MAKE API REQUEST
     const response = await fetch('https://janice.e-351.com/api/rest/v2/appraisal?market=2&designation=appraisal&pricingVariant=immediate&persist=true&compactize=true&pricePercentage=1', {
         method: 'post',
@@ -874,6 +877,12 @@ app.post("/jf", async (req, res) => {
         res.send({ "err": "Invalid Input" });
         return;
     }
+
+}
+else {
+      volume = (parseInt(req.body.additionalVolume) || 0 );
+      price = 0;
+}
 
     let collateral = (parseInt(price) || 0) + (parseInt(additionalCollateral) || 0);
     let reward = 0;
