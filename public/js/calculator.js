@@ -76,6 +76,10 @@ function submit() {
     const additionalCollateral = parseInt($("#additional-collateral").val());
 
     isLoading(true);
+
+    setTimeout(function(){isLoading(false,"An unknown error occured");},5000);
+
+
     $.post("/", { source, destination, isRush, itemList, additionalVolume, additionalCollateral }, (data) => {
         isLoading(false);
         if (data.err) {
@@ -168,12 +172,20 @@ function submit() {
 }
 
 
-function isLoading(loading) {
+function isLoading(loading,err) {
     if (loading) {
         $(".loading").show();
     }
     else {
         $(".loading").hide();
+        if(err){
+        $(".parse-status").html(err);
+        $(".parse-status").addClass("error");
+        $(".parse-status").show();
+        }
+        else{
+            $(".parse-status").hide();
+        }
     }
 }
 
