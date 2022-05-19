@@ -134,11 +134,13 @@ function submit() {
         $("#lowest-sec").html(parseFloat(data.lowestSec).toFixed(1));
 
         if (data.serviceCharges.length == 0) {
-            $(".parse-status").html("Volume exceeds route limit");
+            $(".parse-status").html("No route found matching the volume size");
             $(".parse-status").addClass("error");
             $(".parse-status").show();
+            resetOutputFields();
             $("#service-type").html("No Service Available");
             $("#service-price").html("-");
+            return;
         }
         else {
 
