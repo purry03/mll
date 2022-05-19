@@ -1024,7 +1024,7 @@ async function resumeTrack() {
     fetchStatistics();
     cronID = setInterval(fetchStatistics, 300000);
     setInterval(mailContracts, 60000);
-    setInterval(discordNotification, 30000);
+    setInterval(discordNotification, 60000);
 
 }
 
