@@ -1482,7 +1482,7 @@ async function discordNotification() {
         for (contract of contracts) {
           let serviceType = contract.description.split("-")[1];
 
-          if (serviceType == 'R') {
+          if (serviceType == 'R' && !contract.validationStatus) {
             // this is now a rush contract and therefore a discord notification is required
               let notificationJson = jsonBuilder.buildJson(
                   'firstNotification',
