@@ -1482,7 +1482,7 @@ async function discordNotification() {
         for (contract of contracts) {
           let serviceType = contract.description.split("-")[1];
 
-          if (serviceType == 'R' && !contract.validationStatus) {
+          if (serviceType == 'R' && Boolean(contract.validationStatus)) {
             // this is now a rush contract and therefore a discord notification is required
               let notificationJson = jsonBuilder.buildJson(
                   'firstNotification',
@@ -1516,6 +1516,9 @@ async function discordNotification() {
                 console.log(err)
               }
             console.log ('Discord Notification for ' + contract.issuerName + ' being sent.')
+          }
+          else if (serviceType == 'R' && !contract.validationStatus){
+            console.log("Discord method has run before contract has been validated, will exit without notification.");
           }
           else {
             try {
