@@ -874,7 +874,6 @@ app.post("/jf", async (req, res) => {
         body: req.body.itemList,
         headers: { 'Content-Type': 'text/plain', "X-ApiKey": "07RzWN1u39rubweDFsk1p5SjnxTNlCdi", "accept": "application/json" }
     });
-    let volume, price;
     const data = await response.json();
 
     try {
