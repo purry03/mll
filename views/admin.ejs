@@ -358,6 +358,17 @@
         <% if(!settings.mailsEnabled){%>
         <label class="mailCheckbox">Enabled: <input type="checkbox"></label>
         <%}%>
+        <br>
+        <br>
+        <h2>Discord Service</h2>
+        <br>
+        <% if(settings.discordEnabled){%>
+        <label class="discordCheckbox">Enabled: <input type="checkbox" checked="true"></label>
+        <%}%>
+        <% if(!settings.discordEnabled){%>
+        <label class="discordCheckbox">Enabled: <input type="checkbox"></label>
+        <%}%>
+
     </div>
 
     <script src="js/systems.js" async defer></script>

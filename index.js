@@ -1,3 +1,5 @@
+const jsonBuilder = require("./jsonBuilder");
+const moment = require('moment');
 require('dotenv').config({ path: __dirname + '/.env' })
 // process.env.NODE_ENV = 'production';
 
@@ -22,7 +24,7 @@ var randomstring = require("randomstring");
 app.use(session({
     resave: false,
     saveUninitialized: true,
-    secret: 'gfwq87t83$S'
+    secret: randomstring.generate(8)
 }));
 
 app.use(cookieParser());
@@ -150,8 +152,8 @@ const characterSchema = mongoose.Schema({
 });
 
 const contractSchema = mongoose.Schema({
-    date: String,
-    dateCompleted: String,
+    date: Date,
+    dateCompleted: Date,
     type: String,
     key: String,
     contractID: {
@@ -188,6 +190,23 @@ const contractSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    validationStatus: String,
+    discordNotified: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    discordNotificationTime: Date,
+    discordReminderSent: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    rushContractExpired: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
 
@@ -199,6 +218,11 @@ const haulerSchema = mongoose.Schema({
 
 const settingsSchema = mongoose.Schema({
     mailsEnabled: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    discordEnabled: {
         type: Boolean,
         required: true,
         default: false
@@ -268,7 +292,7 @@ function authHauler(req, res, next) {
 
 
 
-app.get("/perjumpcalcuator", (req, res) => {
+app.get("/perjumpcalculator", (req, res) => {
     System.find({}, (err, systems) => {
         if (err) {
             res.sendStatus(500);
@@ -563,6 +587,18 @@ app.get("/settings/toggle/mail", authAdmin, async (req, res) => {
 })
 
 
+app.get("/settings/toggle/discord", authAdmin, async (req, res) => {
+    let currentSettings = await Settings.findOne({}).exec();
+    if (currentSettings.discordEnabled) {
+        await Settings.findOneAndUpdate({}, { discordEnabled: false }).exec();
+    }
+    else {
+        await Settings.findOneAndUpdate({}, { discordEnabled: true }).exec();
+    }
+    res.sendStatus(200);
+})
+
+
 app.get("/mail/:id/:action", async (req, res) => {
     const { id, action } = req.params;
     let toMail;
@@ -633,7 +669,7 @@ app.post("/", async (req, res) => {
     const data = await response.json();
     let volume, price;
     try {
-        volume = data.totalPackagedVolume + parseInt(req.body.additionalVolume);
+        volume = (Math.round((parseInt(data.totalPackagedVolume)  || 0) * 100) /100) + (parseInt(req.body.additionalVolume) || 0 );
         price = Math.round(data.effectivePrices.totalSellPrice);
         errorLines = data.failures;
     }
@@ -641,7 +677,7 @@ app.post("/", async (req, res) => {
         res.send({ "err": "Invalid Input" });
         return;
     }
-    const collateral = parseInt(price) + parseInt(req.body.additionalCollateral);
+    const collateral = (parseInt(price) || 0) + (parseInt(req.body.additionalCollateral) || 0);;
 
     //get number of jumps
     const { source, destination } = req.body;
@@ -772,6 +808,8 @@ app.post("/", async (req, res) => {
 
     const toSave = new Appraisal({
         key: randomstring.generate(8),
+        from: sourceName,
+        to: destinationName,
         volume,
         reward: lowestPrice,
         collateral,
@@ -827,6 +865,8 @@ app.post("/jf", async (req, res) => {
 
     let errorLines = "";
 
+    let volume, price;
+    if (itemList != "") {
 
     //MAKE API REQUEST
     const response = await fetch('https://janice.e-351.com/api/rest/v2/appraisal?market=2&designation=appraisal&pricingVariant=immediate&persist=true&compactize=true&pricePercentage=1', {
@@ -835,9 +875,9 @@ app.post("/jf", async (req, res) => {
         headers: { 'Content-Type': 'text/plain', "X-ApiKey": "07RzWN1u39rubweDFsk1p5SjnxTNlCdi", "accept": "application/json" }
     });
     const data = await response.json();
-    let volume, price;
+
     try {
-        volume = data.totalPackagedVolume + parseInt(req.body.additionalVolume);
+        volume = (Math.round((parseInt(data.totalPackagedVolume)  || 0) * 100) /100) + (parseInt(req.body.additionalVolume) || 0 );
         price = Math.round(data.effectivePrices.totalSellPrice);
         errorLines = data.failures;
     }
@@ -846,7 +886,13 @@ app.post("/jf", async (req, res) => {
         return;
     }
 
-    let collateral = parseInt(price) + parseInt(additionalCollateral);
+}
+else {
+      volume = (parseInt(req.body.additionalVolume) || 0 );
+      price = 0;
+}
+
+    let collateral = (parseInt(price) || 0) + (parseInt(additionalCollateral) || 0);
     let reward = 0;
     let servicePricing = "ISK per m<sup>3</sup>"
 
@@ -978,6 +1024,7 @@ async function resumeTrack() {
     fetchStatistics();
     cronID = setInterval(fetchStatistics, 300000);
     setInterval(mailContracts, 60000);
+    setInterval(discordNotification, 60000);
 
 }
 
@@ -1284,23 +1331,23 @@ async function mailContracts() {
         let contracts = await Contracts.find({ mailed: false, status: "outstanding" }).exec();
         for (contract of contracts) {
             let action = "approve";
-            let noCode = false
+            let noCode = false;
             if (!contract.appraisalReward && !contract.appraisalCollateral && !contract.appraisalVolume) {
                 noCode = true
             }
             let rewardDelta = contract.reward / contract.appraisalReward;
             let collateralDelta = contract.collateral / contract.appraisalCollateral;
             let volumeDelta = contract.volume / contract.appraisalVolume;
-            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05)) {
+            if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05) && !noCode) {
                 action = "delta error";
             }
-            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo))) {
-                action = "route error"
+            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) && !noCode) {
+                action = "route error";
             }
             if (contract.type == "item_exchange") {
                 action = "type error";
             }
-
+//contract.issuerID
             let toMail = {
                 "approved_cost": 0,
                 "recipients": [
@@ -1345,9 +1392,14 @@ async function mailContracts() {
                     toMail.body = process.env.MAIL_BODY_TYPE;
                     toMail.body = process.env.MAIL_SUBJECT_TYPE;
                 }
-
             }
 
+            if ((noCode) && (action != "approve")) {
+              action = 'Missing validation code & ' + action;
+            }
+            else if ((noCode) && (action = "approve")) {
+              action = 'Missing validation code';
+            }
 
 
             headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
@@ -1361,7 +1413,7 @@ async function mailContracts() {
             try {
                 await request.post(options);
                 const filter = { contractID: contract.contractID };
-                const update = { mailed: true };
+                const update = { mailed: true, validationStatus: action };
                 await Contracts.findOneAndUpdate(filter, update);
             }
             catch (err) {
@@ -1371,6 +1423,7 @@ async function mailContracts() {
         }
         contracts = await Contracts.find({ mailed: true, deliveryAcknowledged: false, status: "finished" }).exec();
         for (contract of contracts) {
+          //contract.issuerID
 
             let toMail = {
                 "approved_cost": 0,
@@ -1409,7 +1462,167 @@ async function mailContracts() {
 
         console.log("All mails sent");
     }
+    //discordNotification();
 }
+
+
+//BG Additions for Discord Bot
+async function discordNotification() {
+
+    const currentSettings = await Settings.findOne({}).exec();
+    //console.log(currentSettings.discordEnabled);
+    if (!currentSettings.discordEnabled) {
+        console.log("Skipping discord notification");
+    }
+    else {
+
+        console.log("Starting discord notification");
+
+        let contracts = await Contracts.find({ discordNotified: false, status: "outstanding" }).exec();
+        for (contract of contracts) {
+          let serviceType = contract.description.split("-")[1];
+
+          if (serviceType == 'R' && Boolean(contract.validationStatus)) {
+            // this is now a rush contract and therefore a discord notification is required
+              let notificationJson = jsonBuilder.buildJson(
+                  'firstNotification',
+                  contract.service,
+                  contract.issuerName,
+                  contract.start,
+                  contract.end,
+                  contract.volume,
+                  contract.status,
+                  contract.validationStatus,
+                  contract.date,
+                  contract.issuerID,
+                  process.env.DISCORD_ROLE_ID)
+
+            //console.log(JSON.stringify(notificationJson));
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.DISCORD_SERVER_ID + '/' + process.env.DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { discordNotified: true, discordNotificationTime: Date.now()};
+                await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Discord Notification for ' + contract.issuerName + ' being sent.')
+          }
+          else if (serviceType == 'R' && !contract.validationStatus){
+            console.log("Discord method has run before contract has been validated, will exit without notification.");
+          }
+          else {
+            try {
+                const filter = { contractID: contract.contractID };
+                const update = { discordNotified: true, discordReminderSent: true, rushContractExpired: true};
+                await Contracts.findOneAndUpdate(filter, update);
+            }
+            catch (err) {
+                console.log(err)
+            }
+          }
+
+        }
+
+        console.log("Checking for discord reminders");
+        let notificationContracts = await Contracts.find({ discordNotified: true, status: "outstanding", discordNotificationTime: {$ne: null}, discordReminderSent: false}).exec();
+        for (contract of notificationContracts) {
+            // this is now a rush contract and therefore a discord notification is required
+              let timePassed = moment().diff(moment(contract.discordNotificationTime), 'hours');
+              if (timePassed >= 12) {
+                let notificationJson = jsonBuilder.buildJson(
+                    'reminderNotification',
+                    contract.service,
+                    contract.issuerName,
+                    contract.start,
+                    contract.end,
+                    contract.volume,
+                    contract.status,
+                    contract.validationStatus,
+                    contract.date,
+                    contract.issuerID,
+                    process.env.DISCORD_ROLE_ID)
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.DISCORD_SERVER_ID + '/' + process.env.DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { discordReminderSent: true};
+                await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Discord Reminder Notification for ' + contract.issuerName + ' has been sent.')
+          }
+
+        }
+
+        console.log("Checking for expired contracts");
+        let rushExpiredContracts = await Contracts.find({ discordNotified: true, status: "outstanding", discordNotificationTime: {$ne: null}, discordReminderSent: true, rushContractExpired: false}).exec();
+        for (contract of rushExpiredContracts) {
+            // this is now a rush contract and therefore a discord notification is required
+              let timePassed = moment().diff(moment(contract.discordNotificationTime), 'hours');
+              if (timePassed >= 24) {
+                let notificationJson = jsonBuilder.buildJson(
+                    'expiredNotification',
+                    contract.service,
+                    contract.issuerName,
+                    contract.start,
+                    contract.end,
+                    contract.volume,
+                    contract.status,
+                    contract.validationStatus,
+                    contract.date,
+                    contract.issuerID,
+                    process.env.DISCORD_ROLE_ID)
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.DISCORD_SERVER_ID + '/' + process.env.DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { rushContractExpired: true};
+                await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Contract Expired Notification for ' + contract.issuerName + ' has been sent.')
+          }
+
+        }
+
+        console.log("Discord Notification Method Complete");
+    }
+}
+
+
+
+
 
 async function refreshToken(token) {
 

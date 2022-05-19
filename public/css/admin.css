@@ -167,3 +167,16 @@ label {
     bottom: .4em;
     /* this is a better value for different fonts! */
 }
+
+.discordCheckbox {
+    display: inline-block;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.discordCheckbox input {
+    vertical-align: middle;
+    position: relative;
+    bottom: .4em;
+    /* this is a better value for different fonts! */
+}
