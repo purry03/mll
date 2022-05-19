@@ -1486,6 +1486,7 @@ async function discordNotification() {
             // this is now a rush contract and therefore a discord notification is required
               let notificationJson = jsonBuilder.buildJson(
                   'firstNotification',
+                  contract.service,
                   contract.issuerName,
                   contract.start,
                   contract.end,
@@ -1541,6 +1542,7 @@ async function discordNotification() {
               if (timePassed >= 12) {
                 let notificationJson = jsonBuilder.buildJson(
                     'reminderNotification',
+                    contract.service,
                     contract.issuerName,
                     contract.start,
                     contract.end,
@@ -1581,6 +1583,7 @@ async function discordNotification() {
               if (timePassed >= 24) {
                 let notificationJson = jsonBuilder.buildJson(
                     'expiredNotification',
+                    contract.service,
                     contract.issuerName,
                     contract.start,
                     contract.end,
