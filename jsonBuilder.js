@@ -3,6 +3,9 @@ exports.buildJson = function (notificationType, issuerName, origin, destination,
   if (notificationType == 'reminderNotification') {
     notificationMessage = "**REMINDER:** There was a rush contract put up over 12 hours ago and it's still outstanding"
   }
+  if (notificationType == 'expiredNotification') {
+    notificationMessage = "**Rush Contract Expired:** There was a rush contract put up over 24 hours ago and it's still outstanding and therefore needs to be cancelled"
+  }
 
     let jsonData = {
         "username": "MLL Rush Shipping Notification",

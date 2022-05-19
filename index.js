@@ -198,7 +198,16 @@ const contractSchema = mongoose.Schema({
         default: false
     },
     discordNotificationTime: Date,
-    discordReminderSent: Boolean
+    discordReminderSent: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    rushContractExpired: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 });
 
 const haulerSchema = mongoose.Schema({
@@ -1501,7 +1510,7 @@ async function discordNotification() {
               try {
                 await request.post(options);
                 const filter = { contractID: contract.contractID };
-                const update = { discordNotified: true, discordNotificationTime: Date.now(), discordReminderSent: false};
+                const update = { discordNotified: true, discordNotificationTime: Date.now()};
                 await Contracts.findOneAndUpdate(filter, update);
               }
               catch (err) {
@@ -1512,7 +1521,7 @@ async function discordNotification() {
           else {
             try {
                 const filter = { contractID: contract.contractID };
-                const update = { discordNotified: true, discordReminderSent: true};
+                const update = { discordNotified: true, discordReminderSent: true, rushContractExpired: true};
                 await Contracts.findOneAndUpdate(filter, update);
             }
             catch (err) {
@@ -1557,7 +1566,47 @@ async function discordNotification() {
               catch (err) {
                 console.log(err)
               }
-            console.log ('Discord Reminder Notification for ' + contract.issuerName + ' being sent.')
+            console.log ('Discord Reminder Notification for ' + contract.issuerName + ' has been sent.')
+          }
+
+        }
+
+        console.log("Checking for expired contracts");
+        let rushExpiredContracts = await Contracts.find({ discordNotified: true, status: "outstanding", discordNotificationTime: {$ne: null}, discordReminderSent: true, rushContractExpired: false}).exec();
+        for (contract of rushExpiredContracts) {
+            // this is now a rush contract and therefore a discord notification is required
+              let timePassed = moment().diff(moment(contract.discordNotificationTime), 'hours');
+              if (timePassed >= 24) {
+                let notificationJson = jsonBuilder.buildJson(
+                    'expiredNotification',
+                    contract.issuerName,
+                    contract.start,
+                    contract.end,
+                    contract.volume,
+                    contract.status,
+                    contract.validationStatus,
+                    contract.date,
+                    contract.issuerID,
+                    process.env.DISCORD_ROLE_ID)
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.DISCORD_SERVER_ID + '/' + process.env.DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { contractID: contract.contractID };
+                const update = { rushContractExpired: true};
+                await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Contract Expired Notification for ' + contract.issuerName + ' has been sent.')
           }
 
         }
