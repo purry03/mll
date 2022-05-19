@@ -152,7 +152,7 @@ label {
 .route-list th {
     padding: 10px 25px;
     border: 1px solid #111;
-    min-width: 250px;
+    min-width: 150px;
 }
 
 .mailCheckbox {
