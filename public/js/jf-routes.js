@@ -15,7 +15,7 @@ $(document).ready(function () {
 
             // For each column
             api
-                .columns()
+                .columns([0,2,3,4,5,6,7,8,9])
                 .eq(0)
                 .each(function (colIdx) {
                     // Set the header cell to contain the input element
