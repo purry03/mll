@@ -318,10 +318,6 @@ app.get("/", (req, res) => {
     res.render("homepage.ejs");
 })
 
-app.get("/jf-routes", (req, res) => {
-    res.render("jf-routes.ejs", {routes});
-})
-
 
 app.get("/admin/login", (req, res) => {
     res.render("login.ejs");
@@ -1010,6 +1006,10 @@ app.get("/contracts", authHauler, async (req, res) => {
         }
     });
     res.render("contracts.ejs", { contracts, routes });
+});
+
+app.get("/jf-routes", (req, res) => {
+    res.render("jf-routes.ejs", {routes});
 });
 
 app.get("/contracts/raw", (req, res) => {
