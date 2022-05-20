@@ -1,4 +1,5 @@
 function addJFRoute() {
+    const routeType = $(".add-routes-wrapper #route-type").val();
     const startSystem = $(".add-routes-wrapper #start-system").val();
     const destinationSystem = $(".add-routes-wrapper #destination-system").val();
     const minReward = $(".add-routes-wrapper #min-reward").val();
@@ -11,7 +12,7 @@ function addJFRoute() {
     const isFlat = $(".add-routes-wrapper #flat-rate").is(':checked');
     const isRush = $(".add-routes-wrapper #rush-shipping").is(':checked');
 
-    const data = { startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush };
+    const data = { routeType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush };
 
 
     $.ajax({
@@ -103,6 +104,7 @@ function loadRoute() {
                 alert("Error" + response.err);
             }
             else {
+                $(".edit-route-wrapper #route-type").val(response[0].routeType);
                 $(".edit-route-wrapper #start-system").val(response[0].start);
                 $(".edit-route-wrapper #destination-system").val(response[0].destination);
                 $(".edit-route-wrapper #max-JFvolume").val(response[0].maxVolume);
@@ -125,6 +127,7 @@ function loadRoute() {
 
 function editJFRoute() {
     const id = $("#route-edit-select").val();
+    const routeType = $(".edit-route-wrapper #route-type").val();
     const startSystem = $(".edit-route-wrapper #start-system").val();
     const destinationSystem = $(".edit-route-wrapper #destination-system").val();
     const minReward = $(".edit-route-wrapper #min-reward").val();
@@ -137,7 +140,7 @@ function editJFRoute() {
     const isFlat = $(".edit-route-wrapper #flat-rate").is(':checked');
     const isRush = $(".edit-route-wrapper #rush-shipping").is(':checked');
 
-    const data = { id, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush };
+    const data = { id, routeType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush };
 
     $.ajax({
         type: "POST",

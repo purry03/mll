@@ -166,6 +166,11 @@
 
         <div class="add-routes-wrapper">
             <h2>Add new route</h2>
+            <label class='add-route'>Route Type :<br><select name="route-type" id="route-type">
+                  <option value="Standard">Standard</option>
+                  <option value="Intra-Drones">Intra-Drones</option>
+                  </select>
+            </label> <br>
             <label class='add-route'>Start : <input type="text" placeholder="Name" name="start-system"
                     id="start-system"></label>
             <label class='add-route'>Destination : <input type="text" placeholder="Name" name="destination-system"
@@ -197,6 +202,9 @@
         <div class="route-list-wrapper">
             <table class="route-list" style="margin-top: 20px;">
                 <tr>
+                    <th>
+                        Route Type
+                    </th>
                     <th>
                         Start
                     </th>
@@ -230,6 +238,9 @@
                 </tr>
                 <% routes.forEach(route=>{ %>
                 <tr>
+                    <td>
+                        <%=route.routeType%>
+                    </td>
                     <td>
                         <%=route.start%>
                     </td>
@@ -282,6 +293,11 @@
                 <option hidden disabled selected value> -- Select Route -- </option>
             </select>
             <button style="display: block;margin: 10px 0;" onclick="loadRoute()">Load Route</button>
+            <label class='add-route'>Route Type :<br><select name="route-type" id="route-type">
+                  <option value="Standard">Standard</option>
+                  <option value="Intra-Drones">Intra-Drones</option>
+                  </select>
+            </label> <br>
             <label class='add-route'>Start : <input type="text" placeholder="Name" name="start-system"
                     id="start-system"></label>
             <label class='add-route'>Destination : <input type="text" placeholder="Name" name="destination-system"

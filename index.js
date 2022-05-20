@@ -141,7 +141,8 @@ const routeSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    isFlat: Boolean
+    isFlat: Boolean,
+    routeType: String
 });
 
 const characterSchema = mongoose.Schema({
@@ -303,6 +304,19 @@ app.get("/perjumpcalculator", (req, res) => {
     })
 });
 
+
+
+app.get("/jf-routes", (req, res) => {
+    Routes.find({}, (err, routes) => {
+        if (err) {
+            res.sendStatus(500);
+        }
+        else {
+            res.render("jf-routes.ejs", { routes });
+        }
+    })
+});
+
 app.get("/jfcalculator", (req, res) => {
     Routes.find({}, (err, routes) => {
         if (err) {
@@ -452,10 +466,11 @@ app.post("/routes/get/name/", async (req, res) => {
 });
 
 app.post("/routes/add", authAdmin, async (req, res) => {
-    const { startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
+    const { routeType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
     let isError = false;
     try {
         const newRoute = new Routes({
+            routeType: routeType,
             start: startSystem,
             destination: destinationSystem,
             minReward: parseInt(minReward),
@@ -482,11 +497,11 @@ app.post("/routes/add", authAdmin, async (req, res) => {
 });
 
 app.post("/routes/edit", authAdmin, async (req, res) => {
-    const { id, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
+    const { id, routeType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
     let isError = false;
 
     let editedRoute = {}
-
+    editedRoute.routeType = routeType;
     editedRoute.start = startSystem;
     editedRoute.destination = destinationSystem;
     editedRoute.minReward = parseInt(minReward);

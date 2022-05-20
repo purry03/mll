@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>JF Routes</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/jf-routes.css">
+    <link rel="icon" type="image/png" href="img/logo.png" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/contracts.js" async></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalizer.css">
+    <link rel="stylesheet" href="css/homepage.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.6.0/dt-1.12.1/sb-1.3.3/sp-2.0.1/datatables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/jf-routes.js" ></script>
+
+
+</head>
+
+<body>
+  <header style="position: relative;">
+      <div id='navContainer' class='navContainer'>
+          <h3 class='title'><a href='/'>Multi-Lemm Logistics</a></h3>
+          <div style='float:right'>
+              <ul class='navList'>
+                  <!--<li class='navLink'><a href="/">Home</a></li>-->
+                  <li class='navLink'><a href="/jfcalculator">JF Calculator</a></li>
+                  <li class='navLink'><a href="/perjumpcalculator">BR/DST/Freighter Calculator</a></li>
+                  <li class='navLink'><a href="/">Home</a></li>
+                  <li class='navLink' onclick="joinus()">Guide</li>
+                  <li class='navLink'><a href='https://discord.gg/kgBGPKuwQ9' target="_blank">DISCORD</a></li>
+                  <li class='navLink'><a
+                          href='https://www.pandemic-horde.org/forum/index.php?threads/multi-lemm-logistics-jf-freighter-br-service-covering-tke-def-custom-routes.2872/'
+                          target="_blank">FORUMS</a></li>
+              </ul>
+          </div>
+      </div>
+  </header>
+  <br>
+
+    <% var current = new Date(); %>
+    <div class="main">
+      <h2>Jump Freighter Routes</h2>
+        <div  class="dataTables_wrapper container-fluid dt-bootstrap4" id="jf-routes-wrapper" value="1">
+            <table id="jf-routes" class="table sortable dataTable">
+              <thead>
+                <tr>
+                    <th>From</th>
+                    <th> </th>
+                    <th>To</th>
+                    <th>Volume Limit</th>
+                    <th>Collateral Limit</th>
+                    <th>Route Pricing</th>
+                    <th>Collateral Charge</th>
+                    <th>Minimum Reward</th>
+                    <th>Rush Shipping</th>
+                    <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% routes.forEach((route)=>{%>
+                <tr>
+                    <td class="start"><%=route.start%></td>
+                    <td>-></td>
+                    <td><%=route.destination%></td>
+                    <td><%=parseInt(route.maxVolume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup></td>
+                    <td><%=parseInt(route.maxCollateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                      <%if(!route.isFlat){%>
+                  <td><%=parseInt(route.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK/m<sup>3</sup></td>
+                  <%}
+                  else {%>
+                    <td><%=parseInt(route.flatPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK Flat Fee</td>
+                  <%}%>
+                    <td><%=route.collateralMultiplier%> %</td>
+                    <td><%=parseInt(route.minReward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <%if(route.isRush){%>
+                    <td><%=parseInt(route.rushShippingCharge).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <%}
+                    else {%>
+                    <td>N/A</td>
+                    <%}%>
+                    <td><%=route.routeType%></td>
+                </tr>
+                <%})%>
+              </tbody>
+            </table>
+        </div>
+        <script src="/js/contracts.js" async></script>
+</body>
+
+</html>
