@@ -28,7 +28,9 @@ function switchTab(value) {
 }
 $(document).ready(function () {
     // Setup - add a text input to each footer cell
-var outstandingSum = 0;
+var outstandingVolumeSum = 0;
+var outstandingRewardSum = 0;
+var outstandingCollateralSum = 0;
     $('#outstanding thead tr')
         .clone(true)
         .addClass('filters')
@@ -90,12 +92,20 @@ var outstandingSum = 0;
     $('#outstanding tbody').on('click', 'tr', function () {
 
         var outstandingVolume = parseInt(($(this).find('td:eq(6)').last().html()).replace(/,|\sm\p{No}/gu, ''));
+        var outstandingReward = parseInt(($(this).find('td:eq(7)').last().html()).replace(/,|\sISK/gu, ''));
+        var outstandingCollateral = parseInt(($(this).find('td:eq(8)').last().html()).replace(/,|\sISK/gu, ''));
         if($(this).hasClass('selected')) {
-           outstandingSum -= outstandingVolume;
+           outstandingVolumeSum -= outstandingVolume;
+           outstandingRewardSum -= outstandingReward;
+           outstandingCollateralSum -= outstandingCollateral;
         } else {
-           outstandingSum += outstandingVolume;
+           outstandingVolumeSum += outstandingVolume;
+           outstandingRewardSum += outstandingReward;
+           outstandingCollateralSum += outstandingCollateral;
         }
-                            $('.outstandingSum').html((outstandingSum.toLocaleString('en-GB')) +' m<sup>3</sup>');
+                            $('.outstandingVolumeSum').html((outstandingVolumeSum.toLocaleString('en-GB')) +' m<sup>3</sup>');
+                            $('.outstandingRewardSum').html((outstandingRewardSum.toLocaleString('en-GB')) +' ISK');
+                            $('.outstandingCollateralSum').html((outstandingCollateralSum.toLocaleString('en-GB')) +' ISK');
          $(this).toggleClass('selected');
     } );
 });
