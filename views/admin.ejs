@@ -166,7 +166,7 @@
 
         <div class="add-routes-wrapper">
             <h2>Add new route</h2>
-            <label class='add-route'>Service Type : <select name="service-type" id="service-type">
+            <label class='add-route'>Route Type :<br><select name="route-type" id="route-type">
                   <option value="Standard">Standard</option>
                   <option value="Intra-Drones">Intra-Drones</option>
                   </select>
@@ -203,7 +203,7 @@
             <table class="route-list" style="margin-top: 20px;">
                 <tr>
                     <th>
-                        Service Type
+                        Route Type
                     </th>
                     <th>
                         Start
@@ -239,7 +239,7 @@
                 <% routes.forEach(route=>{ %>
                 <tr>
                     <td>
-                        <%=route.serviceType%>
+                        <%=route.routeType%>
                     </td>
                     <td>
                         <%=route.start%>
@@ -293,7 +293,7 @@
                 <option hidden disabled selected value> -- Select Route -- </option>
             </select>
             <button style="display: block;margin: 10px 0;" onclick="loadRoute()">Load Route</button>
-            <label class='add-route'>Service Type : <select name="service-type" id="service-type">
+            <label class='add-route'>Route Type :<br><select name="route-type" id="route-type">
                   <option value="Standard">Standard</option>
                   <option value="Intra-Drones">Intra-Drones</option>
                   </select>

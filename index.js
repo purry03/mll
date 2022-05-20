@@ -466,11 +466,11 @@ app.post("/routes/get/name/", async (req, res) => {
 });
 
 app.post("/routes/add", authAdmin, async (req, res) => {
-    const { serviceType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
+    const { routeType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
     let isError = false;
     try {
         const newRoute = new Routes({
-            serviceType: serviceType,
+            routeType: routeType,
             start: startSystem,
             destination: destinationSystem,
             minReward: parseInt(minReward),
@@ -497,11 +497,11 @@ app.post("/routes/add", authAdmin, async (req, res) => {
 });
 
 app.post("/routes/edit", authAdmin, async (req, res) => {
-    const { id, serviceType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
+    const { id, routeType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
     let isError = false;
 
     let editedRoute = {}
-    editedRoute.serviceType = serviceType;
+    editedRoute.routeType = routeType;
     editedRoute.start = startSystem;
     editedRoute.destination = destinationSystem;
     editedRoute.minReward = parseInt(minReward);
