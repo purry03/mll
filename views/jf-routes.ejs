@@ -58,6 +58,7 @@
                     <th>Collateral Charge</th>
                     <th>Minimum Reward</th>
                     <th>Rush Shipping</th>
+                    <th>Type</th>
                 </tr>
               </thead>
               <tbody>
@@ -82,6 +83,7 @@
                     else {%>
                     <td>N/A</td>
                     <%}%>
+                    <td><%=route.serviceType%></td>
                 </tr>
                 <%})%>
               </tbody>

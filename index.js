@@ -141,7 +141,8 @@ const routeSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    isFlat: Boolean
+    isFlat: Boolean,
+    routeType: String
 });
 
 const characterSchema = mongoose.Schema({
@@ -465,10 +466,11 @@ app.post("/routes/get/name/", async (req, res) => {
 });
 
 app.post("/routes/add", authAdmin, async (req, res) => {
-    const { startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
+    const { serviceType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
     let isError = false;
     try {
         const newRoute = new Routes({
+            serviceType: serviceType,
             start: startSystem,
             destination: destinationSystem,
             minReward: parseInt(minReward),
@@ -495,11 +497,11 @@ app.post("/routes/add", authAdmin, async (req, res) => {
 });
 
 app.post("/routes/edit", authAdmin, async (req, res) => {
-    const { id, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
+    const { id, serviceType, startSystem, destinationSystem, minReward, maxJFVolume, maxJFCollateral, flatPrice, price, rushShippingCharge, collateralMultiplier, isFlat, isRush } = req.body;
     let isError = false;
 
     let editedRoute = {}
-
+    editedRoute.serviceType = serviceType;
     editedRoute.start = startSystem;
     editedRoute.destination = destinationSystem;
     editedRoute.minReward = parseInt(minReward);

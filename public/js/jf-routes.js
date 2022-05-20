@@ -9,8 +9,7 @@ $(document).ready(function () {
         orderCellsTop: true,
         fixedHeader: true,
         paging: false,
-        "order":[],
-
+        "order":[10, 'desc'],
         initComplete: function () {
             var api = this.api();
 
