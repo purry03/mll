@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Contracts</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/contracts.css">
+    <link rel="icon" type="image/png" href="img/logo.png" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/contracts.js" async></script>
+
+</head>
+
+<body>
+
+
+    <nav>
+        <ul>
+            <li value="1">
+                Summary/Outstanding
+            </li>
+            <li value="2">
+                In-Progress
+            </li>
+            <li value="3">
+                Finished
+            </li>
+            <li value="4">
+                Deleted/Cancelled/Rejected
+            </li>
+        </ul>
+    </nav>
+
+    <% var current = new Date(); %>
+    <div class="main">
+
+        <div class="table-wrapper" value="1">
+            <h2>Jump Freighter Routes</h2>
+            <table>
+                <tr>
+                    <th>From</th>
+                    <th> </th>
+                    <th>To</th>
+                    <th>Volume Limit</th>
+                    <th>Collateral Limit</th>
+                    <th>Route Pricing</th>
+                    <th>Collateral Charge</th>
+                    <th>Minimum Reward</th>
+                    <th>Rush Shipping</th>
+                </tr>
+                <% routes.forEach((route)=>{%>
+                <tr>
+                    <td class="start"><%=route.from%></td>
+                    <td><"-->"></td>
+                    <td><%=route.to%></td>
+                    <td><%=parseInt(route.maxVolume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup></td>
+                    <td><%=parseInt(route.maxCollateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <td><%=parseInt(route.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <td><%=route.collateralMultiplier%</td>
+                    <td><%=parseInt(route.minReward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <td><%=parseInt(route.rushShippingCharge).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+
+                </tr>
+                <%})%>
+            </table>
+        </div>
+        <div class="table-wrapper" value="1">
+
+            <h2>rush</h2>
+
+            <table>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Client</th>
+                    <th style="width: 150px;">Date Created</th>
+                    <th style="width: 150px;">Time Passed</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Volume</th>
+                    <th>Reward</th>
+                    <th>Collateral</th>
+                    <th>Key</th>
+                    <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
+                </tr>
+                <%  sno = 1  %>
+                <% contracts.forEach((contract)=>{%>
+                <% if(contract.description.split("-")[1] == "R" && contract.status == "outstanding"){%>
+                <% let noCode = false %>
+
+                <% if(!contract.appraisalReward){ contract.appraisalReward = Infinity; noCode=true} %>
+                <% if(!contract.appraisalCollateral){ contract.appraisalCollateral = Infinity; noCode=true} %>
+                <% if(!contract.appraisalVolume){contract.appraisalVolume = Infinity; noCode=true} %>
+                <% let rewardDelta = contract.reward/contract.appraisalReward %>
+                <% let collateralDelta = contract.collateral/contract.appraisalCollateral %>
+                <% let volumeDelta = contract.volume/contract.appraisalVolume %>
+                <% let isRouteInvalid =  contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) %>
+
+
+                <% if(!noCode && rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05 && !isRouteInvalid){ %>
+                <tr style="background-color: rgba(144, 255, 144, 0.5);">
+                    <%}%>
+        <% if((!noCode && !(rewardDelta >= 0.9 && collateralDelta >=0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05)) || isRouteInvalid){ %>
+                <tr style="background-color: rgba(255, 113, 113, 0.5);">
+                    <%}%>
+        <% if(noCode){ %>
+                <tr style="background-color: rgba(255, 191, 0, 0.15);">
+                    <%}%>
+                    <td><%=sno%></td>
+                    <%var options = {  hour:"numeric", minute:"numeric" , month: 'long', day: 'numeric', }; %>
+                    <% let date  = new Date(contract.date);%>
+                    <%var hours = Math.abs(current - date) / 36e5;%>
+                    <%var minutes = Math.abs(current - date) / 60000;%>
+                    <td><%=contract.issuerName%></td>
+
+                    <td><%=date.toLocaleDateString("en-UK", options)%></td>
+                    <% if(hours<1){%>
+                    <td><%=minutes.toFixed(0)%> minutes</td>
+                    <%}%>
+            <% if(hours>=1){%>
+                    <td><%=hours.toFixed(0)%> hours <%=(minutes%60).toFixed(0)%> minutes</td>
+                    <%}%>
+                    <td class="start"><%=contract.start%></td>
+                    <td><%=contract.end%></td>
+                    <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup>
+                    </td>
+                    <td><%=parseInt(contract.reward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <td><%=parseInt(contract.collateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <td><%=contract.key%></td>
+                    <%if(isRouteInvalid){%>
+                    <td>Incorrect Route</td>
+                    <%}%>
+                        <%if(!isRouteInvalid){%>
+                    <td><%=rewardDelta.toFixed(2)%> : <%=collateralDelta.toFixed(2)%> : <%=volumeDelta.toFixed(2)%></td>
+                    <%}%>
+
+                </tr>
+                <% sno += 1; %>
+                    <%}})%>
+            </table>
+        </div>
+        <div class="table-wrapper" value="1">
+
+            <h2>outstanding</h2>
+
+            <table>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Client</th>
+                    <th style="width: 150px;">Date Created</th>
+                    <th style="width: 150px;">Time Passed</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Volume</th>
+                    <th>Reward</th>
+                    <th>Collateral</th>
+                    <Th>Rush</Th>
+                    <th>Service</th>
+                    <th>Key</th>
+                    <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
+                    <th>Mailed</th>
+                </tr>
+                <%  sno = 1  %>
+                <% contracts.forEach((contract)=>{%>
+                <% if(contract.status == "outstanding"){%>
+                <% let noCode = false %>
+
+                <% if(!contract.appraisalReward){ contract.appraisalReward = Infinity; noCode=true} %>
+                <% if(!contract.appraisalCollateral){ contract.appraisalCollateral = Infinity; noCode=true} %>
+                <% if(!contract.appraisalVolume){contract.appraisalVolume = Infinity; noCode=true} %>
+                <% let rewardDelta = contract.reward/contract.appraisalReward %>
+                <% let collateralDelta = contract.collateral/contract.appraisalCollateral %>
+                <% let volumeDelta = contract.volume/contract.appraisalVolume %>
+
+
+                <% let isRouteInvalid =  contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) %>
+
+
+                <% if(!noCode && rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05 && !isRouteInvalid){ %>
+                <tr style="background-color: rgba(144, 255, 144, 0.5);">
+                    <%}%>
+        <% if((!noCode && !(rewardDelta >= 0.9 && collateralDelta >=0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05)) || isRouteInvalid){ %>
+                <tr style="background-color: rgba(255, 113, 113, 0.5);">
+                    <%}%>
+        <% if(noCode){ %>
+                <tr style="background-color: rgba(255, 191, 0, 0.15);">
+                    <%}%>
+            <td><%=sno%></td>
+                    <td><%=contract.issuerName%></td>
+
+                    <%var options = {  hour:"numeric", minute:"numeric" , month: 'long', day: 'numeric', }; %>
+                    <% let date  = new Date(contract.date);%>
+                    <%var hours = Math.abs(current - date) / 36e5;%>
+                    <%var minutes = Math.abs(current - date) / 60000;%>
+
+                    <td><%=date.toLocaleDateString("en-UK", options)%></td>
+                    <% if(hours<1){%>
+                    <td><%=minutes.toFixed(0)%> minutes</td>
+                    <%}%>
+            <% if(hours>=1){%>
+                    <td><%=hours.toFixed(0)%> hours <%=(minutes%60).toFixed(0)%> minutes</td>
+                    <%}%>
+            <td class="start"><%=contract.start%></td>
+                    <td><%=contract.end%></td>
+                    <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
+                        m<sup>3</sup></td>
+                    <td><%=parseInt(contract.reward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <td><%=parseInt(contract.collateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <%if(contract.description.split("-")[1]==="R"){%>
+                    <td>Yes</td>
+                    <%}%>
+                        <%if(contract.description.split("-")[1]!="R"){%>
+                    <td>No</td>
+                    <%}%>
+            <td><%=contract.service%></td>
+
+                    <td><%=contract.key%></td>
+                    <%if(isRouteInvalid){%>
+                    <td>Incorrect Route</td>
+                    <%}%>
+                    <%if(!isRouteInvalid){%>
+                    <td><%=rewardDelta.toFixed(2)%> : <%=collateralDelta.toFixed(2)%> : <%=volumeDelta.toFixed(2)%></td>
+                    <%}%>
+                    <td><%=contract.mailed%></td>
+
+
+                </tr>
+                <% sno += 1; %>
+                <%}})%>
+            </table>
+        </div>
+        <div class="table-wrapper" value="2">
+
+            <h2>in progress</h2>
+            <table>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Client</th>
+                    <th style="width: 150px;">Date Created</th>
+                    <th style="width: 150px;">Time Passed</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Volume</th>
+                    <th>Reward</th>
+                    <th>Collateral</th>
+                    <th>Service</th>
+                    <th>Key</th>
+                    <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
+                </tr>
+                <% sno = 1; %>
+                <% contracts.forEach((contract)=>{%>
+                <% if(contract.status == "in_progress"){%>
+                <% let noCode = false %>
+
+                <% if(!contract.appraisalReward){ contract.appraisalReward = Infinity; noCode=true} %>
+                <% if(!contract.appraisalCollateral){ contract.appraisalCollateral = Infinity; noCode=true} %>
+                <% if(!contract.appraisalVolume){contract.appraisalVolume = Infinity; noCode=true} %>
+                <% let rewardDelta = contract.reward/contract.appraisalReward %>
+                <% let collateralDelta = contract.collateral/contract.appraisalCollateral %>
+                <% let volumeDelta = contract.volume/contract.appraisalVolume %>
+
+
+                <% if(!noCode && rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05){ %>
+                <tr style="background-color: rgba(144, 255, 144, 0.5);">
+                    <%}%>
+        <% if(!noCode && !(rewardDelta >= 0.9 && collateralDelta >=0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05)){ %>
+                <tr style="background-color: rgba(255, 113, 113, 0.5);">
+                    <%}%>
+        <% if(noCode){ %>
+                <tr style="background-color: rgba(255, 191, 0, 0.15);">
+                    <%}%>
+            <td><%=sno%></td>
+                    <td><%=contract.issuerName%></td>
+
+                    <%var options = {  hour:"numeric", minute:"numeric" , month: 'long', day: 'numeric', }; %>
+                    <% let date  = new Date(contract.date);%>
+                    <%var hours = Math.abs(current - date) / 36e5;%>
+                    <%var minutes = Math.abs(current - date) / 60000;%>
+
+                    <td><%=date.toLocaleDateString("en-US", options)%></td>
+                    <% if(hours<1){%>
+                    <td><%=minutes.toFixed(0)%> minutes</td>
+                    <%}%>
+            <% if(hours>=1){%>
+                    <td><%=hours.toFixed(0)%> hours <%=(minutes%60).toFixed(0)%> minutes</td>
+                    <%}%>
+            <td class="start"><%=contract.start%></td>
+                    <td><%=contract.end%></td>
+                    <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
+                        m<sup>3</sup></td>
+                    <td><%=parseInt(contract.reward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                    <td><%=parseInt(contract.collateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK
+                    </td>
+                    <td><%=contract.service%></td>
+                    <td><%=contract.key%></td>
+                    <td><%=rewardDelta.toFixed(2)%> : <%=collateralDelta.toFixed(2)%> :
+                        <%=volumeDelta.toFixed(2)%></td>
+
+                </tr>
+                <% sno += 1; %>
+                <%}})%>
+            </table>
+        </div>
+        <div class="table-wrapper" value="3">
+
+            <h2>finished</h2>
+            <table>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Client</th>
+                    <th>Created At</th>
+                    <th>Finished At</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Volume</th>
+                    <th>Reward</th>
+                    <th>Collateral</th>
+                    <th>Service</th>
+                    <th>Key</th>
+                    <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
+                </tr>
+                <% sno = 1; %>
+                <% contracts.forEach((contract)=>{%>
+                <% if(contract.status == "finished"){%>
+                <% let noCode= false;%>
+                <% if(!contract.appraisalReward){ contract.appraisalReward = Infinity; noCode=true} %>
+                <% if(!contract.appraisalCollateral){ contract.appraisalCollateral = Infinity; noCode=true} %>
+                <% if(!contract.appraisalVolume){contract.appraisalVolume = Infinity; noCode=true} %>
+                <% let rewardDelta = contract.reward/contract.appraisalReward %>
+                <% let collateralDelta = contract.collateral/contract.appraisalCollateral %>
+                <% let volumeDelta = contract.volume/contract.appraisalVolume %>
+
+
+                <% if(!noCode && rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05){ %>
+                <tr style="background-color: rgba(144, 255, 144, 0.5);">
+                    <%}%>
+        <% if(!noCode && !(rewardDelta >= 0.9 && collateralDelta >=0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05)){ %>
+                <tr style="background-color: rgba(255, 113, 113, 0.5);">
+                    <%}%>
+        <% if(noCode){ %>
+                <tr style="background-color: rgba(255, 191, 0, 0.15);">
+                    <%}%>
+                    <td><%=sno%></td>
+                    <td><%=contract.issuerName%></td>
+                    <%var options = {  hour:"numeric", minute:"numeric" , month: 'long', day: 'numeric', }; %>
+                    <% let date  = new Date(contract.date);%>
+                    <% let dateCompleted  = new Date(contract.dateCompleted);%>
+
+                    <td><%=date.toLocaleDateString("en-US", options)%></td>
+                    <td><%=dateCompleted.toLocaleDateString("en-US", options)%></td>
+
+
+                    <td class="start"><%=contract.start%></td>
+                    <td><%=contract.end%></td>
+                    <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
+                        m<sup>3</sup></td>
+                    <td><%=parseInt(contract.reward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK
+                    </td>
+                    <td><%=parseInt(contract.collateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
+                        ISK</td>
+                    <td><%=contract.service%></td>
+                    <td><%=contract.key%></td>
+                    <td><%=rewardDelta.toFixed(2)%> : <%=collateralDelta.toFixed(2)%> : <%=volumeDelta.toFixed(2)%></td>
+
+                </tr>
+                <% sno += 1; %>
+                <%}})%>
+            </table>
+        </div>
+        <div class="table-wrapper" value="4">
+
+            <h2>Cancelled/Failed/Rejected/Deleted</h2>
+            <table>
+                <% sno = 1 %>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Client</th>
+                    <th>Created At</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Volume</th>
+                    <th>Reward</th>
+                    <th>Collateral</th>
+                    <th>Service</th>
+                    <th>Key</th>
+                    <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
+                    <th>Status</th>
+                </tr>
+                <% sno = 1; %>
+                <% contracts.forEach((contract)=>{%>
+                <% if(contract.status == "cancelled" || contract.status == "failed" || contract.status == "rejected" || contract.status == "deleted"){%>
+                <% let noCode=false%>
+                <% if(!contract.appraisalReward){ contract.appraisalReward = Infinity; noCode=true} %>
+                <% if(!contract.appraisalCollateral){ contract.appraisalCollateral = Infinity; noCode=true} %>
+                <% if(!contract.appraisalVolume){contract.appraisalVolume = Infinity; noCode=true} %>
+                <% let rewardDelta = contract.reward/contract.appraisalReward %>
+                <% let collateralDelta = contract.collateral/contract.appraisalCollateral %>
+                <% let volumeDelta = contract.volume/contract.appraisalVolume %>
+
+
+                <% if(!noCode && rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05){ %>
+                <tr style="background-color: rgba(144, 255, 144, 0.5);">
+                    <%}%>
+        <% if(!noCode && !(rewardDelta >= 0.9 && collateralDelta >=0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05)){ %>
+                <tr style="background-color: rgba(255, 113, 113, 0.5);">
+                    <%}%>
+        <% if(noCode){ %>
+                <tr style="background-color: rgba(255, 191, 0, 0.15);">
+                    <%}%>
+            <td><%=sno%></td>
+                    <td><%=contract.issuerName%></td>
+                    <%var options = {  hour:"numeric", minute:"numeric" , month: 'long', day: 'numeric', }; %>
+                    <% let date  = new Date(contract.date);%>
+                    <% let dateCompleted  = new Date(contract.dateCompleted);%>
+
+                    <td><%=date.toLocaleDateString("en-US", options)%></td>
+                    <td class="start"><%=contract.start%></td>
+                    <td><%=contract.end%></td>
+                    <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
+                        m<sup>3</sup></td>
+                    <td><%=parseInt(contract.reward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
+                        ISK</td>
+                    <td><%=parseInt(contract.collateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
+                        ISK</td>
+                    <td><%=contract.service%></td>
+                    <td><%=contract.key%></td>
+                    <td><%=rewardDelta.toFixed(2)%> : <%=collateralDelta.toFixed(2)%> :
+                        <%=volumeDelta.toFixed(2)%></td>
+                    <td><%=contract.status%></td>
+                </tr>
+                <% sno += 1; %>
+                <%}})%>
+            </table>
+
+        </div>
+        <script src="/js/contracts.js" async></script>
+</body>
+
+</html>

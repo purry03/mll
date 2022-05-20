@@ -318,6 +318,10 @@ app.get("/", (req, res) => {
     res.render("homepage.ejs");
 })
 
+app.get("/jf-routes", (req, res) => {
+    res.render("jf-routes.ejs");
+})
+
 
 app.get("/admin/login", (req, res) => {
     res.render("login.ejs");
