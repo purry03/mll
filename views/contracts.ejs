@@ -400,8 +400,9 @@
         <div class="table-wrapper" value="4">
 
             <h2>Cancelled/Failed/Rejected/Deleted</h2>
-            <table>
+            <table id="Cancelled_Deleted" class="dataTable">
                 <% sno = 1 %>
+                <thead>
                 <tr>
                     <th>S.No.</th>
                     <th>Client</th>
@@ -416,6 +417,7 @@
                     <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
                     <th>Status</th>
                 </tr>
+              </thead>
                 <% sno = 1; %>
                 <% contracts.forEach((contract)=>{%>
                 <% if(contract.status == "cancelled" || contract.status == "failed" || contract.status == "rejected" || contract.status == "deleted"){%>

@@ -51,7 +51,7 @@ table tr:hover , tr.selected {
     background-color: rgb(174, 202, 209) !important;
     transition: all 0.1s;
 }
-#outstanding_filter , #finished_filter {
+#outstanding_filter , #finished_filter , #cancelled_Deleted_filter{
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
