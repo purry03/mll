@@ -59,6 +59,10 @@ table tr:hover , tr.selected {
  padding-bottom: 10px;
 }
 
+.filters th input{
+  width: 70%;
+
+}
 
 table,
 th,
