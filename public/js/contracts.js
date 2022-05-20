@@ -110,9 +110,9 @@ var outstandingCollateralSum = 0;
          $(this).toggleClass('selected');
     } );
 // Added new section for finished table
-var outstandingTable = $('#completed').DataTable({
+var outstandingTable = $('#finished').DataTable({
     orderCellsTop: true,
-    fixedHeader: true,
+    fixedHeader: true
 });
 
 
