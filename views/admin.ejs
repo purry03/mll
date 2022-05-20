@@ -170,7 +170,7 @@
                   <option value="Standard">Standard</option>
                   <option value="Intra-Drones">Intra-Drones</option>
                   </select>
-            </label>
+            </label> <br>
             <label class='add-route'>Start : <input type="text" placeholder="Name" name="start-system"
                     id="start-system"></label>
             <label class='add-route'>Destination : <input type="text" placeholder="Name" name="destination-system"
@@ -203,7 +203,7 @@
             <table class="route-list" style="margin-top: 20px;">
                 <tr>
                     <th>
-                        Service type
+                        Service Type
                     </th>
                     <th>
                         Start
@@ -293,8 +293,11 @@
                 <option hidden disabled selected value> -- Select Route -- </option>
             </select>
             <button style="display: block;margin: 10px 0;" onclick="loadRoute()">Load Route</button>
-            <label class='add-route'>Start : <input type="text" placeholder="Name" name="service-type"
-                    id="service-type"></label>
+            <label class='add-route'>Service Type : <select name="service-type" id="service-type">
+                  <option value="Standard">Standard</option>
+                  <option value="Intra-Drones">Intra-Drones</option>
+                  </select>
+            </label> <br>
             <label class='add-route'>Start : <input type="text" placeholder="Name" name="start-system"
                     id="start-system"></label>
             <label class='add-route'>Destination : <input type="text" placeholder="Name" name="destination-system"
