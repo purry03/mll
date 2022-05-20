@@ -1,0 +1,139 @@
+.navContainer {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  width: 100vw;
+  max-width: 100vw;
+  padding: 20px 25px;
+  background-color: rgba(0, 0, 0, 0.25);
+  color: #eee;
+  transition: all;
+  transition-duration: 0.5s;
+  font-size: 1.5rem;
+  backdrop-filter: blur(5px);
+}
+
+.title {
+  display: inline;
+  font-size: 1.5rem;
+  color: #eee;
+  font-weight: 400;
+  letter-spacing: 1.5;
+  text-transform: uppercase;
+}
+
+.navList {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.navLink {
+  display: flex;
+  margin: 0 15px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  font-size: 0.85rem !important;
+  letter-spacing: 1.25pt !important;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.discord {
+  display: inline-block;
+  height: 1rem;
+}
+
+.headingContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  width: 100%;
+}
+
+
+
+* {
+    font-family: monospace;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+nav {
+    position: sticky;
+    top: 0;
+    padding: 20px 0;
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 1.25rem;
+}
+
+nav ul li {
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+nav ul li:hover {
+    color: #6287ff
+}
+
+.main {
+    padding: 10px 30px;
+}
+
+h2 {
+    margin-top: 50px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table tr:hover {
+    background-color: rgb(174, 202, 209) !important;
+    transition: all 0.1s;
+}
+
+
+table,
+th,
+tr,
+td {
+    border: 1px solid #333;
+}
+
+th,
+td {
+    padding: 5px;
+    text-align: center;
+}
+
+#mail {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: none;
+}
+
+#mail button {
+    width: 100%;
+}
