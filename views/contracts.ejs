@@ -127,7 +127,7 @@
                     <%var minutes = Math.abs(current - date) / 60000;%>
                     <td><%=contract.issuerName%></td>
 
-                    <td><%=date.toLocaleDateString("en-UK", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <% if(hours<1){%>
                     <td><%=minutes.toFixed(0)%> minutes</td>
                     <%}%>
@@ -259,6 +259,7 @@
 
             <h2>in progress</h2>
             <table>
+              <thead>
                 <tr>
                     <th>S.No.</th>
                     <th>Client</th>
@@ -273,6 +274,7 @@
                     <th>Key</th>
                     <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
                 </tr>
+                <thead>
                 <% sno = 1; %>
                 <% contracts.forEach((contract)=>{%>
                 <% if(contract.status == "in_progress"){%>
@@ -303,7 +305,7 @@
                     <%var hours = Math.abs(current - date) / 36e5;%>
                     <%var minutes = Math.abs(current - date) / 60000;%>
 
-                    <td><%=date.toLocaleDateString("en-US", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <% if(hours<1){%>
                     <td><%=minutes.toFixed(0)%> minutes</td>
                     <%}%>
@@ -331,6 +333,7 @@
 
             <h2>finished</h2>
             <table id="finished" class="dataTable">
+              <thead>
                 <tr>
                     <th>S.No.</th>
                     <th>Client</th>
@@ -345,6 +348,7 @@
                     <th>Key</th>
                     <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
                 </tr>
+              </thead>
                 <% sno = 1; %>
                 <% contracts.forEach((contract)=>{%>
                 <% if(contract.status == "finished"){%>
@@ -372,8 +376,8 @@
                     <% let date  = new Date(contract.date);%>
                     <% let dateCompleted  = new Date(contract.dateCompleted);%>
 
-                    <td><%=date.toLocaleDateString("en-US", options)%></td>
-                    <td><%=dateCompleted.toLocaleDateString("en-US", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
+                    <td><%=dateCompleted.toLocaleDateString("en-GB", options)%></td>
 
 
                     <td class="start"><%=contract.start%></td>
@@ -439,7 +443,7 @@
                     <% let date  = new Date(contract.date);%>
                     <% let dateCompleted  = new Date(contract.dateCompleted);%>
 
-                    <td><%=date.toLocaleDateString("en-US", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <td class="start"><%=contract.start%></td>
                     <td><%=contract.end%></td>
                     <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
