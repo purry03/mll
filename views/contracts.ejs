@@ -7,6 +7,8 @@
     <title>Contracts</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/css/contracts.css">
     <link rel="icon" type="image/png" href="img/logo.png" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -38,9 +40,9 @@
     <% var current = new Date(); %>
     <div class="main">
 
-        <div class="table-wrapper" value="1">
+        <div class="table-wrapper dataTables_wrapper container-fluid dt-bootstrap4" value="1">
             <h2>summary by route</h2>
-            <table>
+            <table id="summary" class="dataTable">
                 <tr>
                     <th>S.No.</th>
                     <th>Contracts</th>
@@ -79,11 +81,11 @@
                 <%})%>
             </table>
         </div>
-        <div class="table-wrapper" value="1">
+        <div class="table-wrapper dataTables_wrapper container-fluid dt-bootstrap4" value="1">
 
             <h2>rush</h2>
 
-            <table>
+            <table id="rush" class="dataTable">
                 <tr>
                     <th>S.No.</th>
                     <th>Client</th>
