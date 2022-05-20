@@ -62,8 +62,14 @@
                     <td><%=route.destination%></td>
                     <td><%=parseInt(route.maxVolume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup></td>
                     <td><%=parseInt(route.maxCollateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
-                    <td><%=parseInt(route.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
-                    <td><%=route.collateralMultiplier%></td>
+                    <td>
+                      <%if(!route.isFlat){%>
+                  <td><%=parseInt(route.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK m<sup>3</sup></td>
+                  <%}
+                  else {%>
+                    <td><%=parseInt(route.flatPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                  <%}%>
+                    <td><%=route.collateralMultiplier%> %</td>
                     <td><%=parseInt(route.minReward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
                     <td><%=parseInt(route.rushShippingCharge).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
 
