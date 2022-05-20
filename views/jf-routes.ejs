@@ -11,28 +11,31 @@
     <link rel="icon" type="image/png" href="img/logo.png" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/contracts.js" async></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalizer.css">
+    <link rel="stylesheet" href="css/homepage.css">
 
 </head>
 
 <body>
-
-
-    <nav>
-        <ul>
-            <li value="1">
-                Summary/Outstanding
-            </li>
-            <li value="2">
-                In-Progress
-            </li>
-            <li value="3">
-                Finished
-            </li>
-            <li value="4">
-                Deleted/Cancelled/Rejected
-            </li>
-        </ul>
-    </nav>
+  <header style="position: relative;">
+      <div id='navContainer' class='navContainer'>
+          <h3 class='title'><a href='#'>Multi-Lemm Logistics</a></h3>
+          <div style='float:right'>
+              <ul class='navList'>
+                  <li class='navLink'><a href="/">Home</a></li>
+                  <li class='navLink'><a href="/jfcalculator">JF Calculator</a></li>
+                  <li class='navLink'><a href="/perjumpcalculator">BR/DST/Freighter Calculator</a></li>
+                  <li class='navLink' onclick="joinus()">Guide</li>
+                  <li class='navLink'><a href='https://discord.gg/kgBGPKuwQ9' target="_blank">DISCORD</a></li>
+                  <li class='navLink'><a
+                          href='https://www.pandemic-horde.org/forum/index.php?threads/multi-lemm-logistics-jf-freighter-br-service-covering-tke-def-custom-routes.2872/'
+                          target="_blank">FORUMS</a></li>
+              </ul>
+          </div>
+      </div>
+  </header>
 
     <% var current = new Date(); %>
     <div class="main">
