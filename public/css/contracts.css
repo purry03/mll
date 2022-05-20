@@ -47,7 +47,7 @@ table {
     border-collapse: collapse;
 }
 
-table tr:hover {
+table tr:hover , tr.selected {
     background-color: rgb(174, 202, 209) !important;
     transition: all 0.1s;
 }
