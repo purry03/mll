@@ -319,7 +319,7 @@ app.get("/", (req, res) => {
 })
 
 app.get("/jf-routes", (req, res) => {
-    res.render("jf-routes.ejs");
+    res.render("jf-routes.ejs", {routes});
 })
 
 
