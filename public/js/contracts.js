@@ -109,4 +109,11 @@ var outstandingCollateralSum = 0;
                             $('.outstandingCollateralSum').html((outstandingCollateralSum.toLocaleString('en-GB')) +' ISK');
          $(this).toggleClass('selected');
     } );
+// Added new section for finished table
+var outstandingTable = $('#completed').DataTable({
+    orderCellsTop: true,
+    fixedHeader: true
+});
+
+
 });
