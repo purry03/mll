@@ -40,7 +40,6 @@ var outstandingCollateralSum = 0;
         orderCellsTop: true,
         fixedHeader: true,
         paging: false,
-          order: [[3, 'asc']],
         initComplete: function () {
             var api = this.api();
 
