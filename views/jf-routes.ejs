@@ -69,7 +69,7 @@
                     <td><%=parseInt(route.maxVolume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup></td>
                     <td><%=parseInt(route.maxCollateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
                       <%if(!route.isFlat){%>
-                  <td><%=parseInt(route.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK m<sup>3</sup></td>
+                  <td><%=parseInt(route.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK/m<sup>3</sup></td>
                   <%}
                   else {%>
                     <td><%=parseInt(route.flatPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK Flat Fee</td>
