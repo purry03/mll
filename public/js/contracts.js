@@ -115,7 +115,7 @@ pageLength: 25,
 orderCellsTop: true,
 fixedHeader: true
 });
-$('#cancelled_Deleted').DataTable({
+$('#cancelled').DataTable({
 pageLength: 10,
 orderCellsTop: true,
 fixedHeader: true
