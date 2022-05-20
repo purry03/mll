@@ -53,9 +53,9 @@
                 </tr>
                 <% routes.forEach((route)=>{%>
                 <tr>
-                    <td class="start"><%=route.from%></td>
-                    <td><"-->"></td>
-                    <td><%=route.to%></td>
+                    <td class="start"><%=route.start%></td>
+                    <td>--></td>
+                    <td><%=route.destination%></td>
                     <td><%=parseInt(route.maxVolume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup></td>
                     <td><%=parseInt(route.maxCollateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
                     <td><%=parseInt(route.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
