@@ -63,7 +63,7 @@
                 <% routes.forEach((route)=>{%>
                 <tr>
                     <td class="start"><%=route.start%></td>
-                    <td>--></td>
+                    <td>-></td>
                     <td><%=route.destination%></td>
                     <td><%=parseInt(route.maxVolume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup></td>
                     <td><%=parseInt(route.maxCollateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
@@ -86,7 +86,7 @@
               </tbody>
             </table>
         </div>
-        <script language="JavaScript"> $('#jf-routes').dataTable({paging: false});</script>
+        <script language="JavaScript"> $('#jf-routes').dataTable({paging: false, "order": []});</script>
         <script src="/js/contracts.js" async></script>
 </body>
 
