@@ -65,8 +65,8 @@
  padding-bottom: 10px;
 }
 
-.filters {
-  width: 100%;
+.filters th input{
+  width: 70%;
 
 }
 
