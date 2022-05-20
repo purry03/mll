@@ -457,46 +457,6 @@
         </div>
 
 
-        <script language="JavaScript">
-                        $(document).ready(function() {
-            var outstandingSum = 0;
-            $('#outstanding').dataTable( {
-                "footerCallback": function ( row, data, start, end, display ) {
-                    var api = this.api(), data;
-
-                    // Remove the formatting to get integer data for summation
-                    var intVal = function ( i ) {
-                        return typeof i === 'string' ?
-                            i.replace(/,|\sm\p{No}/gu, '')*1 :
-                            typeof i === 'number' ?
-                                i : 0;
-                    };
-
-
-
-
-                }
-            } );
-
-            $('#outstanding tbody').on('click', 'tr', function () {
-
-                var outstandingVolume = parseInt(($(this).find('td:eq(6)').last().html()).replace(/,|\sm\p{No}/gu, ''));
-                if($(this).hasClass('selected')) {
-                   outstandingSum -= outstandingVolume;
-                } else {
-                   outstandingSum += outstandingVolume;
-                }
-                   $('.outstandingSum').html(outstandingSum);
-                 $(this).toggleClass('selected');
-            } );
-
-        } );
-        </script>
-
-
-
-
-        <script src="/js/contracts.js" async></script>
 </body>
 
 </html>
