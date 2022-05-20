@@ -39,7 +39,7 @@ var outstandingCollateralSum = 0;
     var outstandingTable = $('#outstanding').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
-        paging: false,
+        pageLength: 100,
           order: [[2, 'asc']],
         initComplete: function () {
             var api = this.api();
