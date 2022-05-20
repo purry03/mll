@@ -219,7 +219,7 @@
                     <%var hours = Math.abs(current - date) / 36e5;%>
                     <%var minutes = Math.abs(current - date) / 60000;%>
 
-                    <td><%=date.toLocaleDateString("en-UK", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <% if(hours<1){%>
                     <td><%=minutes.toFixed(0)%> minutes</td>
                     <%}%>
