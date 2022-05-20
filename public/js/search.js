@@ -1,4 +1,4 @@
-var $rows = $('#table tr');
+var $rows = $('#jf-routes tr');
 $('#search').keyup(function() {
 
     var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',

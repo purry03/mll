@@ -59,7 +59,9 @@
 
 
 
-
+input#search {
+    font-family: monospace;
+}
 
 
 nav {
