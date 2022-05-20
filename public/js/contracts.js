@@ -112,7 +112,7 @@ var outstandingCollateralSum = 0;
 // Added new section for finished table
 var outstandingTable = $('#finished').DataTable({
     orderCellsTop: true,
-    fixedHeader: true
+    fixedHeader: true,
 });
 
 
