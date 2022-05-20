@@ -303,6 +303,19 @@ app.get("/perjumpcalculator", (req, res) => {
     })
 });
 
+
+
+app.get("/jf-routes", (req, res) => {
+    Routes.find({}, (err, routes) => {
+        if (err) {
+            res.sendStatus(500);
+        }
+        else {
+            res.render("jf-routes.ejs", { routes });
+        }
+    })
+});
+
 app.get("/jfcalculator", (req, res) => {
     Routes.find({}, (err, routes) => {
         if (err) {
@@ -1006,10 +1019,6 @@ app.get("/contracts", authHauler, async (req, res) => {
         }
     });
     res.render("contracts.ejs", { contracts, routes });
-});
-
-app.get("/jf-routes", (req, res) => {
-    res.render("jf-routes.ejs", {routes});
 });
 
 app.get("/contracts/raw", (req, res) => {
