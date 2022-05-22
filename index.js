@@ -307,15 +307,22 @@ app.get("/perjumpcalculator", (req, res) => {
 
 
 app.get("/jf-routes", (req, res) => {
-    Routes.find({}, (err, routes) => {
-        if (err) {
-            res.sendStatus(500);
-        }
-        else {
-            res.render("jf-routes.ejs", { routes });
-        }
-    })
+  let standardRoutePromise = Routes.find({}).exec();
+  let intraRoutePromise = Routes.find({ {routeType: "Intra-Drones"} }).exec();
+  Promise.all ([standardRoutePromise, intraRoutePromise]).then((data) => {
+    res.render("jf-routes.ejs", { routes: data[0], intraRoutes: data[1] });
+  });
 });
+//    Routes.find({ {routeType: "Intra-Drones"} })
+//    Routes.find({}, (err, routes) => {
+//        if (err) {
+//            res.sendStatus(500);
+//        }
+//        else {
+//            res.render("jf-routes.ejs", { routes });
+//        }
+//    })
+//});
 
 app.get("/jfcalculator", (req, res) => {
     Routes.find({}, (err, routes) => {
