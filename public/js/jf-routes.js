@@ -64,18 +64,19 @@ function intraRoutes(checkbox)
 {
     if (checkbox.checked)
     {
-        const table = document.getElementById('jf-routes');
-        const arr = [{SKU: "9372983-382L", retail_price: "11.75", list_price: "3.50", product_name: "Tennis balls"}];
-        for(const obj of arr){
-          const row = document.createElement('tr');
-          for(const val of Object.values(obj)){
-            const col = document.createElement('td');
-            col.textContent = val;
-            row.appendChild(col);
-                  }
-          table.appendChild(row);
-        }
-    }
+//        const table = document.getElementById('jf-routes');
+//        const arr = ;
+//        for(const obj of arr){
+//          const row = document.createElement('tr');
+//          for(const val of Object.values(obj)){
+//            const col = document.createElement('td');
+//            col.textContent = val;
+//            row.appendChild(col);
+//                  }
+//          table.appendChild(row);
+//        }
+         location.reload();
+}
     if (!checkbox.checked){
             var rows = document.getElementsByTagName("tr");
                 for (var i = rows.length; i--;) {
