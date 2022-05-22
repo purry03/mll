@@ -59,3 +59,11 @@ $(document).ready(function () {
         },
     });
 });
+
+function intraRoutes(checkbox)
+{
+    if (checkbox.checked)
+    {
+        alert("a");
+    }
+}
