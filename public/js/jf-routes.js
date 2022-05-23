@@ -85,6 +85,13 @@ var table = $('#jf-routes').DataTable();
 
 });
 
+
+window.onload = onPageLoad();
+
+function onPageLoad() {
+  document.getElementsByName("routeType").checked = true;
+}
+
 //function intraRoutes(checkbox)
 //{
 //    if (checkbox.checked)
