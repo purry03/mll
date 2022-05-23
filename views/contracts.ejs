@@ -93,6 +93,7 @@
                     <th style="width: 150px;">Time Passed</th>
                     <th>From</th>
                     <th>To</th>
+                    <th>Jumps</th>
                     <th>Volume</th>
                     <th>Reward</th>
                     <th>Collateral</th>
@@ -137,6 +138,7 @@
                     <td><%=hours.toFixed(0)%> hours <%=(minutes%60).toFixed(0)%> minutes</td>
                     <%}%>
                     <td class="start"><%=contract.start%></td>
+                    <td><%=contract.appraisalJumps%></td>
                     <td><%=contract.end%></td>
                     <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup>
                     </td>
