@@ -351,7 +351,9 @@
             <tr>
                 <td><%=hauler.ingame_name%></td>
                 <td><%=hauler.username%></td>
-                <td><%=hauler.password%></td>
+                <td><form>
+                      <input onmouseover="this.setAttribute('type','text')" onmouseout="this.setAttribute('type','password')" placeholder="Hover to show password!" type="password" name="password-login" id="password-login" value="<%=hauler.password%>" readonly="readonly">
+                    </form></td>
                 <td><button onclick="removeHauler('<%=hauler.id%>')">Remove</button>
                 </td>
             </tr>
