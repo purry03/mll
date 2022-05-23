@@ -182,6 +182,7 @@ const contractSchema = mongoose.Schema({
     appraisalService: String,
     appraisalFrom: String,
     appraisalTo: String,
+    appraisalJumps: Number,
     mailed: {
         type: Boolean,
         required: true,
@@ -1145,7 +1146,8 @@ async function saveContracts() {
             appraisalVolume: contract.appraisalVolume,
             appraisalService: contract.appraisalService,
             appraisalFrom: contract.appraisalFrom,
-            appraisalTo: contract.appraisalTo
+            appraisalTo: contract.appraisalTo,
+            appraisalJumps: contract.appraisalJumps
         };
 
         const options = { upsert: true, new: true, setDefaultsOnInsert: true };
@@ -1260,6 +1262,7 @@ async function processContracts(user) {
             contract.appraisalFrom = appraisal.from;
             contract.appraisalTo = appraisal.to;
             contract.appraisalService = appraisal.service;
+            contract.appraisalJumps = appraisal.jumps
         }
         newUserContracts.push(contract);
     }
