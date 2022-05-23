@@ -83,10 +83,17 @@ var table = $('#jf-routes').DataTable();
     table.draw();
  });
 
-document.getElementById("standard").checked = true;
+
 
 
 });
+
+
+window.onload = onPageLoad();
+
+function onPageLoad() {
+  document.getElementById("standard").checked = true;
+}
 
 //function intraRoutes(checkbox)
 //{
