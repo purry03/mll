@@ -83,7 +83,8 @@ var table = $('#jf-routes').DataTable();
     table.draw();
  });
 
-document.getElementById("standard").click(); 
+document.getElementById("standard").click();
+document.getElementById("intraDrone").click(); 
 
 
 });
