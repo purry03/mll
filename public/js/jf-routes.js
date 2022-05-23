@@ -69,7 +69,7 @@ $(document).ready(function () {
       return true;
     }
 
-    if (routes.indexOf(searchData[1]) !== -1) {
+    if (routes.indexOf(searchData[9]) !== -1) {
       return true;
     }
 
