@@ -83,6 +83,9 @@ var table = $('#jf-routes').DataTable();
     table.draw();
  });
 
+document.getElementById("standard").checked = true;
+
+
 });
 
 //function intraRoutes(checkbox)
