@@ -49,11 +49,17 @@
       <h2>Jump Freighter Routes</h2>
       <!-- add class p-switch -->
         <div class="pretty p-switch p-fill" style="float: right">
-            <input type="checkbox" name="Intra-Drones" value="Intra-Drones"/>
+            <input type="checkbox" name="routeType" value="Intra-Drones"/>
               <div class="state p-success">
                   <label>Display Intra-Drones Routes</label>
               </div>
           </div>
+          <div class="pretty p-switch p-fill" style="float: right">
+              <input type="checkbox" name="routeType" value="Standard"/>
+                <div class="state p-success">
+                    <label>Display Standard Routes</label>
+                </div>
+            </div>
         <div  class="dataTables_wrapper container-fluid dt-bootstrap4" id="jf-routes-wrapper" value="1">
             <table id="jf-routes" class="table sortable dataTable">
               <thead>
