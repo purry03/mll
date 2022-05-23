@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     var table = $('#route-list').DataTable({
         orderCellsTop: true,
-        fixedHeader: true,
+        fixedHeader: false,
         paging: true,
 
         order: [],
