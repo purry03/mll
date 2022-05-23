@@ -62,7 +62,7 @@ $(document).ready(function () {
     $.fn.dataTable.ext.search.push(
   function( settings, searchData, index, rowData, counter ) {
     var routes = $('input:checkbox[name="Intra-Drones"]:checked').map(function() {
-      return 'Intra-Drones';
+      return "Intra-Drones";
     }).get();
 
     if (routes.length === 0) {
