@@ -85,6 +85,7 @@ nav ul li a:hover {
     width: 55%;
     margin: 25px auto;
     padding: 50px;
+    border-radius: 8px;
 }
 
 .statictics {
