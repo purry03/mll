@@ -61,7 +61,7 @@ $(document).ready(function () {
 
     $.fn.dataTable.ext.search.push(
   function( settings, searchData, index, rowData, counter ) {
-    var routes = $('input:checkbox[name="Intra-Drones"]:checked').map(function() {
+    var routes = $('input:checkbox[name="routeType"]:checked').map(function() {
       return this.value;
     }).get();
 
