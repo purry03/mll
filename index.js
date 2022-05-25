@@ -957,6 +957,57 @@ app.post("/custom", async (req, res) => {
             res.send({ errorLines, systems, sourceName, destinationName, volume, price, collateral, saved });
         }
     })
+
+    const currentSettings = await Settings.findOne({}).exec();
+    if (!currentSettings.customDiscordEnabled) {
+        console.log("Skipping custom discord notifications");
+
+    }
+    else {
+
+        console.log("Starting custom discord notification");
+
+        //console.log(currentSettings.discordEnabled);
+        let customRequest = await Custom.find({ discordNotified: false}).exec();
+
+        for (request of customRequest) {
+            // this is now a rush contract and therefore a discord notification is required
+              let notificationJson = customJsonBuilder.buildJson(
+                  request.from,
+                  request.to,
+                  request.isRush,
+                  request.rushTargetDate,
+                  request.volume,
+                  request.collateral,
+                  request.eveCharacterName,
+                  request.discordId,
+                  request.structureType,
+                  request.submittedDate,
+                  process.env.CUSTOM_DISCORD_ROLE_ID)
+
+            //console.log(JSON.stringify(notificationJson));
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.CUSTOM_DISCORD_SERVER_ID + '/' + process.env.CUSTOM_DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { _id: request._id };
+                const update = { discordNotified: true };
+                await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Custom Discord Notification for ' + request.eveCharacterName + ' being sent.')
+          }
+        }
+    
 })
 
 
