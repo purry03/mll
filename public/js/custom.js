@@ -13,7 +13,7 @@ $("#rushCheckbox").on("change", async function () {
   else {
     div.style.display='none';
   }
-})
+});
 
 $("body").on("input", "#start", function () {
     const name = $(this).val().toString().trim().toLowerCase();
@@ -86,12 +86,14 @@ function submit() {
     const eveCharacterName = $("#eveCharacterName").val();
     const discordId = $("#discordId").val();
     const structureType = $("#structureType").is(":checked");
+    console.log(structureType);
+    console.log(discordId);
     const rushTargetDate = $("#targetRushDate").val();
 
 
     isLoading(true);
 
-    setTimeout(function(){isLoading(false,"An unknown error occurred");},5000);
+    //setTimeout(function(){isLoading(false,"An unknown error occurred");},5000);
 
 
     $.post("/custom", { source, destination, isRush, itemList, additionalVolume, additionalCollateral, eveCharacterName, discordId, structureType, rushTargetDate }, (data) => {
