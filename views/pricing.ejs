@@ -49,14 +49,18 @@
       <h2>Per Jump Pricing</h2>
           <table id="per-jump" class="table">
             <tr>
-              <th>Type</th>
+              <th></th>
+              <th>Maximum Volume</th>
+              <th>Maximum Collateral</th>
               <th>High Sec: Price per Warp</th>
               <th>Low Sec: Price per Warp</th>
               <th>Null Sec: Price per Warp</th>
+              <th>Rush Shipping Surcharge</th>
+              <th>Minimum Rush Shipping Price</th>
             <tr>
               <% services.forEach((service)=>{%>
               <tr>
-                  <td><%=service.name%></td>
+                  <td><strong><%=service.name%></strong></td>
                   <td><%=service.runsIn.highsec%></td>
                   <td><%=service.runsIn.lowsec%></td>
                   <td><%=service.runsIn.nullsec%></td>
