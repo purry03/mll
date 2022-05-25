@@ -290,7 +290,13 @@ function authHauler(req, res, next) {
 
 
 
-
+//app.get("/perjumpcalculator", authAdmin, (req, res) => {
+//    let systemPromise = System.find({}).exec();
+//    let servicesPromise = Services.find({}).exec();
+//    Promise.all([systemPromise, routePromise, haulerPromise, settingsPromise]).then((data) => {
+//        res.render("admin.ejs", { systems: data[0], routes: data[1], haulers: data[2], settings: data[3] });
+//    });
+//});
 
 
 
@@ -307,13 +313,13 @@ app.get("/perjumpcalculator", (req, res) => {
 
 
 
-app.get("/jf-routes", (req, res) => {
+app.get("/pricing", (req, res) => {
     Routes.find({}, (err, routes) => {
         if (err) {
             res.sendStatus(500);
         }
         else {
-            res.render("jf-routes.ejs", { routes });
+            res.render("pricing.ejs", { routes });
         }
     })
 });
