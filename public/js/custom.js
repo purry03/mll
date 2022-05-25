@@ -123,7 +123,7 @@ function submit() {
             resetOutputFields();
             return;
         }
-        $(".parse-status").html("SUCCESSFUL");
+        $(".parse-status").html("Your request has been received, one of our pilots will be in contact shortly.");
         $(".parse-status").removeClass("error");
         $(".parse-status").show();
 
@@ -136,7 +136,7 @@ function submit() {
         //$("#jump-count").html(jumpCount);
         //let bestServiceType;
         if (isRush) {
-            $("#rush-status").html("Yes");
+            $("#rush-status").html("Yes" + rushTargetDate);
         }
         else {
             $("#rush-status").html("No");
