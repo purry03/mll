@@ -24,6 +24,11 @@ exports.buildJson = function (origin, destination, isRush, rushTargetDate, volum
                 "color": 16757309,
                 "fields": [
                     {
+                      "name": "Request Date",
+                      "value": `${submittedDate.toLocaleString('en-GB', {timeZone: 'UTC'})}`,
+                      "inline": true
+                    },
+                    {
                         "name": "Origin",
                         "value": `${origin}`,
                         "inline": true
@@ -31,6 +36,11 @@ exports.buildJson = function (origin, destination, isRush, rushTargetDate, volum
                     {
                         "name": "Destination",
                         "value": `${destination}`,
+                        "inline": true
+                    },
+                    {
+                        "name": "PH/NPC Structures",
+                        "value": `${structureText}`,
                         "inline": true
                     },
                     {
@@ -46,16 +56,6 @@ exports.buildJson = function (origin, destination, isRush, rushTargetDate, volum
                     {
                         "name": "Rush Target Date",
                         "value": `${rushDate}`,
-                        "inline": true
-                    },
-                    {
-                        "name": "PH/NPC Structures",
-                        "value": `${structureText}`,
-                        "inline": true
-                    },
-                    {
-                        "name": "Request Date",
-                        "value": `${submittedDate.toLocaleString('en-GB', {timeZone: 'UTC'})}`,
                         "inline": true
                     }
                 ]
