@@ -109,7 +109,7 @@ const customSchema = mongoose.Schema({
     structureType: Boolean,
     rushTargetDate: Date,
     submittedDate: Date,
-    discordNotified: boolean
+    discordNotified: Boolean
 });
 
 const systemSchema = mongoose.Schema({
