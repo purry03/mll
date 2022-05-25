@@ -87,7 +87,6 @@ function submit() {
     const discordId = $("discordId").val();
     const structureType = $("structureType").is(":checked");
     const rushTargetDate = $("targetRushDate").val();
-    const submittedDate = Date.now();
 
 
     isLoading(true);

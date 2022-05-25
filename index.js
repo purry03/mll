@@ -913,7 +913,6 @@ app.post("/custom", async (req, res) => {
         return;
     }
     const collateral = (parseInt(price) || 0) + (parseInt(req.body.additionalCollateral) || 0);;
-
     //get number of jumps
     const { source, destination } = req.body;
     const sourceName = await systems.getSystemName(source), destinationName = await systems.getSystemName(destination);
@@ -947,11 +946,18 @@ app.post("/custom", async (req, res) => {
     });
     //save to db
 
+    const isRush = req.body.isRush;
+    const eveCharacterName = req.body.eveCharacterName;
+    const discordId = req.body.discordId;
+    const structureType = req.body.structureType;
+    const rushTargetDate = req.body.rushTargetDate;
+    const submittedDate = Date.now();
+
     const toSave = new Custom({
         key: randomstring.generate(8),
         from: sourceName,
         to: destinationName,
-        //isRush,
+        isRush,
         volume,
         collateral,
         jumps: jumpCount,
