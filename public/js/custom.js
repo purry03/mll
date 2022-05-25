@@ -93,7 +93,6 @@ function submit() {
 
     isLoading(true);
 
-    //setTimeout(function(){isLoading(false,"An unknown error occurred");},5000);
 
 
     $.post("/custom", { source, destination, isRush, itemList, additionalVolume, additionalCollateral, eveCharacterName, discordId, structureType, rushTargetDate }, (data) => {
