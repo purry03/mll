@@ -958,7 +958,7 @@ app.post("/custom", async (req, res) => {
         }
     })
 
-
+    const currentSettings = await Settings.findOne({}).exec();
     if (!currentSettings.customDiscordEnabled) {
         console.log("Skipping custom discord notifications");
 
@@ -966,7 +966,7 @@ app.post("/custom", async (req, res) => {
     else {
 
         console.log("Starting custom discord notification");
-        const currentSettings = await Settings.findOne({}).exec();
+
         //console.log(currentSettings.discordEnabled);
         let customRequest = await Custom.find({ discordNotified: false}).exec();
 
@@ -1006,7 +1006,9 @@ app.post("/custom", async (req, res) => {
               }
             console.log ('Custom Discord Notification for ' + request.eveCharacterName + ' being sent.')
           }
-});
+        }
+
+);
 
 
 
