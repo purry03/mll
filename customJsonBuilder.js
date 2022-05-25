@@ -20,7 +20,7 @@ exports.buildJson = function (origin, destination, isRush, rushTargetDate, volum
                 },
                 "title": "MLL Custom Contract Notification",
                 "url": "http://multi-lemm-logistics.com/contracts",
-                "description": `**${eveCharacterName} (${discordId})** has put up a custom contract request, see below for details.`,
+                "description": `**${eveCharacterName} (${discordId})** has put up a custom contract request, see below for details. Please message the customer via discord and react to this message with a :white_check_mark:`,
                 "color": 16757309,
                 "fields": [
                     {
