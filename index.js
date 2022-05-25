@@ -108,7 +108,8 @@ const customSchema = mongoose.Schema({
     discordId: String,
     structureType: Boolean,
     rushTargetDate: Date,
-    submittedDate: Date
+    submittedDate: Date,
+    discordNotified: boolean
 });
 
 const systemSchema = mongoose.Schema({
@@ -952,7 +953,7 @@ app.post("/custom", async (req, res) => {
     const structureType = req.body.structureType;
     const rushTargetDate = req.body.rushTargetDate;
     const submittedDate = Date.now();
-
+console.log(structureType);
     const toSave = new Custom({
         key: randomstring.generate(8),
         from: sourceName,
