@@ -1,5 +1,5 @@
 const jsonBuilder = require("./jsonBuilder");
-//const customJsonBuilder = require("./customJsonBuilder");
+const customJsonBuilder = require("./customJsonBuilder");
 const moment = require('moment');
 require('dotenv').config({ path: __dirname + '/.env' })
 // process.env.NODE_ENV = 'production';
@@ -922,7 +922,7 @@ app.post("/custom", async (req, res) => {
         res.send({ "err": "Invalid Input" });
         return;
     }
-    const collateral = (parseInt(price) || 0) + (parseInt(req.body.additionalCollateral) || 0);;
+    const collateral = (parseInt(price) || 0) + (parseInt(req.body.additionalCollateral) || 0);
     const { source, destination } = req.body;
     const sourceName = await systems.getSystemName(source), destinationName = await systems.getSystemName(destination);
     const isRush = req.body.isRush;
