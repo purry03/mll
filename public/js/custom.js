@@ -136,10 +136,10 @@ function submit() {
         //$("#jump-count").html(jumpCount);
         //let bestServiceType;
         if (isRush) {
-            $("#rush-status").html("Yes" + rushTargetDate);
+            $("#rush-status").html(rushTargetDate);
         }
         else {
-            $("#rush-status").html("No");
+            $("#rush-status").html("N/A");
         }
         //if (data.lowestSec < 0.0) {
         //    data.lowestSec = 0.0
