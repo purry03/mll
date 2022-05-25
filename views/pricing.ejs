@@ -50,10 +50,16 @@
           <table id="per-jump" class="table">
             <tr>
               <th>Type</th>
+              <th>Available in High Sec</th>
+              <th>Available in Low Sec</th>
+              <th>Available in Null Sec</th>
             <tr>
               <% services.forEach((service)=>{%>
               <tr>
                   <td><%=service.name%></td>
+                  <td><%=service.runsInHighsec%></td>
+                  <td><%=service.runsInLowsec%></td>
+                  <td><%=service.runsInNullsec%></td>
               </tr>
               <%})%>
             </tbody>
