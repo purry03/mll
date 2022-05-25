@@ -136,7 +136,7 @@ function submit() {
         //$("#jump-count").html(jumpCount);
         //let bestServiceType;
         if (isRush) {
-            $("#rush-status").html(rushTargetDate);
+            $("#rush-status").html(rushTargetDate.toLocaleDateString('en-GB'));
         }
         else {
             $("#rush-status").html("N/A");
