@@ -46,6 +46,17 @@
 
     <% var current = new Date(); %>
     <div class="main">
+      <h2>Per Jump Pricing</h2>
+          <table id="jf-routes" class="table">
+            <tr>
+              <th>Type</th>
+            <tr>
+              <% services.forEach((service)=>{%>
+              <tr>
+                  <td><%=service.name%></td>
+              </tr>
+              <%})%>
+            </tbody>
       <h2>Jump Freighter Routes</h2>
       <!-- add class p-switch -->
         <div class="pretty p-switch p-fill" style="float: right">
