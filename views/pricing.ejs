@@ -63,7 +63,8 @@
                   <td><strong><%=service.name%></strong></td>
                   <%if(!service.runsIn.highSec && !service.runsIn.lowSec && !service.runsIn.nullSec){%>
                     <td>Not Available</td>
-                  else {%>
+                    <%}
+                    else {%>
                     <td><%=parseInt(service.maxVolume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup></td>
                   <%}%>
 
