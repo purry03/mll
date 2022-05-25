@@ -999,7 +999,7 @@ app.post("/custom", async (req, res) => {
                 await request.post(options);
                 const filter = { key: contract.key };
                 const update = { discordNotified: true };
-                await Contracts.findOneAndUpdate(filter, update);
+                await Custom.findOneAndUpdate(filter, update);
               }
               catch (err) {
                 console.log(err)
