@@ -946,18 +946,6 @@ app.post("/custom", async (req, res) => {
     });
 
     const saved = await toSave.save();
-
-    //SEND RESPONSE
-
-    System.find({}, (err, systems) => {
-        if (err) {
-            res.sendStatus(500);
-        }
-        else {
-            res.send({ errorLines, systems, sourceName, destinationName, volume, price, collateral, saved });
-        }
-    })
-
     const currentSettings = await Settings.findOne({}).exec();
     if (!currentSettings.customDiscordEnabled) {
         console.log("Skipping custom discord notifications");
@@ -1007,6 +995,18 @@ app.post("/custom", async (req, res) => {
             console.log ('Custom Discord Notification for ' + request.eveCharacterName + ' being sent.')
           }
         }
+    //SEND RESPONSE
+
+    System.find({}, (err, systems) => {
+        if (err) {
+            res.sendStatus(500);
+        }
+        else {
+            res.send({ errorLines, systems, sourceName, destinationName, volume, price, collateral, saved });
+        }
+    })
+
+
 
 );
 
