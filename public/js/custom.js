@@ -72,15 +72,19 @@ function clearStuff() {
 }
 
 function submit() {
-  document.getElementById("submit").disabled=true;
-  setTimeout('document.getElementById("submit").disabled=false;',30000);
+
     if (source == destination) {
         alert("Source and destination system cannot be the same");
         return;
     }
     if (source.length == 0 || destination.length == 0) {
         alert("Select a source and destination system");
+        return;
     }
+    if ($("#eveCharacterName").val().length==0 || $("#discordId").val().length==0) {
+      alert("Please ensure you've filled in all required fields");
+      return;
+        }
     const isRush = $("#rushCheckbox").is(":checked");
     const itemList = $("#item-list").val();
     const additionalVolume = parseInt($("#additional-volume").val());
@@ -185,6 +189,8 @@ function submit() {
         // }
         //let shipmentType = isRush ? "R" : "S"
         //$("#description").html("Custom" + "-" + shipmentType + "-" + data.saved.key);
+        document.getElementById("submit").disabled=true;
+        setTimeout('document.getElementById("submit").disabled=false;',30000);
     });
 }
 
