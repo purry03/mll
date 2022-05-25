@@ -1004,7 +1004,7 @@ app.post("/custom", async (req, res) => {
               catch (err) {
                 console.log(err)
               }
-            console.log ('Custom Discord Notification for ' + request.eveCharacterName + ' being sent.')
+            console.log ('Custom Discord Notification for ' + contract.eveCharacterName + ' being sent.')
           }
         }
 
