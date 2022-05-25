@@ -62,7 +62,8 @@ nav ul li a:hover {
 }
 
 #submit:disabled {
-  background-color: #EFEFEF
+  background-color: #EFEFEF;
+  cursor: auto;
 }
 
 .loading {
