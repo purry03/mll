@@ -183,7 +183,7 @@ function submit() {
         //     }
         // }
         let shipmentType = isRush ? "R" : "S"
-        $("#description").html(bestServiceType + "-" + shipmentType + "-" + data.saved.key);
+        $("#description").html("Custom" + "-" + shipmentType + "-" + data.saved.key);
     });
 }
 
