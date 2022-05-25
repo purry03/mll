@@ -83,13 +83,19 @@ function submit() {
     const itemList = $("#item-list").val();
     const additionalVolume = parseInt($("#additional-volume").val());
     const additionalCollateral = parseInt($("#additional-collateral").val());
+    const eveCharacterName = $("#eveCharacterName").val();
+    const discordId = $("discordId").val();
+    const structureType = $("structureType").is(":checked");
+    const rushTargetDate = $("targetRushDate").val();
+    const submittedDate = Date.now();
+
 
     isLoading(true);
 
     setTimeout(function(){isLoading(false,"An unknown error occurred");},5000);
 
 
-    $.post("/custom", { source, destination, isRush, itemList, additionalVolume, additionalCollateral }, (data) => {
+    $.post("/custom", { source, destination, isRush, itemList, additionalVolume, additionalCollateral, eveCharacterName, discordId, structureType, rushTargetDate }, (data) => {
         isLoading(false);
         if (data.err) {
             $(".parse-status").addClass("error");
@@ -123,14 +129,14 @@ function submit() {
         $(".parse-status").removeClass("error");
         $(".parse-status").show();
 
-        const { sourceName, destinationName, jumpCount, price, collateral, volume, serviceCharges } = data;
+        const { sourceName, destinationName, jumpCount, price, collateral, volume } = data;
         $("#ship-from").html(sourceName);
         $("#ship-to").html(destinationName);
         $("#price").html(price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ISK");
         $("#collateral").html(collateral.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ISK");
         $("#volume").html(parseInt(volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " m<sup>3</sup>");
         $("#jump-count").html(jumpCount);
-        let bestServiceType;
+        //let bestServiceType;
         if (isRush) {
             $("#rush-status").html("Yes");
         }
@@ -142,41 +148,41 @@ function submit() {
         }
         $("#lowest-sec").html(parseFloat(data.lowestSec).toFixed(1));
 
-        if (data.serviceCharges.length == 0) {
-            $(".parse-status").html("No route found matching the volume size");
-            $(".parse-status").addClass("error");
-            $(".parse-status").show();
-            resetOutputFields();
-            $("#service-type").html("No Service Available");
-            $("#service-price").html("-");
-            return;
-        }
-        else {
-
-            bestServiceType = "";
-            let lowestPrice = Infinity;
-
-            serviceCharges.forEach(service => {
-                if (service.price < lowestPrice) {
-                    lowestPrice = service.price;
-                    bestServiceType = service.name;
-                }
-            });
-
-            lowestPrice = Math.round((lowestPrice)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-            $("#service-type").html(bestServiceType);
-            $("#service-price").html(lowestPrice + " ISK");
-
-            if (isRush) {
-                $("#expiration").html("1 day");
-                $("#days-to-complete").html("1 day");
-            }
-            else {
-                $("#expiration").html("7 days");
-                $("#days-to-complete").html("3 days");
-            }
-        }
+        // if (data.serviceCharges.length == 0) {
+        //     $(".parse-status").html("No route found matching the volume size");
+        //     $(".parse-status").addClass("error");
+        //     $(".parse-status").show();
+        //     resetOutputFields();
+        //     $("#service-type").html("No Service Available");
+        //     $("#service-price").html("-");
+        //     return;
+        // }
+        // else {
+        //
+        //     bestServiceType = "";
+        //     let lowestPrice = Infinity;
+        //
+        //     serviceCharges.forEach(service => {
+        //         if (service.price < lowestPrice) {
+        //             lowestPrice = service.price;
+        //             bestServiceType = service.name;
+        //         }
+        //     });
+        //
+        //     lowestPrice = Math.round((lowestPrice)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        //
+        //     $("#service-type").html(bestServiceType);
+        //     $("#service-price").html(lowestPrice + " ISK");
+        //
+        //     if (isRush) {
+        //         $("#expiration").html("1 day");
+        //         $("#days-to-complete").html("1 day");
+        //     }
+        //     else {
+        //         $("#expiration").html("7 days");
+        //         $("#days-to-complete").html("3 days");
+        //     }
+        // }
         let shipmentType = isRush ? "R" : "S"
         $("#description").html(bestServiceType + "-" + shipmentType + "-" + data.saved.key);
     });

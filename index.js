@@ -95,6 +95,22 @@ const appraisalSchema = mongoose.Schema({
     jumps: Number
 });
 
+
+const customSchema = mongoose.Schema({
+    key: String,
+    from: String,
+    to: String,
+    isRush: Boolean,
+    volume: Number,
+    collateral: Number,
+    jumps: Number,
+    eveCharacterName: String,
+    discordId: String,
+    structureType: Boolean,
+    rushTargetDate: Date,
+    submittedDate: Date
+});
+
 const systemSchema = mongoose.Schema({
     name: String,
     id: String,
@@ -234,6 +250,7 @@ const settingsSchema = mongoose.Schema({
 contractSchema.plugin(uniqueValidator);
 
 const Appraisal = db.model("Appraisal", appraisalSchema);
+const Custom = db.model("Custom", customSchema);
 const System = db.model("System", systemSchema);
 const Service = db.model("Service", serviceSchema);
 const Routes = db.model("Route", routeSchema);
@@ -872,6 +889,95 @@ app.post("/", async (req, res) => {
         }
     })
 });
+
+//BG - 250522 - addition for custom contract requests
+app.post("/custom", async (req, res) => {
+    let errorLines = "";
+
+
+    //MAKE API REQUEST
+    const response = await fetch('https://janice.e-351.com/api/rest/v2/appraisal?market=2&designation=appraisal&pricingVariant=immediate&persist=true&compactize=true&pricePercentage=1', {
+        method: 'post',
+        body: req.body.itemList,
+        headers: { 'Content-Type': 'text/plain', "X-ApiKey": "07RzWN1u39rubweDFsk1p5SjnxTNlCdi", "accept": "application/json" }
+    });
+    const data = await response.json();
+    let volume, price;
+    try {
+        volume = (Math.round((parseInt(data.totalPackagedVolume)  || 0) * 100) /100) + (parseInt(req.body.additionalVolume) || 0 );
+        price = Math.round(data.effectivePrices.totalSellPrice);
+        errorLines = data.failures;
+    }
+    catch (err) {
+        res.send({ "err": "Invalid Input" });
+        return;
+    }
+    const collateral = (parseInt(price) || 0) + (parseInt(req.body.additionalCollateral) || 0);;
+
+    //get number of jumps
+    const { source, destination } = req.body;
+    const sourceName = await systems.getSystemName(source), destinationName = await systems.getSystemName(destination);
+    const response1 = await fetch('https://esi.evetech.net/latest/route/' + source + '/' + destination + '/?datasource=tranquility&flag=shortest', {
+        method: 'get',
+    });
+    const jumps = await response1.json();
+    if (jumps.error) {
+        res.send({ "err": "No Route Found" });
+        return;
+    }
+    const jumpCount = jumps.length - 1;
+
+
+    var highsecJumps = 0, lowsecJumps = 0, nullsecJumps = 0;
+    var lowestSec = 1.0;
+    await jumps.forEach(async jump => {
+        let sec = await systems.getSystemSecurityFromID(jump);
+        if (sec < lowestSec) {
+            lowestSec = sec;
+        }
+        if (sec >= 0.5) {
+            highsecJumps += 1;
+        }
+        else if (sec <= 0.4 && sec >= 0.1) {
+            lowsecJumps += 1;
+        }
+        else if (sec < 0.0) {
+            nullsecJumps += 1;
+        }
+    });
+    //save to db
+
+    const toSave = new Custom({
+        key: randomstring.generate(8),
+        from: sourceName,
+        to: destinationName,
+        isRush,
+        volume,
+        collateral,
+        jumps: jumpCount,
+        eveCharacterName,
+        discordId,
+        structureType,
+        rushTargetDate,
+        submittedDate
+    });
+
+    const saved = await toSave.save();
+
+    //SEND RESPONSE
+
+    System.find({}, (err, systems) => {
+        if (err) {
+            res.sendStatus(500);
+        }
+        else {
+            res.send({ errorLines, systems, sourceName, destinationName, volume, price, collateral, jumpCount, lowestSec, saved });
+        }
+    })
+});
+
+
+
 
 app.post("/system/add/:name", async (req, res) => {
     const systemName = req.params.name;
