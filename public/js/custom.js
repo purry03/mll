@@ -72,6 +72,8 @@ function clearStuff() {
 }
 
 function submit() {
+  document.getElementById("submit").disabled=true;
+  setTimeout('document.getElementById("submit").disabled=false;',30000);
     if (source == destination) {
         alert("Source and destination system cannot be the same");
         return;
