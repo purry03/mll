@@ -313,6 +313,19 @@ app.get("/perjumpcalculator", (req, res) => {
 
 
 
+app.get("/custom", (req, res) => {
+    System.find({}, (err, systems) => {
+        if (err) {
+            res.sendStatus(500);
+        }
+        else {
+            res.render("custom.ejs", { systems: systems });
+        }
+    })
+});
+
+
+
 app.get("/pricing", (req, res) => {
     let routesPromise = Routes.find({}).exec();
     let servicesPromise = Service.find({}).exec();
