@@ -313,7 +313,7 @@ app.get("/perjumpcalculator", (req, res) => {
 
 
 
-app.get("/pricing", authAdmin, (req, res) => {
+app.get("/pricing", (req, res) => {
     let routesPromise = Routes.find({}).exec();
     let servicesPromise = Services.find({}).exec();
     Promise.all([routesPromise, servicesPromise]).then((data) => {
