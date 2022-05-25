@@ -67,13 +67,42 @@
                     else {%>
                     <td><%=parseInt(service.maxVolume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup></td>
                   <%}%>
-
-
-
-                  <td><%=parseInt(service.maxCollateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
-                  <td><%=service.runsIn.highsec%></td>
-                  <td><%=service.runsIn.lowsec%></td>
-                  <td><%=service.runsIn.nullsec%></td>
+                  <%if(!service.runsIn.highsec && !service.runsIn.lowsec && !service.runsIn.nullsec){%>
+                    <td>Not Available</td>
+                    <%}
+                    else {%>
+                    <td><%=parseInt(service.maxCollateral).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                  <%}%>
+                  <%if(!service.runsIn.highsec){%>
+                    <td>Not Available</td>
+                    <%}
+                    else {%>
+                    <td><%=parseInt(service.highsecPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK/m<sup>3</sup></td>
+                  <%}%>
+                  <%if(!service.runsIn.lowsec){%>
+                    <td>Not Available</td>
+                    <%}
+                    else {%>
+                    <td><%=parseInt(service.lowsecPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK/m<sup>3</sup></td>
+                  <%}%>
+                  <%if(!service.runsIn.nullsec){%>
+                    <td>Not Available</td>
+                    <%}
+                    else {%>
+                    <td><%=parseInt(service.nullsecPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK/m<sup>3</sup></td>
+                  <%}%>
+                  <%if(!service.isRush){%>
+                    <td>Not Available</td>
+                    <%}
+                    else {%>
+                    <td><%=service.rushMultiplier%></td>
+                  <%}%>
+                  <%if(!service.isRush){%>
+                    <td>Not Available</td>
+                    <%}
+                    else {%>
+                    <td><%=parseInt(service.minRushPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
+                  <%}%>
               </tr>
               <%})%>
             </tbody>
