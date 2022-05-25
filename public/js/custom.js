@@ -133,7 +133,7 @@ function submit() {
         $("#price").html(price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ISK");
         $("#collateral").html(collateral.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ISK");
         $("#volume").html(parseInt(volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " m<sup>3</sup>");
-        $("#jump-count").html(jumpCount);
+        //$("#jump-count").html(jumpCount);
         //let bestServiceType;
         if (isRush) {
             $("#rush-status").html("Yes");
@@ -141,10 +141,10 @@ function submit() {
         else {
             $("#rush-status").html("No");
         }
-        if (data.lowestSec < 0.0) {
-            data.lowestSec = 0.0
-        }
-        $("#lowest-sec").html(parseFloat(data.lowestSec).toFixed(1));
+        //if (data.lowestSec < 0.0) {
+        //    data.lowestSec = 0.0
+        //}
+        //$("#lowest-sec").html(parseFloat(data.lowestSec).toFixed(1));
 
         // if (data.serviceCharges.length == 0) {
         //     $(".parse-status").html("No route found matching the volume size");
@@ -181,8 +181,8 @@ function submit() {
         //         $("#days-to-complete").html("3 days");
         //     }
         // }
-        let shipmentType = isRush ? "R" : "S"
-        $("#description").html("Custom" + "-" + shipmentType + "-" + data.saved.key);
+        //let shipmentType = isRush ? "R" : "S"
+        //$("#description").html("Custom" + "-" + shipmentType + "-" + data.saved.key);
     });
 }
 

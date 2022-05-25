@@ -103,7 +103,6 @@ const customSchema = mongoose.Schema({
     isRush: Boolean,
     volume: Number,
     collateral: Number,
-    jumps: Number,
     eveCharacterName: String,
     discordId: String,
     structureType: Boolean,
@@ -245,6 +244,11 @@ const settingsSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    customDiscordEnabled: {
+      type: Boolean,
+      required: true,
+      default: false
     }
 });
 
@@ -917,34 +921,34 @@ app.post("/custom", async (req, res) => {
     //get number of jumps
     const { source, destination } = req.body;
     const sourceName = await systems.getSystemName(source), destinationName = await systems.getSystemName(destination);
-    const response1 = await fetch('https://esi.evetech.net/latest/route/' + source + '/' + destination + '/?datasource=tranquility&flag=shortest', {
-        method: 'get',
-    });
-    const jumps = await response1.json();
-    if (jumps.error) {
-        res.send({ "err": "No Route Found" });
-        return;
-    }
-    const jumpCount = jumps.length - 1;
-
-
-    var highsecJumps = 0, lowsecJumps = 0, nullsecJumps = 0;
-    var lowestSec = 1.0;
-    await jumps.forEach(async jump => {
-        let sec = await systems.getSystemSecurityFromID(jump);
-        if (sec < lowestSec) {
-            lowestSec = sec;
-        }
-        if (sec >= 0.5) {
-            highsecJumps += 1;
-        }
-        else if (sec <= 0.4 && sec >= 0.1) {
-            lowsecJumps += 1;
-        }
-        else if (sec < 0.0) {
-            nullsecJumps += 1;
-        }
-    });
+    // const response1 = await fetch('https://esi.evetech.net/latest/route/' + source + '/' + destination + '/?datasource=tranquility&flag=shortest', {
+    //     method: 'get',
+    // });
+    // const jumps = await response1.json();
+    // if (jumps.error) {
+    //     res.send({ "err": "No Route Found" });
+    //     return;
+    // }
+    // const jumpCount = jumps.length - 1;
+    //
+    //
+    // var highsecJumps = 0, lowsecJumps = 0, nullsecJumps = 0;
+    // var lowestSec = 1.0;
+    // await jumps.forEach(async jump => {
+    //     let sec = await systems.getSystemSecurityFromID(jump);
+    //     if (sec < lowestSec) {
+    //         lowestSec = sec;
+    //     }
+    //     if (sec >= 0.5) {
+    //         highsecJumps += 1;
+    //     }
+    //     else if (sec <= 0.4 && sec >= 0.1) {
+    //         lowsecJumps += 1;
+    //     }
+    //     else if (sec < 0.0) {
+    //         nullsecJumps += 1;
+    //     }
+    // });
     //save to db
 
     const isRush = req.body.isRush;
@@ -960,7 +964,6 @@ app.post("/custom", async (req, res) => {
         isRush,
         volume,
         collateral,
-        jumps: jumpCount,
         eveCharacterName,
         discordId,
         structureType,
@@ -977,7 +980,7 @@ app.post("/custom", async (req, res) => {
             res.sendStatus(500);
         }
         else {
-            res.send({ errorLines, systems, sourceName, destinationName, volume, price, collateral, jumpCount, lowestSec, saved });
+            res.send({ errorLines, systems, sourceName, destinationName, volume, price, collateral, saved });
         }
     })
 });
