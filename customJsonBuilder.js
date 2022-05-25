@@ -3,6 +3,10 @@ exports.buildJson = function (origin, destination, isRush, rushTargetDate, volum
   if (isRush) {
     rushDate = rushTargetDate.toLocaleString('en-GB', {timeZone: 'UTC'})
   }
+  let structureText = "Yes";
+  if (!structureType) {
+    structureText = "No";
+  }
     let jsonData = {
         "username": "MLL Custom Contract Request",
         "avatar_url": "https://multi-lemm-logistics.com/img/logo.png",
@@ -46,7 +50,7 @@ exports.buildJson = function (origin, destination, isRush, rushTargetDate, volum
                     },
                     {
                         "name": "PH/NPC Structures",
-                        "value": `${structureType}`,
+                        "value": `${structureText}`,
                         "inline": true
                     },
                     {
