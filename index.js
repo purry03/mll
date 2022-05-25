@@ -668,6 +668,18 @@ app.get("/settings/toggle/discord", authAdmin, async (req, res) => {
     res.sendStatus(200);
 })
 
+app.get("/settings/toggle/customRequestDiscord", authAdmin, async (req, res) => {
+    let currentSettings = await Settings.findOne({}).exec();
+    if (currentSettings.customDiscordEnabled) {
+        await Settings.findOneAndUpdate({}, { customDiscordEnabled: false }).exec();
+    }
+    else {
+        await Settings.findOneAndUpdate({}, { customDiscordEnabled: true }).exec();
+    }
+    res.sendStatus(200);
+})
+
+
 
 app.get("/mail/:id/:action", async (req, res) => {
     const { id, action } = req.params;

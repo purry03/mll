@@ -372,6 +372,14 @@
         <% if(!settings.discordEnabled){%>
         <label class="discordCheckbox">Enabled: <input type="checkbox"></label>
         <%}%>
+        <h2>Custom Request Discord Service</h2>
+        <br>
+        <% if(settings.customDiscordEnabled){%>
+        <label class="customDiscordCheckbox">Enabled: <input type="checkbox" checked="true"></label>
+        <%}%>
+        <% if(!settings.customDiscordEnabled){%>
+        <label class="customDiscordCheckbox">Enabled: <input type="checkbox"></label>
+        <%}%>
 
     </div>
 
