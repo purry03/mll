@@ -10,8 +10,6 @@
     <link rel="icon" type="image/png" href="img/logo.png" />
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/homepage.css">
-    <link rel="stylesheet" href="css/scroll.css">
-    <link rel="stylesheet" href="css/toast.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -91,7 +89,7 @@
         <td><label class="system-input">Rush Shipping required: </label></td>
             <td><label class="system-input"><div class="input-field">
                 <input type="checkbox" id="rushCheckbox">
-                <input type="datetime-local" id="targetRushDate" name="targetRushDate">
+                <input type="datetime-local" id="targetRushDate" style="display:none" name="targetRushDate">
             </div>
           </label></td>
 
@@ -99,13 +97,6 @@
 
 
         </table>
-
-            <label style="display: block; margin-top: 25px;">
-                Rush Shipping :
-                <input type="checkbox" id="rush">
-                <img src="/img/info-button.png" style="height: 15px; margin-left: 5px;opacity: 0.75;cursor: pointer;"
-                    title="Rush shipments are guaranteed to be completed within 24 hours or your money back">
-            </label>
             <div class="route-limits" style="flex-wrap: wrap;">
               <h3 style="color: black;margin-top: 0px"><a href="/pricing">For a list of pricing/restrictions please click here</a></h3>
               <h3>No assembled containers/ships!</h3>
@@ -194,7 +185,8 @@
 
     </div>
     <script src="js/statistics.js" async defer></script>
-    <script src="js/calculator.js" async defer></script>
+    <script src="js/custom.js" async defer></script>
+
     <script src="js/navbar.js" async defer></script>
 
 </body>
