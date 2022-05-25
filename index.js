@@ -313,16 +313,24 @@ app.get("/perjumpcalculator", (req, res) => {
 
 
 
-app.get("/pricing", (req, res) => {
-    Routes.find({}, (err, routes) => {
-        if (err) {
-            res.sendStatus(500);
-        }
-        else {
-            res.render("pricing.ejs", { routes });
-        }
-    })
+app.get("/pricing", authAdmin, (req, res) => {
+    let routesPromise = Routes.find({}).exec();
+    let servicesPromise = Services.find({}).exec();
+    Promise.all([routesPromise, servicesPromise]).then((data) => {
+        res.render("pricing.ejs", { routes: data[0], services: data[1]});
+    });
 });
+
+//app.get("/pricing", (req, res) => {
+//    Routes.find({}, (err, routes) => {
+//        if (err) {
+//            res.sendStatus(500);
+//        }
+//        else {
+//            res.render("pricing.ejs", { routes });
+//        }
+//    })
+//});
 
 app.get("/jfcalculator", (req, res) => {
     Routes.find({}, (err, routes) => {
