@@ -86,8 +86,6 @@ function submit() {
     const eveCharacterName = $("#eveCharacterName").val();
     const discordId = $("#discordId").val();
     const structureType = $("#structureType").is(":checked");
-    console.log(structureType);
-    console.log(discordId);
     const rushTargetDate = $("#targetRushDate").val();
 
 
