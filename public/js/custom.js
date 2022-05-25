@@ -72,19 +72,23 @@ function clearStuff() {
 }
 
 function submit() {
-
+    if (source.length == 0 || destination.length == 0) {
+      alert("Select a source and destination system");
+      return;
+    }
     if (source == destination) {
         alert("Source and destination system cannot be the same");
         return;
     }
-    if (source.length == 0 || destination.length == 0) {
-        alert("Select a source and destination system");
-        return;
-    }
-    if ($("#eveCharacterName").val().length==0 || $("#discordId").val().length==0) {
-      alert("Please ensure you've filled in all required fields");
+    if ($("#eveCharacterName").val().length==0) {
+      alert("Please ensure you've filled in your character name");
       return;
         }
+    if ($("#discordId").val().length==0) {
+      alert("We need your discord ID to message you about this request!");
+      return;
+    }
+
     const isRush = $("#rushCheckbox").is(":checked");
     const itemList = $("#item-list").val();
     const additionalVolume = parseInt($("#additional-volume").val());
