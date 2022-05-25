@@ -46,6 +46,7 @@
 
     <% var current = new Date(); %>
     <div class="main">
+      <br>
       <h2>Per Jump Pricing</h2>
           <table id="per-jump" class="table">
             <tr>
@@ -95,7 +96,7 @@
                     <td>Not Available</td>
                     <%}
                     else {%>
-                    <td><%=(service.rushMultiplier -1)%></td>
+                    <td><%=(service.rushMultiplier -1)*100%>%</td>
                   <%}%>
                   <%if(!service.isRush){%>
                     <td>Not Available</td>
