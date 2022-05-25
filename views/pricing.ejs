@@ -57,9 +57,9 @@
               <% services.forEach((service)=>{%>
               <tr>
                   <td><%=service.name%></td>
-                  <td><%=service.runsInHighsec%></td>
-                  <td><%=service.runsInLowsec%></td>
-                  <td><%=service.runsInNullsec%></td>
+                  <td><%=service.runsIn.Highsec%></td>
+                  <td><%=service.runsIn.Lowsec%></td>
+                  <td><%=service.runsIn.Nullsec%></td>
               </tr>
               <%})%>
             </tbody>
