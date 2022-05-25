@@ -951,7 +951,7 @@ app.post("/custom", async (req, res) => {
     // });
     //save to db
     var targetDate = req.body.rushTargetDate;
-    targetDate = targetDate.toLocaleDateString('en-GB') + " " + targetDate.toLocaleTimeString('en-GB');
+    targetDate = targetDate.toLocaleString('en-GB', {timeZone: 'UTC'});
     const isRush = req.body.isRush;
     const eveCharacterName = req.body.eveCharacterName;
     const discordId = req.body.discordId;
