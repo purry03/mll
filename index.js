@@ -113,7 +113,7 @@ const customSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
-    },
+    }
 });
 
 const systemSchema = mongoose.Schema({
