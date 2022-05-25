@@ -1,4 +1,5 @@
 const jsonBuilder = require("./jsonBuilder");
+const customJsonBuilder = require ("./customJsonBuilder");
 const moment = require('moment');
 require('dotenv').config({ path: __dirname + '/.env' })
 // process.env.NODE_ENV = 'production';
@@ -108,7 +109,11 @@ const customSchema = mongoose.Schema({
     structureType: Boolean,
     rushTargetDate: Date,
     submittedDate: Date,
-    discordNotified: Boolean
+    discordNotified: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
 });
 
 const systemSchema = mongoose.Schema({
@@ -918,38 +923,8 @@ app.post("/custom", async (req, res) => {
         return;
     }
     const collateral = (parseInt(price) || 0) + (parseInt(req.body.additionalCollateral) || 0);;
-    //get number of jumps
     const { source, destination } = req.body;
     const sourceName = await systems.getSystemName(source), destinationName = await systems.getSystemName(destination);
-    // const response1 = await fetch('https://esi.evetech.net/latest/route/' + source + '/' + destination + '/?datasource=tranquility&flag=shortest', {
-    //     method: 'get',
-    // });
-    // const jumps = await response1.json();
-    // if (jumps.error) {
-    //     res.send({ "err": "No Route Found" });
-    //     return;
-    // }
-    // const jumpCount = jumps.length - 1;
-    //
-    //
-    // var highsecJumps = 0, lowsecJumps = 0, nullsecJumps = 0;
-    // var lowestSec = 1.0;
-    // await jumps.forEach(async jump => {
-    //     let sec = await systems.getSystemSecurityFromID(jump);
-    //     if (sec < lowestSec) {
-    //         lowestSec = sec;
-    //     }
-    //     if (sec >= 0.5) {
-    //         highsecJumps += 1;
-    //     }
-    //     else if (sec <= 0.4 && sec >= 0.1) {
-    //         lowsecJumps += 1;
-    //     }
-    //     else if (sec < 0.0) {
-    //         nullsecJumps += 1;
-    //     }
-    // });
-    //save to db
     const isRush = req.body.isRush;
     const eveCharacterName = req.body.eveCharacterName;
     const discordId = req.body.discordId;
@@ -982,6 +957,55 @@ app.post("/custom", async (req, res) => {
             res.send({ errorLines, systems, sourceName, destinationName, volume, price, collateral, saved });
         }
     })
+
+
+    if (!currentSettings.customDiscordEnabled) {
+        console.log("Skipping custom discord notifications");
+
+    }
+    else {
+
+        console.log("Starting custom discord notification");
+        const currentSettings = await Settings.findOne({}).exec();
+        //console.log(currentSettings.discordEnabled);
+        let customRequest = await Custom.find({ discordNotified: false}).exec();
+
+        for (request of customRequest) {
+            // this is now a rush contract and therefore a discord notification is required
+              let notificationJson = customJsonBuilder.buildJson(
+                  request.from,
+                  request.to,
+                  request.isRush,
+                  request.rushTargetDate,
+                  request.volume,
+                  request.collateral,
+                  request.eveCharacterName,
+                  request.discordId,
+                  request.structureType,
+                  request.submittedDate,
+                  process.env.CUSTOM_DISCORD_ROLE_ID)
+
+            //console.log(JSON.stringify(notificationJson));
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.CUSTOM_DISCORD_SERVER_ID + '/' + process.env.CUSTOM_DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { _id: request._id };
+                const update = { discordNotified: true };
+                await Contracts.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Custom Discord Notification for ' + request.eveCharacterName + ' being sent.')
+          }
 });
 
 
