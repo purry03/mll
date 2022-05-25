@@ -951,7 +951,7 @@ app.post("/custom", async (req, res) => {
         key: randomstring.generate(8),
         from: sourceName,
         to: destinationName,
-        isRush,
+        //isRush,
         volume,
         collateral,
         jumps: jumpCount,
