@@ -45,7 +45,7 @@ exports.buildJson = function (origin, destination, isRush, rushTargetDate, volum
                         "inline": true
                     },
                     {
-                        "name": "Origin & Destination PH/NPC Structure",
+                        "name": "PH/NPC Structures",
                         "value": `${structureType}`,
                         "inline": true
                     },
