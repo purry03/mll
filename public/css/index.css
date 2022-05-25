@@ -61,6 +61,10 @@ nav ul li a:hover {
     padding-bottom: 30px;
 }
 
+:disabled {
+  background-color: #EFEFEF
+}
+
 .loading {
     position: fixed;
     top: 0;
