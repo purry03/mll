@@ -950,12 +950,13 @@ app.post("/custom", async (req, res) => {
     //     }
     // });
     //save to db
-
+    var targetDate = req.body.rushTargetDate;
+    targetDate = targetDate.toLocaleDateString('en-GB') + " " + targetDate.toLocaleTimeString('en-GB');
     const isRush = req.body.isRush;
     const eveCharacterName = req.body.eveCharacterName;
     const discordId = req.body.discordId;
     const structureType = req.body.structureType;
-    const rushTargetDate = req.body.rushTargetDate;
+    const rushTargetDate = targetDate;
     const submittedDate = Date.now();
     const toSave = new Custom({
         key: randomstring.generate(8),

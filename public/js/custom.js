@@ -136,7 +136,7 @@ function submit() {
         //$("#jump-count").html(jumpCount);
         //let bestServiceType;
         if (isRush) {
-            $("#rush-status").html(rushTargetDate.toUTCString());
+            $("#rush-status").html(rushTargetDate);
         }
         else {
             $("#rush-status").html("N/A");
