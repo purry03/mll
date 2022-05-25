@@ -315,7 +315,7 @@ app.get("/perjumpcalculator", (req, res) => {
 
 app.get("/pricing", (req, res) => {
     let routesPromise = Routes.find({}).exec();
-    let servicesPromise = Services.find({}).exec();
+    let servicesPromise = Service.find({}).exec();
     Promise.all([routesPromise, servicesPromise]).then((data) => {
         res.render("pricing.ejs", { routes: data[0], services: data[1]});
     });
