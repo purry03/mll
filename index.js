@@ -953,7 +953,6 @@ app.post("/custom", async (req, res) => {
     const structureType = req.body.structureType;
     const rushTargetDate = req.body.rushTargetDate;
     const submittedDate = Date.now();
-console.log(structureType);
     const toSave = new Custom({
         key: randomstring.generate(8),
         from: sourceName,
