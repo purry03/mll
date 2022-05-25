@@ -970,19 +970,19 @@ app.post("/custom", async (req, res) => {
         //console.log(currentSettings.discordEnabled);
         let customRequest = await Custom.find({ discordNotified: false}).exec();
 
-        for (request of customRequest) {
+        for (contract of customRequest) {
             // this is now a rush contract and therefore a discord notification is required
               let notificationJson = customJsonBuilder.buildJson(
-                  request.from,
-                  request.to,
-                  request.isRush,
-                  request.rushTargetDate,
-                  request.volume,
-                  request.collateral,
-                  request.eveCharacterName,
-                  request.discordId,
-                  request.structureType,
-                  request.submittedDate,
+                  contract.from,
+                  contract.to,
+                  contract.isRush,
+                  contract.rushTargetDate,
+                  contract.volume,
+                  contract.collateral,
+                  contract.eveCharacterName,
+                  contract.discordId,
+                  contract.structureType,
+                  contract.submittedDate,
                   process.env.CUSTOM_DISCORD_ROLE_ID)
 
             //console.log(JSON.stringify(notificationJson));
@@ -1007,7 +1007,7 @@ app.post("/custom", async (req, res) => {
             console.log ('Custom Discord Notification for ' + request.eveCharacterName + ' being sent.')
           }
         }
-    
+
 })
 
 
