@@ -84,9 +84,9 @@ function submit() {
     const additionalVolume = parseInt($("#additional-volume").val());
     const additionalCollateral = parseInt($("#additional-collateral").val());
     const eveCharacterName = $("#eveCharacterName").val();
-    const discordId = $("discordId").val();
-    const structureType = $("structureType").is(":checked");
-    const rushTargetDate = $("targetRushDate").val();
+    const discordId = $("#discordId").val();
+    const structureType = $("#structureType").is(":checked");
+    const rushTargetDate = $("#targetRushDate").val();
 
 
     isLoading(true);
