@@ -7,10 +7,13 @@
     <title>Contracts</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/css/contracts.css">
     <link rel="icon" type="image/png" href="img/logo.png" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/contracts.js" async></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.12.1/sp-2.0.1/sl-1.4.0/datatables.min.js"></script>
 
 </head>
 
@@ -37,9 +40,9 @@
     <% var current = new Date(); %>
     <div class="main">
 
-        <div class="table-wrapper" value="1">
+        <div class="table-wrapper dataTables_wrapper container-fluid dt-bootstrap4" value="1">
             <h2>summary by route</h2>
-            <table>
+            <table id="summary" class="dataTable">
                 <tr>
                     <th>S.No.</th>
                     <th>Contracts</th>
@@ -78,11 +81,11 @@
                 <%})%>
             </table>
         </div>
-        <div class="table-wrapper" value="1">
+        <div class="table-wrapper dataTables_wrapper container-fluid dt-bootstrap4" value="1">
 
             <h2>rush</h2>
 
-            <table>
+            <table id="rush" class="dataTable">
                 <tr>
                     <th>S.No.</th>
                     <th>Client</th>
@@ -90,6 +93,7 @@
                     <th style="width: 150px;">Time Passed</th>
                     <th>From</th>
                     <th>To</th>
+                    <th>Jumps</th>
                     <th>Volume</th>
                     <th>Reward</th>
                     <th>Collateral</th>
@@ -126,7 +130,7 @@
                     <%var minutes = Math.abs(current - date) / 60000;%>
                     <td><%=contract.issuerName%></td>
 
-                    <td><%=date.toLocaleDateString("en-UK", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <% if(hours<1){%>
                     <td><%=minutes.toFixed(0)%> minutes</td>
                     <%}%>
@@ -135,6 +139,7 @@
                     <%}%>
                     <td class="start"><%=contract.start%></td>
                     <td><%=contract.end%></td>
+                    <td><%=contract.appraisalJumps%></td>
                     <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> m<sup>3</sup>
                     </td>
                     <td><%=parseInt(contract.reward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
@@ -152,11 +157,12 @@
                     <%}})%>
             </table>
         </div>
-        <div class="table-wrapper" value="1">
+        <div class="table-wrapper dataTables_wrapper container-fluid dt-bootstrap4" value="1">
 
             <h2>outstanding</h2>
 
-            <table>
+            <table id="outstanding" class="dataTable">
+              <thead>
                 <tr>
                     <th>S.No.</th>
                     <th>Client</th>
@@ -164,6 +170,7 @@
                     <th style="width: 150px;">Time Passed</th>
                     <th>From</th>
                     <th>To</th>
+                    <th>Jumps</th>
                     <th>Volume</th>
                     <th>Reward</th>
                     <th>Collateral</th>
@@ -173,6 +180,17 @@
                     <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
                     <th>Mailed</th>
                 </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Sum of Selected:</th>
+                  <th colspan="6"></th>
+                  <th class="outstandingVolumeSum"> m<sup>3</sup></th>
+                  <th class="outstandingRewardSum" > ISK</th>
+                  <th class="outstandingCollateralSum"> ISK</th>
+                  <th colspan="5"></th>
+                </tr>
+              </tfoot>
                 <%  sno = 1  %>
                 <% contracts.forEach((contract)=>{%>
                 <% if(contract.status == "outstanding"){%>
@@ -206,7 +224,7 @@
                     <%var hours = Math.abs(current - date) / 36e5;%>
                     <%var minutes = Math.abs(current - date) / 60000;%>
 
-                    <td><%=date.toLocaleDateString("en-UK", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <% if(hours<1){%>
                     <td><%=minutes.toFixed(0)%> minutes</td>
                     <%}%>
@@ -215,6 +233,7 @@
                     <%}%>
             <td class="start"><%=contract.start%></td>
                     <td><%=contract.end%></td>
+                    <td><%=contract.appraisalJumps%></td>
                     <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
                         m<sup>3</sup></td>
                     <td><%=parseInt(contract.reward).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> ISK</td>
@@ -242,10 +261,11 @@
                 <%}})%>
             </table>
         </div>
-        <div class="table-wrapper" value="2">
+        <div class="table-wrapper dataTables_wrapper container-fluid dt-bootstrap4" value="2">
 
             <h2>in progress</h2>
-            <table>
+            <table id="inprogress" class="dataTable">
+              <thead>
                 <tr>
                     <th>S.No.</th>
                     <th>Client</th>
@@ -260,6 +280,7 @@
                     <th>Key</th>
                     <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
                 </tr>
+                <thead>
                 <% sno = 1; %>
                 <% contracts.forEach((contract)=>{%>
                 <% if(contract.status == "in_progress"){%>
@@ -290,7 +311,7 @@
                     <%var hours = Math.abs(current - date) / 36e5;%>
                     <%var minutes = Math.abs(current - date) / 60000;%>
 
-                    <td><%=date.toLocaleDateString("en-US", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <% if(hours<1){%>
                     <td><%=minutes.toFixed(0)%> minutes</td>
                     <%}%>
@@ -314,10 +335,11 @@
                 <%}})%>
             </table>
         </div>
-        <div class="table-wrapper" value="3">
+        <div class="table-wrapper dataTables_wrapper container-fluid dt-bootstrap4" value="3">
 
             <h2>finished</h2>
-            <table>
+            <table id="finished" class="dataTable">
+              <thead>
                 <tr>
                     <th>S.No.</th>
                     <th>Client</th>
@@ -332,6 +354,7 @@
                     <th>Key</th>
                     <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
                 </tr>
+              </thead>
                 <% sno = 1; %>
                 <% contracts.forEach((contract)=>{%>
                 <% if(contract.status == "finished"){%>
@@ -359,8 +382,8 @@
                     <% let date  = new Date(contract.date);%>
                     <% let dateCompleted  = new Date(contract.dateCompleted);%>
 
-                    <td><%=date.toLocaleDateString("en-US", options)%></td>
-                    <td><%=dateCompleted.toLocaleDateString("en-US", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
+                    <td><%=dateCompleted.toLocaleDateString("en-GB", options)%></td>
 
 
                     <td class="start"><%=contract.start%></td>
@@ -380,11 +403,12 @@
                 <%}})%>
             </table>
         </div>
-        <div class="table-wrapper" value="4">
+        <div class="table-wrapper dataTables_wrapper container-fluid dt-bootstrap4" value="4">
 
             <h2>Cancelled/Failed/Rejected/Deleted</h2>
-            <table>
+            <table id="cancelled" class="dataTable">
                 <% sno = 1 %>
+                <thead>
                 <tr>
                     <th>S.No.</th>
                     <th>Client</th>
@@ -399,6 +423,7 @@
                     <th style="width: 150px;">Delta (Reward : Collateral : Volume)</th>
                     <th>Status</th>
                 </tr>
+              </thead>
                 <% sno = 1; %>
                 <% contracts.forEach((contract)=>{%>
                 <% if(contract.status == "cancelled" || contract.status == "failed" || contract.status == "rejected" || contract.status == "deleted"){%>
@@ -426,7 +451,7 @@
                     <% let date  = new Date(contract.date);%>
                     <% let dateCompleted  = new Date(contract.dateCompleted);%>
 
-                    <td><%=date.toLocaleDateString("en-US", options)%></td>
+                    <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <td class="start"><%=contract.start%></td>
                     <td><%=contract.end%></td>
                     <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
@@ -446,7 +471,8 @@
             </table>
 
         </div>
-        <script src="/js/contracts.js" async></script>
+
+
 </body>
 
 </html>

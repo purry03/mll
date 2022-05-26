@@ -61,6 +61,11 @@ nav ul li a:hover {
     padding-bottom: 30px;
 }
 
+#submit:disabled {
+  background-color: #EFEFEF;
+  cursor: auto;
+}
+
 .loading {
     position: fixed;
     top: 0;
@@ -85,6 +90,7 @@ nav ul li a:hover {
     width: 55%;
     margin: 25px auto;
     padding: 50px;
+    border-radius: 8px;
 }
 
 .statictics {

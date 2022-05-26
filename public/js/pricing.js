@@ -58,4 +58,60 @@ $(document).ready(function () {
                 });
         },
     });
+
+    $.fn.dataTable.ext.search.push(
+  function( settings, searchData, index, rowData, counter ) {
+    var routes = $('input:checkbox[name="routeType"]:checked').map(function() {
+      return this.value;
+    }).get();
+
+    if (routes.length === 0) {
+      return true;
+    }
+
+    if (routes.indexOf(searchData[9]) !== -1) {
+      return true;
+    }
+
+    return false;
+  }
+);
+
+var table = $('#jf-routes').DataTable();
+
+ $('input:checkbox').on('change', function () {
+    table.draw();
+ });
+
+document.getElementById("standard").click();
+document.getElementById("intraDrone").click(); 
+
+
 });
+
+//function intraRoutes(checkbox)
+//{
+//    if (checkbox.checked)
+//    {
+//        const table = document.getElementById('jf-routes');
+//        const arr = ;
+//        for(const obj of arr){
+//          const row = document.createElement('tr');
+//          for(const val of Object.values(obj)){
+//            const col = document.createElement('td');
+//            col.textContent = val;
+//            row.appendChild(col);
+//                  }
+//          table.appendChild(row);
+//        }
+//         location.reload();
+//}
+//    if (!checkbox.checked){
+//            var rows = document.getElementsByTagName("tr");
+//                for (var i = rows.length; i--;) {
+//                  if(rows[i].innerHTML.indexOf("Intra-Drones") !== -1) {
+//                    rows[i].parentNode.removeChild( rows[i] );
+//                  }
+//                }
+//    }
+//};

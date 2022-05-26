@@ -1,4 +1,5 @@
 const jsonBuilder = require("./jsonBuilder");
+const customJsonBuilder = require("./customJsonBuilder");
 const moment = require('moment');
 require('dotenv').config({ path: __dirname + '/.env' })
 // process.env.NODE_ENV = 'production';
@@ -95,6 +96,26 @@ const appraisalSchema = mongoose.Schema({
     jumps: Number
 });
 
+
+const customSchema = mongoose.Schema({
+    key: String,
+    from: String,
+    to: String,
+    isRush: Boolean,
+    volume: Number,
+    collateral: Number,
+    eveCharacterName: String,
+    discordId: String,
+    structureType: Boolean,
+    rushTargetDate: Date,
+    submittedDate: Date,
+    discordNotified: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
+});
+
 const systemSchema = mongoose.Schema({
     name: String,
     id: String,
@@ -182,6 +203,7 @@ const contractSchema = mongoose.Schema({
     appraisalService: String,
     appraisalFrom: String,
     appraisalTo: String,
+    appraisalJumps: Number,
     mailed: {
         type: Boolean,
         required: true,
@@ -227,12 +249,18 @@ const settingsSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    customDiscordEnabled: {
+      type: Boolean,
+      required: true,
+      default: false
     }
 });
 
 contractSchema.plugin(uniqueValidator);
 
 const Appraisal = db.model("Appraisal", appraisalSchema);
+const Custom = db.model("Custom", customSchema);
 const System = db.model("System", systemSchema);
 const Service = db.model("Service", serviceSchema);
 const Routes = db.model("Route", routeSchema);
@@ -289,7 +317,13 @@ function authHauler(req, res, next) {
 
 
 
-
+//app.get("/perjumpcalculator", authAdmin, (req, res) => {
+//    let systemPromise = System.find({}).exec();
+//    let servicesPromise = Services.find({}).exec();
+//    Promise.all([systemPromise, routePromise, haulerPromise, settingsPromise]).then((data) => {
+//        res.render("admin.ejs", { systems: data[0], routes: data[1], haulers: data[2], settings: data[3] });
+//    });
+//});
 
 
 
@@ -306,16 +340,37 @@ app.get("/perjumpcalculator", (req, res) => {
 
 
 
-app.get("/jf-routes", (req, res) => {
-    Routes.find({}, (err, routes) => {
+app.get("/custom", (req, res) => {
+    System.find({}, (err, systems) => {
         if (err) {
             res.sendStatus(500);
         }
         else {
-            res.render("jf-routes.ejs", { routes });
+            res.render("custom.ejs", { systems: systems });
         }
     })
 });
+
+
+
+app.get("/pricing", (req, res) => {
+    let routesPromise = Routes.find({}).exec();
+    let servicesPromise = Service.find({}).exec();
+    Promise.all([routesPromise, servicesPromise]).then((data) => {
+        res.render("pricing.ejs", { routes: data[0], services: data[1]});
+    });
+});
+
+//app.get("/pricing", (req, res) => {
+//    Routes.find({}, (err, routes) => {
+//        if (err) {
+//            res.sendStatus(500);
+//        }
+//        else {
+//            res.render("pricing.ejs", { routes });
+//        }
+//    })
+//});
 
 app.get("/jfcalculator", (req, res) => {
     Routes.find({}, (err, routes) => {
@@ -613,6 +668,18 @@ app.get("/settings/toggle/discord", authAdmin, async (req, res) => {
     res.sendStatus(200);
 })
 
+app.get("/settings/toggle/customRequestDiscord", authAdmin, async (req, res) => {
+    let currentSettings = await Settings.findOne({}).exec();
+    if (currentSettings.customDiscordEnabled) {
+        await Settings.findOneAndUpdate({}, { customDiscordEnabled: false }).exec();
+    }
+    else {
+        await Settings.findOneAndUpdate({}, { customDiscordEnabled: true }).exec();
+    }
+    res.sendStatus(200);
+})
+
+
 
 app.get("/mail/:id/:action", async (req, res) => {
     const { id, action } = req.params;
@@ -844,6 +911,119 @@ app.post("/", async (req, res) => {
         }
     })
 });
+
+//BG - 250522 - addition for custom contract requests
+app.post("/custom", async (req, res) => {
+    let errorLines = "";
+
+
+    //MAKE API REQUEST
+    const response = await fetch('https://janice.e-351.com/api/rest/v2/appraisal?market=2&designation=appraisal&pricingVariant=immediate&persist=true&compactize=true&pricePercentage=1', {
+        method: 'post',
+        body: req.body.itemList,
+        headers: { 'Content-Type': 'text/plain', "X-ApiKey": "07RzWN1u39rubweDFsk1p5SjnxTNlCdi", "accept": "application/json" }
+    });
+    const data = await response.json();
+    let volume, price;
+    try {
+        volume = (Math.round((parseInt(data.totalPackagedVolume)  || 0) * 100) /100) + (parseInt(req.body.additionalVolume) || 0 );
+        price = Math.round(data.effectivePrices.totalSellPrice);
+        errorLines = data.failures;
+    }
+    catch (err) {
+        res.send({ "err": "Invalid Input" });
+        return;
+    }
+    const collateral = (parseInt(price) || 0) + (parseInt(req.body.additionalCollateral) || 0);
+    const { source, destination } = req.body;
+    const sourceName = await systems.getSystemName(source), destinationName = await systems.getSystemName(destination);
+    const isRush = req.body.isRush;
+    const eveCharacterName = req.body.eveCharacterName;
+    const discordId = req.body.discordId;
+    const structureType = req.body.structureType;
+    const rushTargetDate = req.body.rushTargetDate;
+    const submittedDate = Date.now();
+    const toSave = new Custom({
+        key: randomstring.generate(8),
+        from: sourceName,
+        to: destinationName,
+        isRush,
+        volume,
+        collateral,
+        eveCharacterName,
+        discordId,
+        structureType,
+        rushTargetDate,
+        submittedDate
+    });
+
+    const saved = await toSave.save();
+
+    //SEND RESPONSE
+
+    System.find({}, (err, systems) => {
+        if (err) {
+            res.sendStatus(500);
+        }
+        else {
+            res.send({ errorLines, systems, sourceName, destinationName, volume, price, collateral, saved });
+        }
+    })
+
+    const currentSettings = await Settings.findOne({}).exec();
+    if (!currentSettings.customDiscordEnabled) {
+        console.log("Skipping custom discord notifications");
+
+    }
+    else {
+
+        console.log("Starting custom discord notification");
+
+        //console.log(currentSettings.discordEnabled);
+        let customRequest = await Custom.find({ discordNotified: false}).exec();
+
+        for (contract of customRequest) {
+            // this is now a rush contract and therefore a discord notification is required
+              let notificationJson = customJsonBuilder.buildJson(
+                  contract.from,
+                  contract.to,
+                  contract.isRush,
+                  contract.rushTargetDate,
+                  contract.volume,
+                  contract.collateral,
+                  contract.eveCharacterName,
+                  contract.discordId,
+                  contract.structureType,
+                  contract.submittedDate,
+                  process.env.CUSTOM_DISCORD_ROLE_ID)
+
+            //console.log(JSON.stringify(notificationJson));
+
+            headers = { 'Content-type': 'application/json', 'Accept': 'text/plain' }
+
+            var options = {
+                uri: 'https://discord.com/api/webhooks/' + process.env.CUSTOM_DISCORD_SERVER_ID + '/' + process.env.CUSTOM_DISCORD_WEBHOOK_TOKEN,
+                method: 'POST',
+                json: notificationJson
+            };
+
+              try {
+                await request.post(options);
+                const filter = { key: contract.key };
+                const update = { discordNotified: true };
+                await Custom.findOneAndUpdate(filter, update);
+              }
+              catch (err) {
+                console.log(err)
+              }
+            console.log ('Custom Discord Notification for ' + contract.eveCharacterName + ' being sent.')
+          }
+        }
+
+})
+
+
+
 
 app.post("/system/add/:name", async (req, res) => {
     const systemName = req.params.name;
@@ -1138,7 +1318,8 @@ async function saveContracts() {
             appraisalVolume: contract.appraisalVolume,
             appraisalService: contract.appraisalService,
             appraisalFrom: contract.appraisalFrom,
-            appraisalTo: contract.appraisalTo
+            appraisalTo: contract.appraisalTo,
+            appraisalJumps: contract.appraisalJumps
         };
 
         const options = { upsert: true, new: true, setDefaultsOnInsert: true };
@@ -1253,6 +1434,7 @@ async function processContracts(user) {
             contract.appraisalFrom = appraisal.from;
             contract.appraisalTo = appraisal.to;
             contract.appraisalService = appraisal.service;
+            contract.appraisalJumps = appraisal.jumps
         }
         newUserContracts.push(contract);
     }
