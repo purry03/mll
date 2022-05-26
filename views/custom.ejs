@@ -10,8 +10,6 @@
     <link rel="icon" type="image/png" href="img/logo.png" />
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/homepage.css">
-    <link rel="stylesheet" href="css/scroll.css">
-    <link rel="stylesheet" href="css/toast.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -25,6 +23,7 @@
                 <ul class='navList'>
                     <li class='navLink'><a href="/">Home</a></li>
                     <li class='navLink'><a href="/jfcalculator">JF Calculator</a></li>
+                    <li class='navLink'><a href="/perjumpcalculator"></a>BR/DST/Freighter Calculator</li>
                     <li class='navLink'><a href="/pricing">Pricing</a></li>
                     <li class='navLink'><a href="/#guideSection">Guide</a></li>
                     <li class='navLink'><a href='https://discord.gg/kgBGPKuwQ9' target="_blank">DISCORD</a></li>
@@ -47,34 +46,59 @@
 
         </div>
         <div class="calculator">
-            <h1>BR/DST/Freighter Calculator</h1>
-            <label class="system-input start">Start:
-                <div class="input-field">
+            <h1>Custom Request Form</h1>
+            <table>
+              <tr>
+                <td><label class="system-input">Eve Character Name:</label></td>
+                    <td><label class="system-input"><div class="input-field">
+                        <input type="text" id="eveCharacterName" spellcheck="false">
+                    </div></label></td>
+                <td><label class="system-input">Discord ID:</label>
+                  <img src="/img/info-button.png" style="height: 15px; margin-left: 5px;opacity: 0.75;cursor: pointer;"
+                      title="Please put your full discord name + ID here. e.g. Brad#2222"></td>
+                    <td><label class="system-input"><div class="input-field">
+                        <input type="text" id="discordId" spellcheck="false">
+                    </div></label></td>
+
+            </tr>
+            <tr>
+              <td><label class="system-input">Start:</label></td>
+                <td>
+                  <label class="system-input start"><div class="input-field">
                     <input type="text" id="start" spellcheck="false">
                     <div class="search-results">
-
                     </div>
                 </div>
             </label>
-            </label>
-            <label class="system-input finish">Destination:
+        </td>
+            <td><label class="system-input">Destination:</label></td>
+              <td><label class="system-input finish">
                 <div class="input-field">
                     <input type="text" id="finish" spellcheck="false">
                     <div class="search-results">
 
                     </div>
                 </div>
-            </label>
-            </label>
+          </label></td>
+        </tr>
+        <tr>
+          <td><label>Start & Destination both NPC/PH Structures?</label>
+            </td>
+            <td><input type="checkbox" id="structureType" style="margin-left: 10px"> <img src="/img/info-button.png" style="height: 15px; margin-left: 5px;opacity: 0.75;cursor: pointer;"
+              title="If it's a citadel PH do not own, chances are we do not have docking rights"></td>
+        <td><label class="system-input">Rush Shipping required: </label></td>
+            <td><label class="system-input"><div class="input-field">
+                <input type="checkbox" id="rushCheckbox">
+                <input type="datetime-local" id="targetRushDate" style="display:none" name="targetRushDate">
+            </div>
+          </label></td>
 
-            <label style="display: block; margin-top: 25px;">
-                Rush Shipping :
-                <input type="checkbox" id="rush">
-                <img src="/img/info-button.png" style="height: 15px; margin-left: 5px;opacity: 0.75;cursor: pointer;"
-                    title="Rush shipments are guaranteed to be completed within 24 hours or your money back">
-            </label>
+    </tr>
+
+
+        </table>
             <div class="route-limits" style="flex-wrap: wrap;">
-              <h3 style="color: black;margin-top: 0px"><a href="/pricing">For a list of pricing/restrictions please click here</a></h3>
+              <h3 style="color: black;margin-top: 0px">Submitting this form notifies our pilots of your custom request, please ensure details are correct before submitting.</h3>
               <h3>No assembled containers/ships!</h3>
             </div>
             <label class="item-list">
@@ -91,80 +115,47 @@
                     <input type="text" placeholder="Additional Collateral" id="additional-collateral" value="0">
                 </label>
                 <button onclick="clearStuff()" id="clear">Clear</button>
-                <button onclick="submit()">Submit</button>
+                <button id="submit" onclick="submit()">Submit</button>
             </div>
         </div>
 
         <div class="contract">
             <!-- <h4>Total Volume : <%= (!!locals.volume)?volume:'0' %> m<sup>3</sup></h4>
             <h4>Total Price : <%= (!!locals.price)?price:'0' %> ISK</h4> -->
-            <mark class="parse-status success">PARSED SUCCESSFULY</mark>
+            <mark class="parse-status success">Parsed successfully</mark>
             <table>
-                <tr>
-                    <th colspan="2" style="border-right: none;">Contract Description</th>
-                </tr>
-                <tr>
-                    <td title="Click to Copy" colspan="2" style="border-right: none;" id="description">-</td>
-                </tr>
                 <tr>
                     <th>Ship From</th>
                     <th>Ship To</th>
                 </tr>
                 <tr>
-                    <td title="Click to Copy" id="ship-from">-</td>
-                    <td title="Click to Copy" id="ship-to">-</td>
+                    <td id="ship-from">-</td>
+                    <td id="ship-to">-</td>
                 </tr>
                 <tr>
-                    <th>Jump Count</th>
-                    <th>Lowest Security Status</th>
-                </tr>
-                <tr>
-                    <td title="Click to Copy" id="jump-count">-</td>
-                    <td title="Click to Copy" id="lowest-sec">-</td>
-                </tr>
-                <tr>
-                    <th>Service Type</th>
-                    <th>Rush Shipping</th>
-                </tr>
-                <tr>
-                    <td title="Click to Copy" id="service-type">-</td>
-                    <td title="Click to Copy" id="rush-status">-</td>
-                </tr>
-                <tr>
+                    <th>Rush Target Date</th>
                     <th>Total Volume</th>
+                </tr>
+                <tr>
+                    <td id="rush-status">-</td>
+                    <td id="volume">-</td>
+                </tr>
+                <tr>
                     <th>Jita Sell Price</th>
-                </tr>
-                <tr>
-                    <td title="Click to Copy" id="volume">-</td>
-                    <td title="Click to Copy" id="price">-</td>
-                </tr>
-
-                <tr>
-                    <th>Contract Reward</th>
                     <th>Contract Collateral</th>
                 </tr>
                 <tr>
-                    <td title="Click to Copy" id="service-price">-</td>
-                    <td title="Click to Copy" id="collateral">-</td>
+                    <td id="price">-</td>
+                    <td id="collateral">-</td>
                 </tr>
-                <tr>
-                    <th>Expiration</th>
-                    <th>Days To Complete</th>
-                </tr>
-                <tr>
-                    <td title="Click to Copy" id="expiration">-</td>
-                    <td title="Click to Copy" id="days-to-complete">-</td>
-                </tr>
-
             </table>
         </div>
 
     </div>
     <script src="js/statistics.js" async defer></script>
-    <script src="js/calculator.js" async defer></script>
+    <script src="js/custom.js" async defer></script>
+
     <script src="js/navbar.js" async defer></script>
-    <script src="js/copy.js" async defer></script>
-    <script src="js/toast.js" async defer></script>
 
 </body>
 
