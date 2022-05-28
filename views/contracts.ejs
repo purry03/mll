@@ -308,8 +308,8 @@
 
                     <%var options = {  hour:"numeric", minute:"numeric" , month: 'long', day: 'numeric', }; %>
                     <% let date  = new Date(contract.date);%>
-                    <%var hours = Math.abs(current - date) / 36e5;%>
-                    <%var minutes = Math.abs(current - date) / 60000;%>
+                    <%var hours = Math.floor(Math.abs(current - date) / 36e5);%>
+                    <%var minutes = Math.floor(Math.abs(current - date) % 36e5 / 60000);%>
 
                     <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <% if(hours<1){%>
