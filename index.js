@@ -1119,7 +1119,7 @@ else {
                 reward = route.flatPrice;
             }
             else {
-                reward = Math.round((volume * route.price) + (collateral * (route.collateralMultiplier / 100))*100)/100;
+                reward = (volume * route.price) + (collateral * (route.collateralMultiplier / 100));
                 if (reward < route.minReward) {
                     reward = route.minReward;
                 }
