@@ -111,6 +111,7 @@ var outstandingCollateralSum = 0;
     } );
 // Added new section for finished table
 $.fn.dataTable.moment('D MMMM, HH:mm');
+$.fn.dataTable.moment('D MMMM, HH:mm');
 $('#finished').DataTable({
 pageLength: 25,
 orderCellsTop: true,
