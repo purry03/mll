@@ -1481,6 +1481,9 @@ async function processContracts(user) {
           }
         }
         }
+        else {
+          validatedReward = -1;
+        }
           contract.secondaryValidationReward = (Math.round((validatedReward  || 0) * 100) /100);
         }
         newUserContracts.push(contract);

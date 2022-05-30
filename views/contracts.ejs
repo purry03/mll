@@ -215,13 +215,13 @@
                 <% if((!noCode && !(rewardDelta >= 0.9 && collateralDelta >=0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05)) || isRouteInvalid){ %>
                 <tr style="background-color: rgba(255, 60, 60, 0.5);">
                     <%}%>
-                <% if(noCode && (contract.secondaryValidationReward || 0) == 0){ %>
+                <% if(noCode && (contract.secondaryValidationReward || 0) <= 0){ %>
                 <tr style="background-color: rgba(255, 191, 0, 0.15);">
                     <%}%>
                 <% if(noCode && contract.secondaryValidationReward >= 0.9) { %>
                 <tr style="background-color: rgba(144, 255, 144, 0.5);">
                     <%}%>
-                <% if(noCode && (contract.secondaryValidationReward < 0.9 && contract.secondaryValidationReward != 0)) { %>
+                <% if(noCode && (contract.secondaryValidationReward < 0.9 && contract.secondaryValidationReward > 0)) { %>
                 <tr style="background-color: rgba(255, 130, 130, 0.5);">
                     <%}%>
             <td><%=sno%></td>
