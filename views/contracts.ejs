@@ -271,6 +271,7 @@
                     <th>Client</th>
                     <th style="width: 150px;">Date Created</th>
                     <th style="width: 150px;">Time Passed</th>
+                    <th>Pilot Name</th>
                     <th>From</th>
                     <th>To</th>
                     <th>Volume</th>
@@ -318,6 +319,7 @@
             <% if(hours>=1){%>
                     <td><%=hours.toFixed(0)%> hours <%=(minutes%60).toFixed(0)%> minutes</td>
                     <%}%>
+                    <td><%=contract.acceptorName%></td>
             <td class="start"><%=contract.start%></td>
                     <td><%=contract.end%></td>
                     <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
@@ -345,6 +347,7 @@
                     <th>Client</th>
                     <th>Created At</th>
                     <th>Finished At</th>
+                    <th>Pilot Name</th>
                     <th>From</th>
                     <th>To</th>
                     <th>Volume</th>
@@ -385,7 +388,7 @@
                     <td><%=date.toLocaleDateString("en-GB", options)%></td>
                     <td><%=dateCompleted.toLocaleDateString("en-GB", options)%></td>
 
-
+                    <td><%=contract.acceptorName%></td>
                     <td class="start"><%=contract.start%></td>
                     <td><%=contract.end%></td>
                     <td><%=parseInt(contract.volume).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>
