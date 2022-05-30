@@ -27,7 +27,6 @@ function switchTab(value) {
     })
 }
 $(document).ready(function () {
-$.fn.dataTable.moment('D MMMM, HH:mm');
     // Setup - add a text input to each footer cell
 var outstandingVolumeSum = 0;
 var outstandingRewardSum = 0;
@@ -111,6 +110,7 @@ var outstandingCollateralSum = 0;
          $(this).toggleClass('selected');
     } );
 // Added new section for finished table
+$.fn.dataTable.moment('D MMMM, HH:mm');
 $('#finished').DataTable({
 pageLength: 25,
 orderCellsTop: true,
