@@ -1455,6 +1455,7 @@ async function processContracts(user) {
         }
         //Guesstimate of whether the contract is valid or not
         else {
+          console.log("Entered into secondary validation block");
           let start = " ";
           let end = " ";
           //let start = contract.start;
