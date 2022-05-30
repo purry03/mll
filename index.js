@@ -1455,11 +1455,15 @@ async function processContracts(user) {
         }
         //Guesstimate of whether the contract is valid or not
         else {
+          let start = " ";
+          let end = " ";
           //let start = contract.start;
-          let start = contract.start_location_id.split(" ")[0];
-          let end = contract.end_location_id.split(" ")[0]
-          console.log(start);
-          console.log(end);
+          if (contract.start_location_id) {
+          start = contract.start_location_id.split(" ")[0] ;
+          }
+          if (contract.end_location_id) {
+          end = contract.end_location_id.split(" ")[0];
+          }
           const routes = await Routes.findOne({$and: [ {start: {"$regex":"^" + start + "*"}},{destination: {"$regex":"^" + end + "*"}} ] });
           let secondaryStatus = "ERROR: No route found";
           //If I can find a route
