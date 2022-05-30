@@ -1471,7 +1471,7 @@ async function processContracts(user) {
           //If I can find a route
           if (routes) {
             if (routes.isFlat) {
-                validatedReward = routes.flatPrice;
+                validatedReward = contract.reward / routes.flatPrice;
             }
             else {
             calculatedReward = ((contract.volume * routes.price) + (contract.collateral * (parseFloat(routes.collateralMultiplier)/100)));
