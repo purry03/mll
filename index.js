@@ -1466,16 +1466,22 @@ async function processContracts(user) {
           end = contract.end_location_id.split(" ")[0];
           }
           const routes = await Routes.findOne({$and: [ {start: {"$regex":"^" + start + "*"}},{destination: {"$regex":"^" + end + "*"}} ] });
-          let secondaryStatus = 0;
+          let validatedReward = 0;
+          let calculatedReward = 0;
           //If I can find a route
           if (routes) {
-            let calculatedReward = ((contract.volume * routes.price) + (contract.collateral * (parseFloat(routes.collateralMultiplier)/100)));
+            if (routes.isFlat) {
+                validatedReward = routes.flatPrice;
+            }
+            else {
+            calculatedReward = ((contract.volume * routes.price) + (contract.collateral * (parseFloat(routes.collateralMultiplier)/100)));
             if (contract.reward != 0) {
             let rewardDelta = contract.reward  / calculatedReward;
-            secondaryStatus = rewardDelta;
+            validatedReward = rewardDelta;
           }
         }
-          contract.secondaryValidationReward = (Math.round((secondaryStatus  || 0) * 100) /100);
+        }
+          contract.secondaryValidationReward = (Math.round((validatedReward  || 0) * 100) /100);
         }
         newUserContracts.push(contract);
 
