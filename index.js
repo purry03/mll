@@ -196,6 +196,7 @@ const contractSchema = mongoose.Schema({
         required: true,
         default: ""
     },
+    secondaryValidationStatus: String,
     service: String,
     acceptorId: String,
     acceptorName: String,
@@ -1452,7 +1453,23 @@ async function processContracts(user) {
             contract.appraisalService = appraisal.service;
             contract.appraisalJumps = appraisal.jumps
         }
+        //Guesstimate of whether the contract is valid or not
+        else {
+          const routes = await Routes.findOne({$and: [ {start: {"$regex":"^" + contract.start.substring(0, contract.contract.start.indexOf(' ')) + "*"}},{destination: {"$regex":"^" + contract.end.substring(0, contract.contract.end.indexOf(' ')) + "*"}} ] });
+          let secondaryStatus = "ERROR: No route found";
+          //If I can find a route
+          if (routes) {
+            let calculatedReward = ((contract.volume * routes.price) + (contract.collateral * (parseFloat(routes.collateralMultiplier)/100)));
+            let rewardDelta = contract.reward / calculatedReward;
+            secondaryStatus = "Within Tolerance";
+            if (!rewardDelta >= 0.9) {
+              secondaryStatus = "Outside of tolerance, expected reward: " + calculatedReward;
+            }
+          }
+          contract.secondaryValidationStatus = secondaryStatus;
+        }
         newUserContracts.push(contract);
+
     }
 
     userContracts = newUserContracts;
