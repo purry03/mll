@@ -1538,7 +1538,7 @@ async function mailContracts() {
             if (!(rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >= 0.95 && volumeDelta <= 1.05) && !noCode) {
                 action = "delta error";
             }
-            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom) && contract.end.includes(contract.appraisalTo)) && !noCode) {
+            if (contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom.substring(0, contract.appraisalFrom.indexOf(' '))) && contract.end.includes(contract.appraisalTo.substring(0, contract.appraisalTo.indexOf(' ')))) && !noCode) {
                 action = "route error";
             }
             if (contract.type == "item_exchange") {
