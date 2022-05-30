@@ -257,7 +257,7 @@
                     <td>Incorrect Route</td>
                     <%}%>
                     <%if(noCode){%>
-                    <td><%=contract.secondaryValidationReward%> : 1.00 : 1.00</td>
+                    <td><%=contract.secondaryValidationReward.toFixed(2)%> : 1.00 : 1.00</td>
                     <%}%>
                     <%if(!isRouteInvalid && !noCode){%>
                     <td><%=rewardDelta.toFixed(2)%> : <%=collateralDelta.toFixed(2)%> : <%=volumeDelta.toFixed(2)%></td>
