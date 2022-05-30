@@ -209,13 +209,13 @@
                 <% let isRouteInvalid =  contract.appraisalService == "Standard Routes" && !(contract.start.includes(contract.appraisalFrom.substring(0, contract.appraisalFrom.indexOf(' '))) && contract.end.includes(contract.appraisalTo.substring(0, contract.appraisalTo.indexOf(' ')))) %>
 
 
-                <% if((!noCode && rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05 && !isRouteInvalid) || (noCode && contract.secondaryValidationStatus == 'Test')){ %>
+                <% if((!noCode && rewardDelta >= 0.9 && collateralDelta >= 0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05 && !isRouteInvalid) || (noCode && contract.secondaryValidationStatus == 'Within Tolerance')){ %>
                 <tr style="background-color: rgba(144, 255, 144, 0.5);">
                     <%}%>
         <% if((!noCode && !(rewardDelta >= 0.9 && collateralDelta >=0.9 && volumeDelta >=0.95 && volumeDelta <= 1.05)) || isRouteInvalid){ %>
                 <tr style="background-color: rgba(255, 113, 113, 0.5);">
                     <%}%>
-        <% if(noCode){ %>
+        <% if(noCode && contract.secondaryValidationStatus == ''){ %>
                 <tr style="background-color: rgba(255, 191, 0, 0.15);">
                     <%}%>
             <td><%=sno%></td>
