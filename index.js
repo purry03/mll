@@ -1471,12 +1471,17 @@ async function processContracts(user) {
           //If I can find a route
           if (routes) {
             let calculatedReward = ((contract.volume * routes.price) + (contract.collateral * (parseFloat(routes.collateralMultiplier)/100)));
-            let rewardDelta = contract.reward / calculatedReward;
+            if (contract.reward == 0) {
+              secondaryStatus = "Outside of tolerance, 0 Reward"
+            }
+            else {
+            let rewardDelta = contract.reward  / calculatedReward;
             secondaryStatus = "Within Tolerance";
             if (!rewardDelta >= 0.9) {
               secondaryStatus = "Outside of tolerance, expected reward: " + calculatedReward;
             }
           }
+        }
           contract.secondaryValidationStatus = secondaryStatus;
         }
         newUserContracts.push(contract);
