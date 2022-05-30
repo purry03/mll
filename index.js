@@ -1470,15 +1470,12 @@ async function processContracts(user) {
           //If I can find a route
           if (routes) {
             let calculatedReward = ((contract.volume * routes.price) + (contract.collateral * (parseFloat(routes.collateralMultiplier)/100)));
-            if (contract.reward == 0) {
-              secondaryStatus = 0
-            }
-            else {
+            if (contract.reward != 0) {
             let rewardDelta = contract.reward  / calculatedReward;
             secondaryStatus = rewardDelta;
           }
         }
-          contract.secondaryValidationReward = secondaryStatus;
+          contract.secondaryValidationReward = (Math.round((secondaryStatus  || 0) * 100) /100);
         }
         newUserContracts.push(contract);
 
