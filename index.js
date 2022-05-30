@@ -1316,6 +1316,7 @@ async function saveContracts() {
             description: contract.title,
             service: contract.service,
             key: contract.key,
+            secondaryValidationStatus: contract.secondaryValidationStatus,
             acceptorId: contract.acceptor_id,
             acceptorName: contract.acceptor_name,
             appraisalReward: contract.appraisalReward,
