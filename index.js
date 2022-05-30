@@ -1455,12 +1455,9 @@ async function processContracts(user) {
         }
         //Guesstimate of whether the contract is valid or not
         else {
-          let start = contract.start;
-          console.log(start);
-          start = start.substring(0, start.indexOf(' '));
-          let end = contract.end;
-          console.log(end);
-          end = end.substring(0, end.indexOf(' '));
+          //let start = contract.start;
+          let start = contract.start.split(" ")[0];
+          let end = contract.end.split(" ")[0]
           console.log(start);
           console.log(end);
           const routes = await Routes.findOne({$and: [ {start: {"$regex":"^" + start + "*"}},{destination: {"$regex":"^" + end + "*"}} ] });
