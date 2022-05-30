@@ -196,7 +196,7 @@ const contractSchema = mongoose.Schema({
         required: true,
         default: ""
     },
-    secondaryValidationReward: String,
+    secondaryValidationReward: Number,
     service: String,
     acceptorId: String,
     acceptorName: String,
@@ -1468,7 +1468,7 @@ async function processContracts(user) {
           const routes = await Routes.findOne({$and: [ {start: {"$regex":"^" + start + "*"}},{destination: {"$regex":"^" + end + "*"}} ] });
           let validatedReward = 0;
           let calculatedReward = 0;
-          //If I can find a route
+          //If I can find a route validate the reward
           if (routes) {
             if (routes.isFlat) {
                 validatedReward = contract.reward / routes.flatPrice;
