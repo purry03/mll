@@ -1455,7 +1455,7 @@ async function processContracts(user) {
         }
         //Guesstimate of whether the contract is valid or not
         else {
-          const routes = await Routes.findOne({$and: [ {start: {"$regex":"^" + contract.start.substring(0, contract.contract.start.indexOf(' ')) + "*"}},{destination: {"$regex":"^" + contract.end.substring(0, contract.contract.end.indexOf(' ')) + "*"}} ] });
+          const routes = await Routes.findOne({$and: [ {start: {"$regex":"^" + contract.start.substring(0, contract.start.indexOf(' ')) + "*"}},{destination: {"$regex":"^" + contract.end.substring(0, contract.end.indexOf(' ')) + "*"}} ] });
           let secondaryStatus = "ERROR: No route found";
           //If I can find a route
           if (routes) {
