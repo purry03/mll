@@ -1479,7 +1479,7 @@ async function processContracts(user) {
             let rewardDelta = contract.reward  / calculatedReward;
             console.log(rewardDelta);
             secondaryStatus = "Within Tolerance";
-            if (!rewardDelta >= 0.9) {
+            if (!(rewardDelta >= 0.9)) {
               console.log("in if block")
               secondaryStatus = "Outside of tolerance, expected reward: " + calculatedReward;
             }
