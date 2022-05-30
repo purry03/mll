@@ -1456,8 +1456,10 @@ async function processContracts(user) {
         //Guesstimate of whether the contract is valid or not
         else {
           let start = contract.start;
+          console.log(start);
           start = start.substring(0, start.indexOf(' '));
           let end = contract.end;
+          console.log(end);
           end = end.substring(0, end.indexOf(' '));
           console.log(start);
           console.log(end);
