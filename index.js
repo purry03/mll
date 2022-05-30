@@ -1482,6 +1482,8 @@ async function processContracts(user) {
             }
           }
         }
+        console.log("Outside of else block, final setting");
+        console.log(secondaryStatus);
           contract.secondaryValidationStatus = secondaryStatus;
         }
         newUserContracts.push(contract);
